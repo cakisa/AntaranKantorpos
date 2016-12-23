@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Antaran Kantorpos</string>
+    <string name="err_imei">
+        IMEI perangkat tidak valid.
+        Hubungi Admin untuk mengubah IMEI.
+    </string>
+
+    <string name="err_name">
+        Kesalahan : \n
+        1. Tidak boleh kosong \n
+        2. Hanya karakter huruf yang diperbolehkan
+    </string>
+</resources>
