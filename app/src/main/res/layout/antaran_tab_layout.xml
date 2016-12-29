@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <FrameLayout
         android:id="@+id/frameNoData"
         android:layout_width="match_parent"
@@ -28,11 +29,18 @@
                 android:layout_height="wrap_content" />
         </RelativeLayout>
     </FrameLayout>
-    <ProgressBar android:id="@+id/spinner"
+    <com.github.rahatarmanahmed.cpv.CircularProgressView
+        android:id="@+id/spinner"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerInParent="true"
+        app:cpv_animAutostart="true"
+        app:cpv_indeterminate="true"/>
+    <!--<ProgressBar android:id="@+id/spinner"
         style="?android:progressBarStyleSmall"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true" />-->
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"

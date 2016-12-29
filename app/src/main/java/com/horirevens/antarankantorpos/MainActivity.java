@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private String imeiNumber, networkStatus;
     private TextView tvImei;
-    private AlertDialog ade, adi;
+    private AlertDialog ade;
     private ViewPager viewPager;
     private CoordinatorLayout coordinatorLayout;
     private IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -106,6 +106,23 @@ public class MainActivity extends AppCompatActivity {
         return imeiNumber;
     }
 
+    /*private void showMySnackbar() {
+        Snackbar mySnackbar = Snackbar.make(coordinatorLayout, "ERROR CONNECTION", Snackbar.LENGTH_LONG);
+        mySnackbar.setAction("ULANGI", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getOneAdruser();
+            }
+        });
+        mySnackbar.setActionTextColor(Color.WHITE);
+        View view = mySnackbar.getView();
+        TextView textView = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+        //textView.setTextColor(getResources().getColor(R.color.colorPrimary));
+        textView.setTextColor(Color.WHITE);
+
+        mySnackbar.show();
+    }*/
+
     private void getOneAdruser() {
         Log.i(MY_LOG, "getOneAdruser");
         String params = "?device_imei=" + imeiNumber;
@@ -121,7 +138,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i(MY_LOG, "onErrorResponse");
-                        Toast.makeText(getApplicationContext(), "Kesalahan Pada Pengambilan Data", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Error Connection. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
+                        //showMySnackbar();
                     }
                 });
 

@@ -30,7 +30,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -44,6 +43,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.horirevens.antarankantorpos.R;
@@ -74,7 +74,8 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
     private View rootView;
     private TextView tvCountData;
     private String anippos, akditem;
-    private ProgressBar spinner, spinnerAstatus;
+    //private ProgressBar spinner, spinnerAstatus;
+    private CircularProgressView spinner, spinnerAstatus;
     private SwipeRefreshLayout swipeRefreshLayout;
     private AntaranAdapter antaranAdapter;
     private SearchView searchView;
@@ -98,7 +99,8 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         Log.i(MY_LOG, "onCreateView");
         rootView = inflater.inflate(R.layout.antaran_tab_layout, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView);
-        spinner = (ProgressBar) rootView.findViewById(R.id.spinner);
+        //spinner = (ProgressBar) rootView.findViewById(R.id.spinner);
+        spinner = (CircularProgressView) rootView.findViewById(R.id.spinner);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
         animationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
         tvCountData = (TextView) rootView.findViewById(R.id.countData);
@@ -160,6 +162,14 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                 Log.i(MY_LOG, "onOptionsItemSelected searchAkditem");
                 searchAkditem(item);
                 return true;
+            /*case R.id.updateKolektif:
+                Log.i(MY_LOG, "onOptionsItemSelected updateKolektif");
+                String iAnippos = anippos;
+                Intent i = new Intent(getContext(), SearchWithCheckbox.class);
+                i.putExtra("anippos", iAnippos);
+                startActivity(i);
+                //getActivity().finish();
+                return true;*/
             /*case R.id.scanAkditem:
                 Log.i(MY_LOG, "onOptionsItemSelected scanAkditem");
                 IntentIntegrator scanIntegrator = new IntentIntegrator(getActivity());
@@ -296,7 +306,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i(MY_LOG, "onErrorResponse");
-                        Toast.makeText(getContext(), "Kesalahan Pada Pengambilan Data", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Error Connection. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -380,7 +390,8 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = inflater.inflate(R.layout.alert_dialog_jenis_status, null);
         radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
-        spinnerAstatus = (ProgressBar) view.findViewById(R.id.spinnerAstatus);
+        //spinnerAstatus = (ProgressBar) view.findViewById(R.id.spinnerAstatus);
+        spinnerAstatus = (CircularProgressView) view.findViewById(R.id.spinnerAstatus);
 
         radioGroup.setVisibility(View.GONE);
         getAllAdrstatus(params);
@@ -425,7 +436,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i(MY_LOG, "onErrorResponse");
-                        Toast.makeText(getContext(), "Kesalahan Pada Pengambilan Data", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Error Connection. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -500,6 +511,8 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
 
         final EditText namaPenerima = (EditText) view.findViewById(R.id.namaPenerima);
         namaPenerima.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
+
+        Log.i(MY_LOG, "initAwesomeValidation");
         awesomeValidation.addValidation(namaPenerima, "[a-zA-Z\\s]+", getResources().getString(R.string.err_name));
 
         AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
@@ -642,7 +655,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Log.i(MY_LOG, "onErrorResponse");
-                    Toast.makeText(getContext(), "Kesahalan Pada Pengiriman Data", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Error Connection. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
                     getAllAdrantaran();
                 }
             }) {

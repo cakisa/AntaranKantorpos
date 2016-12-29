@@ -23,7 +23,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +31,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.horirevens.antarankantorpos.R;
 import com.horirevens.antarankantorpos.antaran.AntaranAdapter;
 import com.horirevens.antarankantorpos.antaran.AntaranParseJSON;
@@ -47,7 +47,8 @@ public class AntaranTab3 extends Fragment implements ListView.OnItemClickListene
     private View rootView;
     private TextView tvCountData;
     private String anippos, akditem;
-    private ProgressBar spinner;
+    //private ProgressBar spinner;
+    private CircularProgressView spinner;
     private SwipeRefreshLayout swipeRefreshLayout;
     private AntaranAdapter antaranAdapter;
     private SearchView searchView;
@@ -61,7 +62,8 @@ public class AntaranTab3 extends Fragment implements ListView.OnItemClickListene
         Log.i(MY_LOG, "onCreateView");
         rootView = inflater.inflate(R.layout.antaran_tab_layout, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView);
-        spinner = (ProgressBar) rootView.findViewById(R.id.spinner);
+        //spinner = (ProgressBar) rootView.findViewById(R.id.spinner);
+        spinner = (CircularProgressView) rootView.findViewById(R.id.spinner);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
         animationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
         tvCountData = (TextView) rootView.findViewById(R.id.countData);
@@ -228,7 +230,7 @@ public class AntaranTab3 extends Fragment implements ListView.OnItemClickListene
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i(MY_LOG, "onErrorResponse");
-                        Toast.makeText(getContext(), "Kesalahan Pada Pengambilan Data", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Error Connection. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
                     }
                 });
 
