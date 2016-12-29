@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i(MY_LOG, "onErrorResponse");
-                        Toast.makeText(getApplicationContext(), "Error Connection. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Gangguan Koneksi. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
                         //showMySnackbar();
                     }
                 });

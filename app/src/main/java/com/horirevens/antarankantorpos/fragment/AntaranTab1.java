@@ -306,7 +306,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i(MY_LOG, "onErrorResponse");
-                        Toast.makeText(getContext(), "Error Connection. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Gangguan Koneksi. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -436,7 +436,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i(MY_LOG, "onErrorResponse");
-                        Toast.makeText(getContext(), "Error Connection. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Gangguan Koneksi. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -655,7 +655,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Log.i(MY_LOG, "onErrorResponse");
-                    Toast.makeText(getContext(), "Error Connection. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Gangguan Koneksi. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
                     getAllAdrantaran();
                 }
             }) {

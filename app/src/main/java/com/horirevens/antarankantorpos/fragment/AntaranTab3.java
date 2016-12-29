@@ -230,7 +230,7 @@ public class AntaranTab3 extends Fragment implements ListView.OnItemClickListene
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i(MY_LOG, "onErrorResponse");
-                        Toast.makeText(getContext(), "Error Connection. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Gangguan Koneksi. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
                     }
                 });
 
