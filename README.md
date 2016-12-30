@@ -1,5 +1,3 @@
-# AntaranKantorpos
-=======
 # AntaranKantorpos 1.0
 
 Aplikasi internal PT Pos Indonesia (Persero) untuk layanan petugas Antaran  
