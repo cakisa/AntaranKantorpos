@@ -50,6 +50,7 @@ import com.horirevens.antarankantorpos.R;
 import com.horirevens.antarankantorpos.antaran.AdrstatusParseJSON;
 import com.horirevens.antarankantorpos.antaran.AntaranAdapter;
 import com.horirevens.antarankantorpos.antaran.AntaranParseJSON;
+import com.journeyapps.barcodescanner.CompoundBarcodeView;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -83,6 +84,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
     private FloatingActionButton fab;
     private FrameLayout frameNoData;
     private AlertDialog adus, adjs, adp, adk;
+    private CompoundBarcodeView barcodeView;
 
     private int animationDuration, countData;
 
@@ -170,11 +172,13 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                 startActivity(i);
                 //getActivity().finish();
                 return true;*/
-            /*case R.id.scanAkditem:
+            case R.id.scanAkditem:
                 Log.i(MY_LOG, "onOptionsItemSelected scanAkditem");
                 IntentIntegrator scanIntegrator = new IntentIntegrator(getActivity());
                 scanIntegrator.initiateScan();
-                return true;*/
+
+                IntentIntegrator
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
