@@ -48,7 +48,6 @@ public class AntaranParseJSON {
             adrsAketerangan = new String[jsonArray.length()];
             astatuskirim = new String[jsonArray.length()];
 
-
             for(int i=0;i<jsonArray.length();i++){
                 Log.i(MY_LOG, "parseJSON looping");
                 JSONObject jo = jsonArray.getJSONObject(i);

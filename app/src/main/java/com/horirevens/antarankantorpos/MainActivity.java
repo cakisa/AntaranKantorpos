@@ -25,6 +25,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.horirevens.antarankantorpos.antaran.AntaranPagerAdapter;
 import com.horirevens.antarankantorpos.libs.MyImei;
 import com.horirevens.antarankantorpos.network.NetworkStatus;
@@ -96,6 +98,22 @@ public class MainActivity extends AppCompatActivity {
 
         getImeiNumber();
         getOneAdruser();
+        //getIntentResult();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        Log.i(MY_LOG, "onActivityResult");
+        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if(scanningResult != null) {
+            if(scanningResult.getContents() == null) {
+                Toast.makeText(this, "Cancelled from fragment", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Scanned from fragment", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, intent);
     }
 
     private String getImeiNumber() {
@@ -105,23 +123,6 @@ public class MainActivity extends AppCompatActivity {
         Log.i(MY_LOG, "getImeiNumber imeiNumber");
         return imeiNumber;
     }
-
-    /*private void showMySnackbar() {
-        Snackbar mySnackbar = Snackbar.make(coordinatorLayout, "ERROR CONNECTION", Snackbar.LENGTH_LONG);
-        mySnackbar.setAction("ULANGI", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getOneAdruser();
-            }
-        });
-        mySnackbar.setActionTextColor(Color.WHITE);
-        View view = mySnackbar.getView();
-        TextView textView = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-        //textView.setTextColor(getResources().getColor(R.color.colorPrimary));
-        textView.setTextColor(Color.WHITE);
-
-        mySnackbar.show();
-    }*/
 
     private void getOneAdruser() {
         Log.i(MY_LOG, "getOneAdruser");
@@ -139,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         Log.i(MY_LOG, "onErrorResponse");
                         Toast.makeText(getApplicationContext(), "Gangguan Koneksi. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
-                        //showMySnackbar();
                     }
                 });
 

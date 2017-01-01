@@ -6,12 +6,13 @@
         android:icon="@drawable/ic_search"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView"/>
-    <!--<item android:id="@+id/updateKolektif"
-        android:title="Update Kolektif"
-        android:icon="@drawable/ic_barcode"
-        app:showAsAction="ifRoom|collapseActionView" />-->
     <item android:id="@+id/scanAkditem"
         android:title="Scan"
         android:icon="@drawable/ic_barcode"
         app:showAsAction="ifRoom|collapseActionView" />
+    <!--<item android:id="@+id/updateKolektif"
+        android:title="Update Kolektif"
+        android:icon="@drawable/ic_barcode"
+        app:showAsAction="ifRoom|collapseActionView" />-->
+
 </menu>

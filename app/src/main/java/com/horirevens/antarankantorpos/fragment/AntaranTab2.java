@@ -110,6 +110,7 @@ public class AntaranTab2 extends Fragment implements ListView.OnItemClickListene
         Log.i(MY_LOG, "onCreateOptionsMenu");
         menu.clear();
         inflater.inflate(R.menu.main_menu, menu);
+        menu.findItem(R.id.scanAkditem).setVisible(false);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
