@@ -85,7 +85,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
     private int animationDuration, countData;
 
     private String[] resAkditemArray;
-    private String[] resAnamaArray;
+    private String[] resKeteranganStatusArray;
     private String[] resAstatusArray;
     private String[] resAketeranganArray;
 
@@ -108,7 +108,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         resAkditemArray = new String[1];
         resAstatusArray = new String[1];
         resAketeranganArray = new String[1];
-        resAnamaArray = new String[1];
+        resKeteranganStatusArray = new String[1];
 
         anippos = getArguments().getString("anippos");
         frameNoData.setVisibility(View.GONE);
@@ -465,14 +465,14 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                                 rbIdValue.equals("6218")) {
                             Log.i(MY_LOG, "addRadioButton berhasil");
                             String status = "1";
-                            alertDialogPenerima(status);
+                            alertDialogKeterangan(status);
                         }
 
                         if (rbIdValue.equals("6221") || rbIdValue.equals("6220") ||
                                 rbIdValue.equals("6238")) {
                             Log.i(MY_LOG, "addRadioButton gagal");
                             String status = "0";
-                            alertDialogPenerima(status);
+                            alertDialogKeterangan(status);
                             //alertDialogValidasi(status);
                         }
                     }
@@ -481,18 +481,18 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         });
     }
 
-    private void alertDialogPenerima(final String status) {
-        Log.i(MY_LOG, "alertDialogPenerima");
+    private void alertDialogKeterangan(final String status) {
+        Log.i(MY_LOG, "alertDialogKeterangan");
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        View view = inflater.inflate(R.layout.alert_dialog_penerima, null);
+        View view = inflater.inflate(R.layout.alert_dialog_keterangan, null);
         awesomeValidation = new AwesomeValidation(ValidationStyle.UNDERLABEL);
         awesomeValidation.setContext(getContext());
 
-        final EditText namaPenerima = (EditText) view.findViewById(R.id.namaPenerima);
-        namaPenerima.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
+        final EditText keteranganStatus = (EditText) view.findViewById(R.id.keteranganStatus);
+        keteranganStatus.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
 
         Log.i(MY_LOG, "initAwesomeValidation");
-        awesomeValidation.addValidation(namaPenerima, "[a-zA-Z\\s]+", getResources().getString(R.string.err_name));
+        awesomeValidation.addValidation(keteranganStatus, "[a-zA-Z\\s]+", getResources().getString(R.string.err_name));
 
         AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
         if (status.equals("1")) {
@@ -504,7 +504,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                Log.i(MY_LOG, "alertDialogPenerima onDismiss");
+                Log.i(MY_LOG, "alertDialogKeterangan onDismiss");
                 getAllAdrantaran();
             }
         });
@@ -517,11 +517,11 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.i(MY_LOG, "alertDialogPenerima simpan");
+                        Log.i(MY_LOG, "alertDialogKeterangan simpan");
                         if (awesomeValidation.validate()) {
                             Log.i(MY_LOG, "validate");
-                            String valNamaPenerima = namaPenerima.getText().toString().trim();
-                            resAnamaArray[0] = valNamaPenerima;
+                            String valKeteranganStatus = keteranganStatus.getText().toString().trim();
+                            resKeteranganStatusArray[0] = valKeteranganStatus;
                             adp.dismiss();
                             alertDialogValidasi(status);
                         }
@@ -571,7 +571,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
             tvOleh.setText("Diterima Oleh");
             tvAkditem.setText(resAkditemArray[0]);
             tvAketerangan.setText(resAketeranganArray[0]);
-            tvAnama.setText(resAnamaArray[0].toUpperCase());
+            tvAnama.setText(resKeteranganStatusArray[0].toUpperCase());
         }
 
         if (status == "0") {
@@ -579,7 +579,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
             tvOleh.setText("Keterangan Gagal");
             tvAkditem.setText(resAkditemArray[0]);
             tvAketerangan.setText(resAketeranganArray[0]);
-            tvAnama.setText(resAnamaArray[0].toUpperCase());
+            tvAnama.setText(resKeteranganStatusArray[0].toUpperCase());
         }
 
         AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
@@ -650,7 +650,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                 params.put(KEY_ANIPPOS, anippos);
                 params.put(KEY_AKDSTATUS, resAstatusArray[0]);
                 params.put(KEY_AWKTLOKAL, awktlokal);
-                params.put(KEY_AKETERANGAN, resAnamaArray[0]);
+                params.put(KEY_AKETERANGAN, resKeteranganStatusArray[0]);
 
                 /*if (status == "1") {
                     params.put(KEY_AKETERANGAN, resAnamaArray[0]);
