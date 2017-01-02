@@ -65,22 +65,17 @@ public class AntaranAdapter extends ArrayAdapter<String> {
                 tvAkdstatus.setImageResource(R.drawable.ba);
                 tvAketerangan.setText(adrsAketerangan[position] + " (" + adraAketerangan[position] + ")");
             }
-        } else if (akdstatus[position].equals("6221") || akdstatus[position].equals("6233") ||
-                akdstatus[position].equals("6230") || akdstatus[position].equals("6231") ||
-                akdstatus[position].equals("6232") || akdstatus[position].equals("6234") ||
-                akdstatus[position].equals("6235") || akdstatus[position].equals("6237") ||
-                akdstatus[position].equals("6238") || akdstatus[position].equals("6239") ||
-                akdstatus[position].equals("6240") || akdstatus[position].equals("6251") ||
-                akdstatus[position].equals("6252")) {
+        } else if (akdstatus[position].equals("6221") || akdstatus[position].equals("6220") ||
+                akdstatus[position].equals("6238")) {
             if (astatuskirim[position].equals("2")) {
                 tvAkdstatus.setImageResource(R.drawable.ga_android);
-                tvAketerangan.setText(adrsAketerangan[position]);
+                tvAketerangan.setText(adrsAketerangan[position] + " (" + adraAketerangan[position] + ")");
             } else if (astatuskirim[position].equals("3")) {
                 tvAkdstatus.setImageResource(R.drawable.ga_desktop);
-                tvAketerangan.setText(adrsAketerangan[position]);
+                tvAketerangan.setText(adrsAketerangan[position] + " (" + adraAketerangan[position] + ")");
             } else {
                 tvAkdstatus.setImageResource(R.drawable.ga);
-                tvAketerangan.setText(adrsAketerangan[position]);
+                tvAketerangan.setText(adrsAketerangan[position] + " (" + adraAketerangan[position] + ")");
             }
         } else {
             tvAkdstatus.setImageResource(R.drawable.do_proses);

@@ -468,16 +468,12 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                             alertDialogPenerima(status);
                         }
 
-                        if (rbIdValue.equals("6221") || rbIdValue.equals("6252") ||
-                                rbIdValue.equals("6230") || rbIdValue.equals("6231") ||
-                                rbIdValue.equals("6232") || rbIdValue.equals("6234") ||
-                                rbIdValue.equals("6235") || rbIdValue.equals("6237") ||
-                                rbIdValue.equals("6238") || rbIdValue.equals("6239") ||
-                                rbIdValue.equals("6240") || rbIdValue.equals("6251") ||
-                                rbIdValue.equals("6233")) {
+                        if (rbIdValue.equals("6221") || rbIdValue.equals("6220") ||
+                                rbIdValue.equals("6238")) {
                             Log.i(MY_LOG, "addRadioButton gagal");
                             String status = "0";
-                            alertDialogValidasi(status);
+                            alertDialogPenerima(status);
+                            //alertDialogValidasi(status);
                         }
                     }
                 }
@@ -499,7 +495,11 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         awesomeValidation.addValidation(namaPenerima, "[a-zA-Z\\s]+", getResources().getString(R.string.err_name));
 
         AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
-        adb.setTitle("Nama Penerima");
+        if (status.equals("1")) {
+            adb.setTitle("Nama Penerima");
+        } else {
+            adb.setTitle("Keterangan Gagal");
+        }
         adb.setPositiveButton("Simpan", null);
         adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -568,6 +568,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
 
         if (status == "1") {
             Log.i(MY_LOG, "alertDialogValidasi berhasil");
+            tvOleh.setText("Diterima Oleh");
             tvAkditem.setText(resAkditemArray[0]);
             tvAketerangan.setText(resAketeranganArray[0]);
             tvAnama.setText(resAnamaArray[0].toUpperCase());
@@ -575,10 +576,10 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
 
         if (status == "0") {
             Log.i(MY_LOG, "alertDialogValidasi gagal");
+            tvOleh.setText("Keterangan Gagal");
             tvAkditem.setText(resAkditemArray[0]);
             tvAketerangan.setText(resAketeranganArray[0]);
-            tvOleh.setVisibility(View.GONE);
-            tvAnama.setVisibility(View.GONE);
+            tvAnama.setText(resAnamaArray[0].toUpperCase());
         }
 
         AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
@@ -649,13 +650,14 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                 params.put(KEY_ANIPPOS, anippos);
                 params.put(KEY_AKDSTATUS, resAstatusArray[0]);
                 params.put(KEY_AWKTLOKAL, awktlokal);
+                params.put(KEY_AKETERANGAN, resAnamaArray[0]);
 
-                if (status == "1") {
+                /*if (status == "1") {
                     params.put(KEY_AKETERANGAN, resAnamaArray[0]);
                 }
                 if (status == "0") {
                     params.put(KEY_AKETERANGAN, "-");
-                }
+                }*/
 
                 return params;
             }
