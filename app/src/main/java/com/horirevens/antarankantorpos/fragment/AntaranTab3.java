@@ -20,7 +20,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -39,7 +38,7 @@ import com.horirevens.antarankantorpos.antaran.AntaranParseJSON;
 /**
  * Created by horirevens on 11/25/16.
  */
-public class AntaranTab3 extends Fragment implements ListView.OnItemClickListener {
+public class AntaranTab3 extends Fragment {
     public static final String JSON_URL_ADRANTARAN = "http://mob.agenposedo.com/adrantaran.php";
     public static final String MY_LOG = "log_AntaranTab3";
 
@@ -47,7 +46,6 @@ public class AntaranTab3 extends Fragment implements ListView.OnItemClickListene
     private View rootView;
     private TextView tvCountData;
     private String anippos, akditem;
-    //private ProgressBar spinner;
     private CircularProgressView spinner;
     private SwipeRefreshLayout swipeRefreshLayout;
     private AntaranAdapter antaranAdapter;
@@ -62,7 +60,6 @@ public class AntaranTab3 extends Fragment implements ListView.OnItemClickListene
         Log.i(MY_LOG, "onCreateView");
         rootView = inflater.inflate(R.layout.antaran_tab_layout, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView);
-        //spinner = (ProgressBar) rootView.findViewById(R.id.spinner);
         spinner = (CircularProgressView) rootView.findViewById(R.id.spinner);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
         animationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
@@ -74,7 +71,6 @@ public class AntaranTab3 extends Fragment implements ListView.OnItemClickListene
         frameNoData.setVisibility(View.GONE);
         listView = (ListView) rootView.findViewById(R.id.listView);
         listView.setVisibility(View.GONE);
-        listView.setOnItemClickListener(this);
 
         getAllAdrantaran();
         swipeRefresh();
@@ -261,11 +257,5 @@ public class AntaranTab3 extends Fragment implements ListView.OnItemClickListene
             countData = listView.getAdapter().getCount();
             tvCountData.setText("" + countData);
         }
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Log.i(MY_LOG, "onItemClick");
-        String itemValue = String.valueOf(listView.getItemAtPosition(i));
     }
 }

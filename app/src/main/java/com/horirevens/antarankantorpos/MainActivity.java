@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             Log.i(MY_LOG, "onReceive");
             networkStatus = NetworkStatus.getConnectivityStatusString(context.getApplicationContext());
-            //Toast.makeText(getApplicationContext(), networkStatus, Toast.LENGTH_SHORT).show();
 
             if (networkStatus == "1") {
                 tvNetwork.setVisibility(View.GONE);

@@ -97,7 +97,6 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         Log.i(MY_LOG, "onCreateView");
         rootView = inflater.inflate(R.layout.antaran_tab_layout, container, false);
         listView = (ListView) rootView.findViewById(R.id.listView);
-        //spinner = (ProgressBar) rootView.findViewById(R.id.spinner);
         spinner = (CircularProgressView) rootView.findViewById(R.id.spinner);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
         animationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
@@ -282,7 +281,6 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                                 spinner.setVisibility(View.GONE);
                             }
                         });
-                        //antaranAdapter.notifyDataSetChanged();
                     }
                 },
                 new Response.ErrorListener() {
@@ -373,7 +371,6 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = inflater.inflate(R.layout.alert_dialog_jenis_status, null);
         radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
-        //spinnerAstatus = (ProgressBar) view.findViewById(R.id.spinnerAstatus);
         spinnerAstatus = (CircularProgressView) view.findViewById(R.id.spinnerAstatus);
 
         radioGroup.setVisibility(View.GONE);
@@ -456,7 +453,6 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                         String rbTextValue = (String) radioButton.getText();
                         resAstatusArray[0] = rbIdValue;
                         resAketeranganArray[0] = rbTextValue;
-                        //Toast.makeText(getContext(), rbIdValue, Toast.LENGTH_LONG).show();
 
                         if (rbIdValue.equals("6207") || rbIdValue.equals("6208") ||
                                 rbIdValue.equals("6209") || rbIdValue.equals("6210") ||
@@ -473,7 +469,6 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                             Log.i(MY_LOG, "addRadioButton gagal");
                             String status = "0";
                             alertDialogKeterangan(status);
-                            //alertDialogValidasi(status);
                         }
                     }
                 }
@@ -588,7 +583,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Log.i(MY_LOG, "alertDialogValidasi Validasi");
-                updateData(status);
+                updateData();
             }
         });
         adb.setNegativeButton("Batal", new DialogInterface.OnClickListener() {
@@ -610,7 +605,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         adk.show();
     }
 
-    private void updateData(final String status) {
+    private void updateData() {
         Log.i(MY_LOG, "updateData");
         Calendar c = Calendar.getInstance();
 
@@ -651,13 +646,6 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                 params.put(KEY_AKDSTATUS, resAstatusArray[0]);
                 params.put(KEY_AWKTLOKAL, awktlokal);
                 params.put(KEY_AKETERANGAN, resKeteranganStatusArray[0]);
-
-                /*if (status == "1") {
-                    params.put(KEY_AKETERANGAN, resAnamaArray[0]);
-                }
-                if (status == "0") {
-                    params.put(KEY_AKETERANGAN, "-");
-                }*/
 
                 return params;
             }
