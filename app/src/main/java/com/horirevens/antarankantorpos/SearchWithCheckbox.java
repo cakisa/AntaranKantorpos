@@ -36,7 +36,7 @@ public class SearchWithCheckbox extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.antaran_checklist);
+        setContentView(R.layout.antaran_update_kolektif);
         Log.i(MY_LOG, "onCreate");
 
         //Bundle extras = getIntent().getExtras();

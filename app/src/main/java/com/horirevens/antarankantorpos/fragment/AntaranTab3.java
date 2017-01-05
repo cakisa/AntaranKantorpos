@@ -107,6 +107,7 @@ public class AntaranTab3 extends Fragment {
         menu.clear();
         inflater.inflate(R.menu.main_menu, menu);
         menu.findItem(R.id.scanAkditem).setVisible(false);
+        menu.findItem(R.id.updateKolektif).setVisible(false);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

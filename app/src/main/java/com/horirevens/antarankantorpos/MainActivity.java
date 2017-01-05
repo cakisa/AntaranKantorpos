@@ -12,6 +12,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvImei;
     private AlertDialog ade;
     private ViewPager viewPager;
+    private NestedScrollView nestedScrollView;
     private CoordinatorLayout coordinatorLayout;
     private IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
     private BroadcastReceiver myReceiver = new BroadcastReceiver() {
@@ -88,6 +90,9 @@ public class MainActivity extends AppCompatActivity {
         tvNetwork = (TextView) findViewById(R.id.tvNetwork);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
+        //nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
+        //nestedScrollView.setFillViewport(true);
+        //nestedScrollView.setNestedScrollingEnabled(true);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);

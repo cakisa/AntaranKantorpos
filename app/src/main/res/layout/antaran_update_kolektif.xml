@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:elevation="4dp"
+        android:background="@color/colorPrimary"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark"/>
+    <!--<EditText
+        android:id="@+id/searchAkditem"
+        android:layout_below="@+id/toolbar"
+        android:hint="No Barcode"
+        android:inputType="number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />-->
     <FrameLayout
         android:id="@+id/frameNoData"
+        android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <RelativeLayout
@@ -30,27 +45,11 @@
                 android:layout_height="wrap_content" />
         </RelativeLayout>
     </FrameLayout>
-    <com.github.rahatarmanahmed.cpv.CircularProgressView
-        android:id="@+id/spinner"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_centerInParent="true"
-        app:cpv_animAutostart="true"
-        app:cpv_indeterminate="true"/>
-    <!--<ProgressBar android:id="@+id/spinner"
-        style="?android:progressBarStyleSmall"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_centerInParent="true" />-->
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+    <ListView android:id="@+id/listView"
+        android:layout_below="@+id/toolbar"
+        android:divider="@android:color/transparent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <ListView android:id="@+id/listView"
-            android:divider="@android:color/transparent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </android.support.v4.widget.SwipeRefreshLayout>
+        android:layout_height="match_parent"/>
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -58,18 +57,21 @@
         android:layout_alignParentEnd="true">
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
+            android:clickable="true"
             android:layout_height="46dp"
             android:layout_width="46dp"
             android:layout_margin="24dp"
-            android:src="@android:color/transparent"
+            android:src="@drawable/ic_send"
             app:backgroundTint="@color/colorPrimary"
-            app:elevation="6dp"/>
-        <TextView android:id="@+id/countData"
-            android:textSize="20sp"
-            android:elevation="16dp"
-            android:layout_gravity="center"
-            android:textColor="@color/colorWhite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            app:elevation="6dp"
+            app:fabSize="mini"/>
     </FrameLayout>
+    <com.github.rahatarmanahmed.cpv.CircularProgressView
+        android:id="@+id/spinner"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerInParent="true"
+        app:cpv_animAutostart="true"
+        app:cpv_indeterminate="true"/>
+
 </RelativeLayout>

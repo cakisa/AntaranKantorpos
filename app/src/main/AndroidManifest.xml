@@ -42,7 +42,16 @@
             android:name=".BarcodeScannerActivity" >
             <intent-filter>
                 <action android:name="com.horirevens.antarankantorpos.BarcodeScannerActivity" />
-                <category android:name="android.intent.category.default" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".UpdateKolektifActivity"
+            android:parentActivityName=".MainActivity"
+            android:label="Update Kolektif">
+            <intent-filter>
+                <action android:name="com.horirevens.antarankantorpos.UpdateKolektifActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity

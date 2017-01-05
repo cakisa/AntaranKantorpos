@@ -5,10 +5,13 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -16,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.horirevens.antarankantorpos.antaran.AntaranAdapter;
 import com.horirevens.antarankantorpos.antaran.AntaranAdapterCheckbox;
 import com.horirevens.antarankantorpos.antaran.AntaranParseJSON;
@@ -24,12 +28,14 @@ import com.horirevens.antarankantorpos.antaran.AntaranParseJSON;
  * Created by horirevens on 12/27/16.
  */
 public class UpdateKolektifActivity extends AppCompatActivity {
-    public static final String MY_LOG = "log_SearchWithCheckbox";
+    public static final String MY_LOG = "log_UpdateKolektif";
     public static final String JSON_URL_ADRANTARAN = "http://mob.agenposedo.com/adrantaran.php";
 
     private ListView listView;
+    private Toolbar toolbar;
     private String anippos, akditem;
-    private ProgressBar spinner;
+    private CircularProgressView spinner;
+    private FrameLayout frameNoData;
     private AntaranAdapterCheckbox antaranAdapterCheckbox;
 
     private int animationDuration;
@@ -39,15 +45,32 @@ public class UpdateKolektifActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.antaran_checklist);
+        setContentView(R.layout.antaran_update_kolektif);
         Log.i(MY_LOG, "onCreate");
 
         animationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
-        spinner = (ProgressBar) findViewById(R.id.spinner);
+        spinner = (CircularProgressView) findViewById(R.id.spinner);
         listView = (ListView) findViewById(R.id.listView);
+        frameNoData = (FrameLayout) findViewById(R.id.frameNoData);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        frameNoData.setVisibility(View.GONE);
+        listView.setVisibility(View.GONE);
 
         getIntentResult();
         getAllAdrantaran();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.update_kolektif, menu);
+        return true;
     }
 
     private void getIntentResult() {
@@ -104,6 +127,15 @@ public class UpdateKolektifActivity extends AppCompatActivity {
                 this, AntaranParseJSON.akditem, AntaranParseJSON.akdstatus, AntaranParseJSON.awklokal,
                 AntaranParseJSON.adraAketerangan, AntaranParseJSON.adrsAketerangan, AntaranParseJSON.astatuskirim);
         antaranAdapter.notifyDataSetChanged();
-        listView.setAdapter(antaranAdapter);
+
+        if (antaranAdapter.getCount() == 0) {
+            frameNoData.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
+        } else {
+            frameNoData.setVisibility(View.GONE);
+            listView.setVisibility(View.VISIBLE);
+
+            listView.setAdapter(antaranAdapter);
+        }
     }
 }

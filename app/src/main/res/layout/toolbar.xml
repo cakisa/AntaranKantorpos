@@ -7,7 +7,7 @@
     android:layout_height="?attr/actionBarSize"
     android:elevation="4dp"
     android:background="@color/colorPrimary"
-    android:theme="@style/AppTheme.Toolbar"
+    app:theme="@style/AppTheme.Toolbar"
     app:popupTheme="@style/Theme.AppCompat.Light.NoActionBar">
     <LinearLayout android:orientation="vertical"
         android:layout_width="wrap_content"
