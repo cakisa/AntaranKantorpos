@@ -16,6 +16,7 @@ public class AntaranParseJSON {
     public static String[] adraAketerangan;
     public static String[] adrsAketerangan;
     public static String[] astatuskirim;
+    public static int length;
 
     public static final String MY_LOG = "log_message";
     public static final String TAG_JSON_ARRAY="array";
@@ -47,6 +48,7 @@ public class AntaranParseJSON {
             adraAketerangan = new String[jsonArray.length()];
             adrsAketerangan = new String[jsonArray.length()];
             astatuskirim = new String[jsonArray.length()];
+            length = jsonArray.length();
 
             for(int i=0;i<jsonArray.length();i++){
                 Log.i(MY_LOG, "parseJSON looping");
