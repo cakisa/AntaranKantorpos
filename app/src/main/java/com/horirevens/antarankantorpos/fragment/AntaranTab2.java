@@ -2,8 +2,10 @@ package com.horirevens.antarankantorpos.fragment;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -23,7 +25,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -49,6 +50,7 @@ public class AntaranTab2 extends Fragment {
     private CircularProgressView spinner;
     private SwipeRefreshLayout swipeRefreshLayout;
     private AntaranAdapter antaranAdapter;
+    private AlertDialog adi;
     private SearchView searchView;
     private FloatingActionButton fab;
     private FrameLayout frameNoData;
@@ -86,6 +88,7 @@ public class AntaranTab2 extends Fragment {
             Log.i(MY_LOG, "setUserVisibleHint isVisible");
             listView.setVisibility(View.GONE);
             frameNoData.setVisibility(View.GONE);
+            fab.setVisibility(View.GONE);
             spinner.setAlpha(0f);
             spinner.setVisibility(View.VISIBLE);
             spinner.animate().alpha(1f).setDuration(animationDuration).setListener(null);
@@ -228,12 +231,37 @@ public class AntaranTab2 extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i(MY_LOG, "onErrorResponse");
-                        Toast.makeText(getContext(), "Gangguan Koneksi. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
+                        String s = "Gangguan koneksi. Sedang menunggu jaringan...";
+                        alertDialogInformasi(s);
+                        //Toast.makeText(getContext(), "Gangguan Koneksi. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
                     }
                 });
 
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
+    }
+
+    private void alertDialogInformasi(String s) {
+        Log.i(MY_LOG, "alertDialogInformasi");
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View view = inflater.inflate(R.layout.alert_dialog_informasi, null);
+        TextView tvInformasi = (TextView) view.findViewById(R.id.tvInformasi);
+        tvInformasi.setText(s);
+
+        final AlertDialog.Builder adb = new AlertDialog.Builder(getContext());
+        adb.setTitle("Informasi");
+        adb.setPositiveButton("Oke", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Log.i(MY_LOG, "alertDialogInformasi setPositiveButton");
+                getAllAdrantaran();
+                adi.dismiss();
+            }
+        });
+
+        adb.setView(view);
+        adi = adb.create();
+        adi.show();
     }
 
     private void showAdrantaran(String json) {

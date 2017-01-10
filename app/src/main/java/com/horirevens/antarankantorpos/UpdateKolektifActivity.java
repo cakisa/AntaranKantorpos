@@ -23,20 +23,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
@@ -45,36 +44,49 @@ import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.horirevens.antarankantorpos.antaran.AdrstatusParseJSON;
 import com.horirevens.antarankantorpos.antaran.AntaranAdapterKolektif;
 import com.horirevens.antarankantorpos.antaran.AntaranParseJSON;
+import com.horirevens.antarankantorpos.libs.MyCustomRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by horirevens on 12/27/16.
  */
-public class UpdateKolektifActivity extends AppCompatActivity implements ListView.OnItemClickListener {
+public class UpdateKolektifActivity extends AppCompatActivity {
     public static final String MY_LOG = "log_UpdateKolektif";
     public static final String JSON_URL_ADRANTARAN = "http://mob.agenposedo.com/adrantaran.php";
     public static final String JSON_URL_ADRSTATUS = "http://mob.agenposedo.com/adrstatus.php";
 
+    public static final String KEY_AKDITEM = "akditem";
+    public static final String KEY_ANIPPOS = "anippos";
+    public static final String KEY_AWKTLOKAL = "awktlokal";
+    public static final String KEY_AKDSTATUS = "akdstatus";
+    public static final String KEY_AKETERANGAN = "aketerangan";
+
     private ListView listView;
     private Toolbar toolbar;
-    private String anippos, akditem;
+    private String anippos, akditem, valKeteranganStatus, valAstatus, valAketerangan;
     private CircularProgressView spinner, spinnerAstatus;
     private FrameLayout frameNoData;
     private SearchView searchView;
-    private CheckBox cbAkditem;
     private RadioGroup radioGroup;
     private FloatingActionButton fab;
-    private AlertDialog adus, adjs, adp, adk;
+    private AlertDialog adus, adjs, adp, adk, adi;
 
-    private int animationDuration, j;
+    private int animationDuration, isUpdated;
 
-    private String[] checkboxList;
-    private String[] resAkditemArray;
-    private String[] resKeteranganStatusArray;
-    private String[] resAstatusArray;
-    private String[] resAketeranganArray;
-
-    AntaranAdapterKolektif antaranAdapterKolektif;
-    AwesomeValidation awesomeValidation;
+    private ArrayList<String> checkboxList = new ArrayList<>();
+    private AntaranAdapterKolektif antaranAdapterKolektif;
+    private AwesomeValidation awesomeValidation;
+    private RequestQueue requestQueue;
+    private MyCustomRequest myCustomRequest;
+    private JsonObjectRequest jsonRequest;
+    private Map<String, String> map = new HashMap<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,20 +106,12 @@ public class UpdateKolektifActivity extends AppCompatActivity implements ListVie
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        checkboxList = new String[1];
-        resAkditemArray = new String[1];
-        resAstatusArray = new String[1];
-        resAketeranganArray = new String[1];
-        resKeteranganStatusArray = new String[1];
-
         frameNoData.setVisibility(View.GONE);
         listView.setVisibility(View.GONE);
-        listView.setOnItemClickListener(this);
 
         getIntentResult();
         getAllAdrantaran();
         initCheckBox();
-        //isCheckboxChecked();
     }
 
     @Override
@@ -213,7 +217,8 @@ public class UpdateKolektifActivity extends AppCompatActivity implements ListVie
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i(MY_LOG, "onErrorResponse");
-                        Toast.makeText(getApplicationContext(), "Kesalahan Pada Pengambilan Data", Toast.LENGTH_LONG).show();
+                        String s = "Gangguan koneksi. Sedang menunggu jaringan...";
+                        alertDialogInformasi(s);
                     }
                 });
 
@@ -245,23 +250,17 @@ public class UpdateKolektifActivity extends AppCompatActivity implements ListVie
 
     private void initCheckBox() {
         Log.i(MY_LOG, "initCheckBox");
-        LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.listview_update_kolektif, null);
-        cbAkditem = (CheckBox) view.findViewById(R.id.cbAkditem);
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                j = 0;
+                checkboxList.clear();
                 for (int i = 0; i < antaranAdapterKolektif.getCount(); i++) {
                     if (antaranAdapterKolektif.getItemChecked(i)) {
-                        antaranAdapterKolektif.getItem(i);
-                        j++;
+                        checkboxList.add(antaranAdapterKolektif.getItem(i));
                     }
                 }
-                //Toast.makeText(getApplicationContext(), "" + checkboxIsChecked, Toast.LENGTH_SHORT).show();
 
-                alertDialogUpdateStatus(j);
+                alertDialogUpdateStatus(checkboxList.size());
             }
         });
     }
@@ -294,16 +293,18 @@ public class UpdateKolektifActivity extends AppCompatActivity implements ListVie
                 alertDialogJenisStatus(params);
             }
         });
-        adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        /*adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 Log.i(MY_LOG, "alertDialogUpdateStatus onDismiss");
                 getAllAdrantaran();
             }
-        });
+        });*/
         adb.setView(view);
         adus = adb.create();
         adus.show();
+
+
     }
 
     private void alertDialogJenisStatus(String params) {
@@ -319,13 +320,13 @@ public class UpdateKolektifActivity extends AppCompatActivity implements ListVie
 
         AlertDialog.Builder adb = new AlertDialog.Builder(this);
         adb.setTitle("Keterangan");
-        adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        /*adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
                 Log.i(MY_LOG, "alertDialogJenisStatus onDismiss");
                 getAllAdrantaran();
             }
-        });
+        });*/
         adb.setView(view);
         adjs = adb.create();
         adjs.show();
@@ -355,7 +356,8 @@ public class UpdateKolektifActivity extends AppCompatActivity implements ListVie
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i(MY_LOG, "onErrorResponse");
-                        Toast.makeText(getApplicationContext(), "Gangguan Koneksi. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
+                        String s = "Gangguan koneksi. Sedang menunggu jaringan...";
+                        alertDialogInformasi(s);
                     }
                 });
 
@@ -390,8 +392,8 @@ public class UpdateKolektifActivity extends AppCompatActivity implements ListVie
 
                         String rbIdValue = String.valueOf(radioButton.getId());
                         String rbTextValue = (String) radioButton.getText();
-                        resAstatusArray[0] = rbIdValue;
-                        resAketeranganArray[0] = rbTextValue;
+                        valAstatus = rbIdValue;
+                        valAketerangan = rbTextValue;
 
                         if (rbIdValue.equals("6207") || rbIdValue.equals("6208") ||
                                 rbIdValue.equals("6209") || rbIdValue.equals("6210") ||
@@ -435,13 +437,13 @@ public class UpdateKolektifActivity extends AppCompatActivity implements ListVie
             adb.setTitle("Keterangan Gagal");
         }
         adb.setPositiveButton("Simpan", null);
-        adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        /*adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 Log.i(MY_LOG, "alertDialogKeterangan onDismiss");
                 getAllAdrantaran();
             }
-        });
+        });*/
         adb.setView(view);
         adp = adb.create();
         adp.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -454,8 +456,8 @@ public class UpdateKolektifActivity extends AppCompatActivity implements ListVie
                         Log.i(MY_LOG, "alertDialogKeterangan simpan");
                         if (awesomeValidation.validate()) {
                             Log.i(MY_LOG, "validate");
-                            String valKeteranganStatus = keteranganStatus.getText().toString().trim();
-                            resKeteranganStatusArray[0] = valKeteranganStatus;
+                            String a = keteranganStatus.getText().toString().trim();
+                            valKeteranganStatus = a;
                             adp.dismiss();
                             alertDialogValidasi(status);
                         }
@@ -499,21 +501,24 @@ public class UpdateKolektifActivity extends AppCompatActivity implements ListVie
         TextView tvAketerangan = (TextView) view.findViewById(R.id.tvAketerangan);
         TextView tvAnama = (TextView) view.findViewById(R.id.tvAnama);
         TextView tvOleh = (TextView) view.findViewById(R.id.tvOleh);
+        TextView tvLabel = (TextView) view.findViewById(R.id.tvLabel);
+
+        tvLabel.setText("Jumlah Resi");
 
         if (status == "1") {
             Log.i(MY_LOG, "alertDialogValidasi berhasil");
             tvOleh.setText("Diterima Oleh");
-            tvAkditem.setText(resAkditemArray[0]);
-            tvAketerangan.setText(resAketeranganArray[0]);
-            tvAnama.setText(resKeteranganStatusArray[0].toUpperCase());
+            tvAkditem.setText("" + checkboxList.size());
+            tvAketerangan.setText(valAketerangan);
+            tvAnama.setText(valKeteranganStatus.toUpperCase());
         }
 
         if (status == "0") {
             Log.i(MY_LOG, "alertDialogValidasi gagal");
             tvOleh.setText("Keterangan Gagal");
-            tvAkditem.setText(resAkditemArray[0]);
-            tvAketerangan.setText(resAketeranganArray[0]);
-            tvAnama.setText(resKeteranganStatusArray[0].toUpperCase());
+            tvAkditem.setText("" + checkboxList.size());
+            tvAketerangan.setText(valAketerangan);
+            tvAnama.setText(valKeteranganStatus.toUpperCase());
         }
 
         AlertDialog.Builder adb = new AlertDialog.Builder(this);
@@ -522,7 +527,7 @@ public class UpdateKolektifActivity extends AppCompatActivity implements ListVie
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Log.i(MY_LOG, "alertDialogValidasi Validasi");
-                //updateData();
+                updateData();
             }
         });
         adb.setNegativeButton("Batal", new DialogInterface.OnClickListener() {
@@ -532,25 +537,152 @@ public class UpdateKolektifActivity extends AppCompatActivity implements ListVie
                 adk.dismiss();
             }
         });
-        adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        /*adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 Log.i(MY_LOG, "alertDialogValidasi onDismiss");
                 getAllAdrantaran();
             }
-        });
+        });*/
         adb.setView(view);
         adk = adb.create();
         adk.show();
     }
 
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-        //Toast.makeText(getApplicationContext(), "Oke", Toast.LENGTH_LONG).show();
-        cbAkditem = (CheckBox) view.findViewById(R.id.cbAkditem);
-        if (cbAkditem.isChecked()) {
-            Toast.makeText(getApplicationContext(), "Checked" + cbAkditem.getTag(), Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getApplicationContext(), "unChecked", Toast.LENGTH_SHORT).show();
-        }
+    private void updateData() {
+        Log.i(MY_LOG, "updateData");
+        Calendar c = Calendar.getInstance();
+
+        int second = c.get(Calendar.SECOND);
+        int minute = c.get(Calendar.MINUTE);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        String time = String.format("%02d:%02d:%02d", hour, minute, second);
+
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH)+1;
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        String date = String.format("%04d-%02d-%02d", year, month, day);
+
+        final String awktlokal = date+" "+time;
+
+        /*requestQueue = Volley.newRequestQueue(this);
+        //for (int i=0; i<checkboxList.size(); i++) {
+            map.put(KEY_AKDITEM, checkboxList.get(0));
+            map.put(KEY_ANIPPOS, anippos);
+            map.put(KEY_AKDSTATUS, valAstatus);
+            map.put(KEY_AWKTLOKAL, awktlokal);
+            map.put(KEY_AKETERANGAN, valKeteranganStatus);
+        //}
+
+        myCustomRequest = new MyCustomRequest(Request.Method.POST, JSON_URL_ADRANTARAN, map,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i(MY_LOG, "updateData success");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i(MY_LOG, "updateData error");
+                    }
+                });
+
+        jsonRequest = new JsonObjectRequest(
+                        Request.Method.POST,
+                        JSON_URL_ADRANTARAN,
+                        new JSONObject(map),
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Log.i(MY_LOG, "updateData success");
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.i(MY_LOG, "updateData error");
+                            }
+                        }) {
+                            @Override
+                            public Map<String, String> getHeaders() throws AuthFailureError {
+                                HashMap<String, String> headers = new HashMap<>();
+                                headers.put("Content-Type", "application/json; charset=utf-8");
+                                headers.put("User-agent", System.getProperty("http.agent"));
+                                return super.getHeaders();
+                            }
+                        };
+
+        Log.i(MY_LOG, "map: " + map);
+        requestQueue.add(myCustomRequest);*/
+
+
+        /*listView.setVisibility(View.GONE);
+        spinner.setAlpha(0f);
+        spinner.setVisibility(View.VISIBLE);
+        spinner.animate().alpha(1f).setDuration(animationDuration).setListener(null);*/
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                "http://mob.agenposedo.com/example.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i(MY_LOG, "updateData onResponse");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i(MY_LOG, "onErrorResponse");
+                    }
+                })
+        {
+            @Override
+            protected Map<String,String> getParams() {
+                HashMap<String, String> params = new HashMap<>();
+                for (int i=0; i<checkboxList.size(); i++) {
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put(KEY_AKDITEM, checkboxList.get(i));
+                        jsonObject.put(KEY_ANIPPOS, anippos);
+                        jsonObject.put(KEY_AKDSTATUS, valAstatus);
+                        jsonObject.put(KEY_AWKTLOKAL, awktlokal);
+                        jsonObject.put(KEY_AKETERANGAN, valKeteranganStatus);
+
+                        params.put("params", jsonObject.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                Log.i(MY_LOG, "params: " + params);
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+    private void alertDialogInformasi(String s) {
+        Log.i(MY_LOG, "alertDialogInformasi");
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.alert_dialog_informasi, null);
+        TextView tvInformasi = (TextView) view.findViewById(R.id.tvInformasi);
+        tvInformasi.setText(s);
+
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        adb.setTitle("Informasi");
+        adb.setPositiveButton("Oke", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Log.i(MY_LOG, "alertDialogInformasi setPositiveButton");
+                getAllAdrantaran();
+                adi.dismiss();
+            }
+        });
+        adb.setView(view);
+        adi = adb.create();
+        adi.show();
     }
 }

@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private String imeiNumber, networkStatus;
     private TextView tvImei;
-    private AlertDialog ade;
+    private AlertDialog ade, adi;
     private ViewPager viewPager;
     private NestedScrollView nestedScrollView;
     private CoordinatorLayout coordinatorLayout;
@@ -143,12 +143,36 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i(MY_LOG, "onErrorResponse");
-                        Toast.makeText(getApplicationContext(), "Gangguan Koneksi. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
+                        String s = "Gangguan Koneksi. Keluar dan Jalankan Kembali";
+                        alertDialogInformasiError(s);
+                        //Toast.makeText(getApplicationContext(), "Gangguan Koneksi. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
                     }
                 });
 
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         requestQueue.add(stringRequest);
+    }
+
+    private void alertDialogInformasiError(String s) {
+        Log.i(MY_LOG, "alertDialogInformasi");
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.alert_dialog_informasi, null);
+        TextView tvInformasi = (TextView) view.findViewById(R.id.tvInformasi);
+        tvInformasi.setText(s);
+
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        adb.setTitle("Informasi");
+        adb.setPositiveButton("Oke", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Log.i(MY_LOG, "alertDialogInformasi setPositiveButton");
+                finish();
+                //adi.dismiss();
+            }
+        });
+        adb.setView(view);
+        adi = adb.create();
+        adi.show();
     }
 
     private void alertDialogIMEI(String response) {
