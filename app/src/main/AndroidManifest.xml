@@ -27,30 +27,39 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="Antaran Kantorpos"
-        android:supportsRtl="true"
         android:screenOrientation="portrait"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme" >
-        <activity
-            android:name=".MainActivity" >
+        <activity android:name=".MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".BarcodeScannerActivity" >
+            android:name=".DeliveryOrderActivity" >
+            <intent-filter>
+                <action android:name="com.horirevens.antarankantorpos.DeliveryOrderActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".BarcodeScannerActivity" >
             <intent-filter>
                 <action android:name="com.horirevens.antarankantorpos.BarcodeScannerActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name=".UpdateKolektifActivity"
-            android:parentActivityName=".MainActivity"
-            android:label="Update Kolektif">
+            android:label="Update Kolektif"
+            android:parentActivityName=".MainActivity" >
             <intent-filter>
                 <action android:name="com.horirevens.antarankantorpos.UpdateKolektifActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -59,7 +68,7 @@
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme"
-            android:windowSoftInputMode="stateAlwaysHidden">
+            android:windowSoftInputMode="stateAlwaysHidden" >
         </activity>
     </application>
 

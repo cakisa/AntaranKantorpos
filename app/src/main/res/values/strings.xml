@@ -5,6 +5,9 @@
         Hubungi Admin untuk mengubah IMEI.
     </string>
 
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
     <string name="err_name">
         Kesalahan : \n
         1. Tidak boleh kosong \n
