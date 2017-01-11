@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i(MY_LOG, "setupTabIcons");
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
-        View view1 = getLayoutInflater().inflate(R.layout.antaran_tab_icon, null);
+        /*View view1 = getLayoutInflater().inflate(R.layout.antaran_tab_icon, null);
         view1.findViewById(R.id.iconId).setBackgroundResource(R.drawable.icon_tab1_selector);
         tabLayout.addTab(tabLayout.newTab().setCustomView(view1));
 
@@ -251,11 +251,11 @@ public class MainActivity extends AppCompatActivity {
 
         View view3 = getLayoutInflater().inflate(R.layout.antaran_tab_icon, null);
         view3.findViewById(R.id.iconId).setBackgroundResource(R.drawable.icon_tab3_selector);
-        tabLayout.addTab(tabLayout.newTab().setCustomView(view3));
+        tabLayout.addTab(tabLayout.newTab().setCustomView(view3));*/
 
-        //tabLayout.addTab(tabLayout.newTab().setText("Delivery Order"));
-        //tabLayout.addTab(tabLayout.newTab().setText("Berhasil"));
-        //tabLayout.addTab(tabLayout.newTab().setText("Gagal"));
+        tabLayout.addTab(tabLayout.newTab().setText("Delivery Order"));
+        tabLayout.addTab(tabLayout.newTab().setText("Berhasil"));
+        tabLayout.addTab(tabLayout.newTab().setText("Gagal"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
     }
 

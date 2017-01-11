@@ -21,11 +21,12 @@ public class AntaranAdapter extends ArrayAdapter<String> {
     private String[] adraAketerangan;
     private String[] adrsAketerangan;
     private String[] astatuskirim;
+    private String[] ado;
     private Activity context;
 
     public AntaranAdapter(
             Activity context, String[] akditem, String[] akdstatus, String[] awktlokal,
-            String[] adraAketerangan, String[] adrsAketerangan, String[] astatuskirim
+            String[] adraAketerangan, String[] adrsAketerangan, String[] astatuskirim, String[] ado
     ) {
         super(context, R.layout.listview_tab, akditem);
         this.context = context;
@@ -35,6 +36,7 @@ public class AntaranAdapter extends ArrayAdapter<String> {
         this.adraAketerangan = adraAketerangan;
         this.adrsAketerangan = adrsAketerangan;
         this.astatuskirim = astatuskirim;
+        this.ado = ado;
     }
 
     @Override
@@ -48,8 +50,7 @@ public class AntaranAdapter extends ArrayAdapter<String> {
 
         MyDate myDate = new MyDate();
         tvAkditem.setText(akditem[position]);
-        tvAwtlokal.setText(myDate.datetimeIndo(awktlokal[position]));
-        //tvAketerangan.setText(adrsAketerangan[position]);
+        tvAwtlokal.setText(myDate.datetimeIndo(awktlokal[position]) + " | No. DO " + ado[position]);
         if (akdstatus[position].equals("6207") || akdstatus[position].equals("6208") ||
                 akdstatus[position].equals("6209") || akdstatus[position].equals("6210") ||
                 akdstatus[position].equals("6211") || akdstatus[position].equals("6212") ||

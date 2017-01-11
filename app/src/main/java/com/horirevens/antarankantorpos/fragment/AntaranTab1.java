@@ -307,7 +307,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         Log.i(MY_LOG, "showAdrantaran parseJSON");
         antaranAdapter = new AntaranAdapter(
                 getActivity(), AntaranParseJSON.akditem, AntaranParseJSON.akdstatus, AntaranParseJSON.awklokal,
-                AntaranParseJSON.adraAketerangan, AntaranParseJSON.adrsAketerangan, AntaranParseJSON.astatuskirim);
+                AntaranParseJSON.adraAketerangan, AntaranParseJSON.adrsAketerangan, AntaranParseJSON.astatuskirim, AntaranParseJSON.ado);
         antaranAdapter.notifyDataSetChanged();
         if (antaranAdapter.getCount() == 0) {
             frameNoData.setVisibility(View.VISIBLE);
@@ -383,7 +383,12 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         Log.i(MY_LOG, "alertDialogJenisStatus getAllAdrstatus");
 
         AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
-        adb.setTitle("Keterangan");
+        if (params.equals("?status=1")) {
+            adb.setTitle("Keterangan Berhasil");
+        } else {
+            adb.setTitle("Keterangan Gagal");
+        }
+
         /*adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
