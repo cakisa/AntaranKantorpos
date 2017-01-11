@@ -307,7 +307,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         Log.i(MY_LOG, "showAdrantaran parseJSON");
         antaranAdapter = new AntaranAdapter(
                 getActivity(), AntaranParseJSON.akditem, AntaranParseJSON.akdstatus, AntaranParseJSON.awklokal,
-                AntaranParseJSON.adraAketerangan, AntaranParseJSON.adrsAketerangan, AntaranParseJSON.astatuskirim);
+                AntaranParseJSON.adraAketerangan, AntaranParseJSON.adrsAketerangan, AntaranParseJSON.astatuskirim, AntaranParseJSON.ado);
         antaranAdapter.notifyDataSetChanged();
         if (antaranAdapter.getCount() == 0) {
             frameNoData.setVisibility(View.VISIBLE);
@@ -655,6 +655,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                 params.put(KEY_AWKTLOKAL, awktlokal);
                 params.put(KEY_AKETERANGAN, valKeteranganStatus);
 
+                Log.i(MY_LOG, "params: " + params);
                 return params;
             }
         };

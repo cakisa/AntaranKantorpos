@@ -41,12 +41,13 @@ import com.android.volley.toolbox.Volley;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
+import com.google.gson.Gson;
 import com.horirevens.antarankantorpos.antaran.AdrstatusParseJSON;
+import com.horirevens.antarankantorpos.antaran.Antaran;
 import com.horirevens.antarankantorpos.antaran.AntaranAdapterKolektif;
 import com.horirevens.antarankantorpos.antaran.AntaranParseJSON;
 import com.horirevens.antarankantorpos.libs.MyCustomRequest;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -78,7 +79,7 @@ public class UpdateKolektifActivity extends AppCompatActivity {
     private FloatingActionButton fab;
     private AlertDialog adus, adjs, adp, adk, adi;
 
-    private int animationDuration, isUpdated;
+    private int animationDuration, checkedItem;
 
     private ArrayList<String> checkboxList = new ArrayList<>();
     private AntaranAdapterKolektif antaranAdapterKolektif;
@@ -261,6 +262,7 @@ public class UpdateKolektifActivity extends AppCompatActivity {
                 }
 
                 alertDialogUpdateStatus(checkboxList.size());
+                checkedItem = checkboxList.size();
             }
         });
     }
@@ -469,28 +471,28 @@ public class UpdateKolektifActivity extends AppCompatActivity {
         adp.show();
 
     /*adb.setPositiveButton("Simpan", new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialogInterface, int i) {
-            awesomeValidation.validate();
-            Log.i(MY_LOG, "validate");
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                awesomeValidation.validate();
+                Log.i(MY_LOG, "validate");
 
-            Log.i(MY_LOG, "alertDialogPenerima simpan");
-            //String valNamaPenerima = namaPenerima.getText().toString().trim();
-            //resAnama[0] = valNamaPenerima;
-            //adp.dismiss();
-            //alertDialogValidasi(status);
-        }
-    });
-    adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
-        @Override
-        public void onDismiss(DialogInterface dialogInterface) {
-            namaPenerima.setText("");
-        }
-    });
-    adb.setView(view);
-    adp = adb.create();
-    adp.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-    adp.show();*/
+                Log.i(MY_LOG, "alertDialogPenerima simpan");
+                //String valNamaPenerima = namaPenerima.getText().toString().trim();
+                //resAnama[0] = valNamaPenerima;
+                //adp.dismiss();
+                //alertDialogValidasi(status);
+            }
+        });
+        adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                namaPenerima.setText("");
+            }
+        });
+        adb.setView(view);
+        adp = adb.create();
+        adp.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        adp.show();*/
     }
 
     private void alertDialogValidasi(final String status) {
@@ -640,22 +642,36 @@ public class UpdateKolektifActivity extends AppCompatActivity {
             @Override
             protected Map<String,String> getParams() {
                 HashMap<String, String> params = new HashMap<>();
-                for (int i=0; i<checkboxList.size(); i++) {
-                    JSONObject jsonObject = new JSONObject();
-                    try {
-                        jsonObject.put(KEY_AKDITEM, checkboxList.get(i));
-                        jsonObject.put(KEY_ANIPPOS, anippos);
-                        jsonObject.put(KEY_AKDSTATUS, valAstatus);
-                        jsonObject.put(KEY_AWKTLOKAL, awktlokal);
-                        jsonObject.put(KEY_AKETERANGAN, valKeteranganStatus);
+                ArrayList<Antaran> antaranList = new ArrayList<>();
+                Log.i(MY_LOG, "checkedItem " + checkedItem);
 
-                        params.put("params", jsonObject.toString());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                JSONObject jsonObject = new JSONObject();
+                //try {
+                    for (int i=0; i<checkedItem; i++) {
+                        Log.i(MY_LOG, "looping " + i);
+                        /*String joAkditem = String.valueOf(jsonObject.put(KEY_AKDITEM, checkboxList.get(i)));
+                        String joAnippos = String.valueOf(jsonObject.put(KEY_ANIPPOS, anippos));
+                        String joAkdstatus = String.valueOf(jsonObject.put(KEY_AKDSTATUS, valAstatus));
+                        String joAwktlokal = String.valueOf(jsonObject.put(KEY_AWKTLOKAL, awktlokal));
+                        String joAketerangan = String.valueOf(jsonObject.put(KEY_AKETERANGAN, valKeteranganStatus));*/
+
+                        String joAkditem = "joAkditem " + i;
+                        String joAnippos = "joAnippos " + i;
+                        String joAkdstatus = "joAkdstatus " + i;
+                        String joAwktlokal = "joAwktlokal " + i;
+                        String joAketerangan = "joAketerangan " + i;
+
+                        //params.put("\"array\"", new Gson().toJson(jsonObject.toString()));
+                        antaranList.add(new Antaran(joAkditem, joAnippos, joAkdstatus, joAwktlokal, joAketerangan));
                     }
-                }
+                /*} catch (JSONException e) {
+                    e.printStackTrace();
+                }*/
 
-                Log.i(MY_LOG, "params: " + params);
+                String jsonCommands = new Gson().toJson(antaranList);
+                params.put("array", jsonCommands);
+
+                Log.i(MY_LOG, "json: " + params);
                 return params;
             }
         };

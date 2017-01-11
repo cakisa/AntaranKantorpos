@@ -271,7 +271,7 @@ public class AntaranTab2 extends Fragment {
         Log.i(MY_LOG, "showAdrantaran parseJSON");
         antaranAdapter = new AntaranAdapter(
                 getActivity(), AntaranParseJSON.akditem, AntaranParseJSON.akdstatus, AntaranParseJSON.awklokal,
-                AntaranParseJSON.adraAketerangan, AntaranParseJSON.adrsAketerangan, AntaranParseJSON.astatuskirim);
+                AntaranParseJSON.adraAketerangan, AntaranParseJSON.adrsAketerangan, AntaranParseJSON.astatuskirim, AntaranParseJSON.ado);
         if (antaranAdapter.getCount() == 0) {
             frameNoData.setVisibility(View.VISIBLE);
             listView.setVisibility(View.GONE);

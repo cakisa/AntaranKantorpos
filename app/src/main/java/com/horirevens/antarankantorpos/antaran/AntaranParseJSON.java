@@ -16,6 +16,7 @@ public class AntaranParseJSON {
     public static String[] adraAketerangan;
     public static String[] adrsAketerangan;
     public static String[] astatuskirim;
+    public static String[] ado;
     public static int length;
 
     public static final String MY_LOG = "log_message";
@@ -26,6 +27,7 @@ public class AntaranParseJSON {
     public static final String TAG_ADRA_AKETERANGAN = "ada_aketerangan";
     public static final String TAG_ADRS_AKETERANGAN = "ads_aketerangan";
     public static final String TAG_ASTATUSKIRIM = "astatuskirim";
+    public static final String TAG_ADO = "ado";
 
     private JSONArray jsonArray = null;
     private JSONObject jsonObject = null;
@@ -48,6 +50,7 @@ public class AntaranParseJSON {
             adraAketerangan = new String[jsonArray.length()];
             adrsAketerangan = new String[jsonArray.length()];
             astatuskirim = new String[jsonArray.length()];
+            ado = new String[jsonArray.length()];
             length = jsonArray.length();
 
             for(int i=0;i<jsonArray.length();i++){
@@ -60,6 +63,7 @@ public class AntaranParseJSON {
                 adraAketerangan[i] = jo.getString(TAG_ADRA_AKETERANGAN);
                 adrsAketerangan[i] = jo.getString(TAG_ADRS_AKETERANGAN);
                 astatuskirim[i] = jo.getString(TAG_ASTATUSKIRIM);
+                ado[i] = jo.getString(TAG_ADO);
             }
         } catch (JSONException e) {
             e.printStackTrace();
