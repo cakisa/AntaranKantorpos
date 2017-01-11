@@ -9,18 +9,13 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,9 +54,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvImei;
     private AlertDialog ade, adi;
     private ViewPager viewPager;
-    private NestedScrollView nestedScrollView;
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
     private CoordinatorLayout coordinatorLayout;
     private IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
     private BroadcastReceiver myReceiver = new BroadcastReceiver() {
@@ -96,8 +88,6 @@ public class MainActivity extends AppCompatActivity {
         tvNetwork = (TextView) findViewById(R.id.tvNetwork);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.navigation_view);
         //nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
         //nestedScrollView.setFillViewport(true);
         //nestedScrollView.setNestedScrollingEnabled(true);
@@ -111,89 +101,8 @@ public class MainActivity extends AppCompatActivity {
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         getImeiNumber();
-        setupNavigationView(navigationView);
         getOneAdruser();
         //getIntentResult();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Log.i(MY_LOG, "onOptionsItemSelected");
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                drawerLayout.openDrawer(GravityCompat.START);
-                return true;
-            default:
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void setupNavigationView(NavigationView navigationView) {
-        Log.i(MY_LOG, "setupDrawerContent");
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem item) {
-                        item.setChecked(true);
-                        selectDrawerItem(item);
-                        return true;
-                    }
-                });
-    }
-
-    public void selectDrawerItem(MenuItem menuItem) {
-        Log.i(MY_LOG, "selectDrawerItem");
-        switch(menuItem.getItemId()) {
-            case R.id.nav_first_fragment:
-                Log.i(MY_LOG, "selectDrawerItem firstFragment");
-                //fragmentClass = MainActivity.class;
-                break;
-            case R.id.nav_second_fragment:
-                Log.i(MY_LOG, "selectDrawerItem secondFragment");
-                startActivity(new Intent(this, DeliveryOrderActivity.class));
-                finish();
-                //fragmentClass = SecondFragment.class;
-                break;
-            default:
-                Log.i(MY_LOG, "selectDrawerItem defaultFragment");
-                //fragmentClass = MainActivity.class;
-                break;
-        }
-
-        menuItem.setChecked(true);
-        drawerLayout.closeDrawers();
-        /*Fragment fragment = null;
-        Class fragmentClass;
-        switch(menuItem.getItemId()) {
-            case R.id.nav_first_fragment:
-                Log.i(MY_LOG, "selectDrawerItem firstFragment");
-                fragmentClass = MainActivity.class;
-                break;
-            case R.id.nav_second_fragment:
-                fragmentClass = SecondFragment.class;
-                break;
-            default:
-                fragmentClass = MainActivity.class;
-        }
-
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Log.i(MY_LOG, "selectDrawerItem insertFragment");
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-
-        // Highlight the selected item has been done by NavigationView
-        menuItem.setChecked(true);
-        // Set action bar title
-        setTitle(menuItem.getTitle());
-        // Close the navigation drawer
-        drawerLayout.closeDrawers();*/
     }
 
     @Override
@@ -332,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i(MY_LOG, "setupTabIcons");
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
-        View view1 = getLayoutInflater().inflate(R.layout.antaran_tab_icon, null);
+        /*View view1 = getLayoutInflater().inflate(R.layout.antaran_tab_icon, null);
         view1.findViewById(R.id.iconId).setBackgroundResource(R.drawable.icon_tab1_selector);
         tabLayout.addTab(tabLayout.newTab().setCustomView(view1));
 
@@ -342,11 +251,11 @@ public class MainActivity extends AppCompatActivity {
 
         View view3 = getLayoutInflater().inflate(R.layout.antaran_tab_icon, null);
         view3.findViewById(R.id.iconId).setBackgroundResource(R.drawable.icon_tab3_selector);
-        tabLayout.addTab(tabLayout.newTab().setCustomView(view3));
+        tabLayout.addTab(tabLayout.newTab().setCustomView(view3));*/
 
-        //tabLayout.addTab(tabLayout.newTab().setText("Delivery Order"));
-        //tabLayout.addTab(tabLayout.newTab().setText("Berhasil"));
-        //tabLayout.addTab(tabLayout.newTab().setText("Gagal"));
+        tabLayout.addTab(tabLayout.newTab().setText("Delivery Order"));
+        tabLayout.addTab(tabLayout.newTab().setText("Berhasil"));
+        tabLayout.addTab(tabLayout.newTab().setText("Gagal"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
     }
 
