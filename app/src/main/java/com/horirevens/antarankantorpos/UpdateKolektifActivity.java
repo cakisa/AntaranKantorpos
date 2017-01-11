@@ -31,25 +31,29 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
-import com.google.gson.Gson;
 import com.horirevens.antarankantorpos.antaran.AdrstatusParseJSON;
-import com.horirevens.antarankantorpos.antaran.Antaran;
 import com.horirevens.antarankantorpos.antaran.AntaranAdapterKolektif;
 import com.horirevens.antarankantorpos.antaran.AntaranParseJSON;
 import com.horirevens.antarankantorpos.libs.MyCustomRequest;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -552,132 +556,87 @@ public class UpdateKolektifActivity extends AppCompatActivity {
     }
 
     private void updateData() {
-        Log.i(MY_LOG, "updateData");
-        Calendar c = Calendar.getInstance();
+        try {
+            Log.i(MY_LOG, "updateData");
+            Calendar c = Calendar.getInstance();
 
-        int second = c.get(Calendar.SECOND);
-        int minute = c.get(Calendar.MINUTE);
-        int hour = c.get(Calendar.HOUR_OF_DAY);
-        String time = String.format("%02d:%02d:%02d", hour, minute, second);
+            int second = c.get(Calendar.SECOND);
+            int minute = c.get(Calendar.MINUTE);
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            String time = String.format("%02d:%02d:%02d", hour, minute, second);
 
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH)+1;
-        int day = c.get(Calendar.DAY_OF_MONTH);
-        String date = String.format("%04d-%02d-%02d", year, month, day);
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH) + 1;
+            int day = c.get(Calendar.DAY_OF_MONTH);
+            String date = String.format("%04d-%02d-%02d", year, month, day);
 
-        final String awktlokal = date+" "+time;
+            final String awktlokal = date + " " + time;
 
-        /*requestQueue = Volley.newRequestQueue(this);
-        //for (int i=0; i<checkboxList.size(); i++) {
-            map.put(KEY_AKDITEM, checkboxList.get(0));
-            map.put(KEY_ANIPPOS, anippos);
-            map.put(KEY_AKDSTATUS, valAstatus);
-            map.put(KEY_AWKTLOKAL, awktlokal);
-            map.put(KEY_AKETERANGAN, valKeteranganStatus);
-        //}
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String MyURL = "http://mob.agenposedo.com/example.php";
+            JSONArray jsonArray = new JSONArray();
 
-        myCustomRequest = new MyCustomRequest(Request.Method.POST, JSON_URL_ADRANTARAN, map,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i(MY_LOG, "updateData success");
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.i(MY_LOG, "updateData error");
-                    }
-                });
-
-        jsonRequest = new JsonObjectRequest(
-                        Request.Method.POST,
-                        JSON_URL_ADRANTARAN,
-                        new JSONObject(map),
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                Log.i(MY_LOG, "updateData success");
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Log.i(MY_LOG, "updateData error");
-                            }
-                        }) {
-                            @Override
-                            public Map<String, String> getHeaders() throws AuthFailureError {
-                                HashMap<String, String> headers = new HashMap<>();
-                                headers.put("Content-Type", "application/json; charset=utf-8");
-                                headers.put("User-agent", System.getProperty("http.agent"));
-                                return super.getHeaders();
-                            }
-                        };
-
-        Log.i(MY_LOG, "map: " + map);
-        requestQueue.add(myCustomRequest);*/
-
-
-        /*listView.setVisibility(View.GONE);
-        spinner.setAlpha(0f);
-        spinner.setVisibility(View.VISIBLE);
-        spinner.animate().alpha(1f).setDuration(animationDuration).setListener(null);*/
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "http://mob.agenposedo.com/example.php",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.i(MY_LOG, "updateData onResponse");
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.i(MY_LOG, "onErrorResponse");
-                    }
-                })
-        {
-            @Override
-            protected Map<String,String> getParams() {
-                HashMap<String, String> params = new HashMap<>();
-                ArrayList<Antaran> antaranList = new ArrayList<>();
-                Log.i(MY_LOG, "checkedItem " + checkedItem);
-
+            for (int i=0; i<checkedItem; i++) {
+                Log.i(MY_LOG, "looping " + i);
                 JSONObject jsonObject = new JSONObject();
-                //try {
-                    for (int i=0; i<checkedItem; i++) {
-                        Log.i(MY_LOG, "looping " + i);
-                        /*String joAkditem = String.valueOf(jsonObject.put(KEY_AKDITEM, checkboxList.get(i)));
-                        String joAnippos = String.valueOf(jsonObject.put(KEY_ANIPPOS, anippos));
-                        String joAkdstatus = String.valueOf(jsonObject.put(KEY_AKDSTATUS, valAstatus));
-                        String joAwktlokal = String.valueOf(jsonObject.put(KEY_AWKTLOKAL, awktlokal));
-                        String joAketerangan = String.valueOf(jsonObject.put(KEY_AKETERANGAN, valKeteranganStatus));*/
-
-                        String joAkditem = "joAkditem " + i;
-                        String joAnippos = "joAnippos " + i;
-                        String joAkdstatus = "joAkdstatus " + i;
-                        String joAwktlokal = "joAwktlokal " + i;
-                        String joAketerangan = "joAketerangan " + i;
-
-                        //params.put("\"array\"", new Gson().toJson(jsonObject.toString()));
-                        antaranList.add(new Antaran(joAkditem, joAnippos, joAkdstatus, joAwktlokal, joAketerangan));
-                    }
-                /*} catch (JSONException e) {
-                    e.printStackTrace();
-                }*/
-
-                String jsonCommands = new Gson().toJson(antaranList);
-                params.put("array", jsonCommands);
-
-                Log.i(MY_LOG, "json: " + params);
-                return params;
+                jsonObject.put(KEY_AKDITEM, checkboxList.get(i));
+                jsonObject.put(KEY_ANIPPOS, anippos);
+                jsonObject.put(KEY_AKDSTATUS, valAstatus);
+                jsonObject.put(KEY_AWKTLOKAL, awktlokal);
+                jsonObject.put(KEY_AKETERANGAN, valKeteranganStatus);
+                jsonArray.put(jsonObject);
             }
-        };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
+            JSONObject jsonObjectArray = new JSONObject();
+            jsonObjectArray.put("array", jsonArray);
+            final String jsonString = jsonObjectArray.toString();
+
+            StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                    MyURL,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.i(MY_LOG, "updateData onResponse");
+                            String s = "Berhasil update status";
+                            alertDialogInformasi(s);
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.i(MY_LOG, "onErrorResponse");
+                        }
+                    }) {
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return jsonString == null ? null : jsonString.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", jsonString, "utf-8");
+                        return null;
+                    }
+                }
+
+                @Override
+                protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                    String responseString = "";
+                    if (response != null) {
+                        responseString = String.valueOf(response.statusCode);
+                        // can get more details such as response.headers
+                    }
+                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                }
+            };
+            requestQueue.add(stringRequest);
+            Log.i(MY_LOG, "json: " + jsonString);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void alertDialogInformasi(String s) {

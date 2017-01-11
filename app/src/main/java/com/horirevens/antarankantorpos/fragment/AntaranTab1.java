@@ -463,8 +463,9 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                         if (rbIdValue.equals("6207") || rbIdValue.equals("6208") ||
                                 rbIdValue.equals("6209") || rbIdValue.equals("6210") ||
                                 rbIdValue.equals("6211") || rbIdValue.equals("6212") ||
+                                rbIdValue.equals("6213") || rbIdValue.equals("6214") ||
                                 rbIdValue.equals("6215") || rbIdValue.equals("6216") ||
-                                rbIdValue.equals("6218")) {
+                                rbIdValue.equals("6217") || rbIdValue.equals("6218")) {
                             Log.i(MY_LOG, "addRadioButton berhasil");
                             String status = "1";
                             alertDialogKeterangan(status);
@@ -655,7 +656,6 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                 params.put(KEY_AWKTLOKAL, awktlokal);
                 params.put(KEY_AKETERANGAN, valKeteranganStatus);
 
-                Log.i(MY_LOG, "params: " + params);
                 return params;
             }
         };
