@@ -58,7 +58,7 @@ import java.util.Map;
 /**
  * Created by horirevens on 12/16/16.
  */
-public class AntaranTab1 extends Fragment implements ListView.OnItemClickListener {
+public class AntaranTab1 extends Fragment implements ListView.OnItemClickListener, ListView.OnItemLongClickListener {
     public static final String JSON_URL_ADRANTARAN = "http://mob.agenposedo.com/adrantaran.php";
     public static final String JSON_URL_ADRSTATUS = "http://mob.agenposedo.com/adrstatus.php";
 
@@ -106,6 +106,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         listView = (ListView) rootView.findViewById(R.id.listView);
         listView.setVisibility(View.GONE);
         listView.setOnItemClickListener(this);
+        listView.setOnItemLongClickListener(this);
 
         getAllAdrantaran();
         swipeRefresh();
@@ -491,7 +492,8 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         awesomeValidation.setContext(getContext());
 
         final EditText keteranganStatus = (EditText) view.findViewById(R.id.keteranganStatus);
-        keteranganStatus.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
+        int maxLength = 25;
+        keteranganStatus.setFilters(new InputFilter[] {new InputFilter.AllCaps(), new InputFilter.LengthFilter(maxLength)});
 
         Log.i(MY_LOG, "initAwesomeValidation");
         awesomeValidation.addValidation(keteranganStatus, "[a-zA-Z\\s]+", getResources().getString(R.string.err_name));
@@ -687,5 +689,11 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         adb.setView(view);
         adi = adb.create();
         adi.show();
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        Toast.makeText(getContext(), "Long click", Toast.LENGTH_SHORT).show();
+        return true;
     }
 }
