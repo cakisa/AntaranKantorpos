@@ -1,4 +1,4 @@
-# AntaranKantorpos 1.2.1
+# AntaranKantorpos 1.2.2
 
 Aplikasi internal PT Pos Indonesia (Persero) untuk layanan petugas Antaran  
 
@@ -9,5 +9,5 @@ Fitur Aplikasi :
 4. Update Kolektif  
 
 Perubahan :  
-1. Menambahkan Navigation Drawer
+1. Update kolektif by longitemclicklistener
 
