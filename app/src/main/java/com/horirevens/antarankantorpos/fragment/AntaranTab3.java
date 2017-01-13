@@ -32,6 +32,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
+import com.horirevens.antarankantorpos.DBConfig;
 import com.horirevens.antarankantorpos.R;
 import com.horirevens.antarankantorpos.antaran.AntaranAdapter;
 import com.horirevens.antarankantorpos.antaran.AntaranParseJSON;
@@ -40,7 +41,6 @@ import com.horirevens.antarankantorpos.antaran.AntaranParseJSON;
  * Created by horirevens on 11/25/16.
  */
 public class AntaranTab3 extends Fragment {
-    public static final String JSON_URL_ADRANTARAN = "http://mob.agenposedo.com/adrantaran.php";
     public static final String MY_LOG = "log_AntaranTab3";
 
     private ListView listView;
@@ -208,7 +208,7 @@ public class AntaranTab3 extends Fragment {
         String param2 = "&anippos=" + anippos;
         String param3 = "&akditem=" + akditem;
         String params = param1 + param2 + param3;
-        StringRequest stringRequest = new StringRequest(JSON_URL_ADRANTARAN + params,
+        StringRequest stringRequest = new StringRequest(DBConfig.JSON_URL_ADRANTARAN + params,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

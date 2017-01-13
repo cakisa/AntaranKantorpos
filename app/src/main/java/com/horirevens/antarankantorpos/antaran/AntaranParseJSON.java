@@ -2,6 +2,8 @@ package com.horirevens.antarankantorpos.antaran;
 
 import android.util.Log;
 
+import com.horirevens.antarankantorpos.DBConfig;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,14 +22,7 @@ public class AntaranParseJSON {
     public static int length;
 
     public static final String MY_LOG = "log_message";
-    public static final String TAG_JSON_ARRAY="array";
-    public static final String TAG_AKDITEM = "akditem";
-    public static final String TAG_AKDSTATUS = "akdstatus";
-    public static final String TAG_AWKTLOKAL = "awktlokal";
-    public static final String TAG_ADRA_AKETERANGAN = "ada_aketerangan";
-    public static final String TAG_ADRS_AKETERANGAN = "ads_aketerangan";
-    public static final String TAG_ASTATUSKIRIM = "astatuskirim";
-    public static final String TAG_ADO = "ado";
+
 
     private JSONArray jsonArray = null;
     private JSONObject jsonObject = null;
@@ -42,7 +37,7 @@ public class AntaranParseJSON {
         try {
             Log.i(MY_LOG, "parseJSON try");
             jsonObject = new JSONObject(json);
-            jsonArray = jsonObject.getJSONArray(TAG_JSON_ARRAY);
+            jsonArray = jsonObject.getJSONArray(DBConfig.TAG_JSON_ARRAY);
 
             akditem = new String[jsonArray.length()];
             akdstatus = new String[jsonArray.length()];
@@ -57,13 +52,13 @@ public class AntaranParseJSON {
                 Log.i(MY_LOG, "parseJSON looping");
                 JSONObject jo = jsonArray.getJSONObject(i);
                 Log.i(MY_LOG, "parseJSON JSONObject");
-                akditem[i] = jo.getString(TAG_AKDITEM);
-                akdstatus[i] = jo.getString(TAG_AKDSTATUS);
-                awklokal[i] = jo.getString(TAG_AWKTLOKAL);
-                adraAketerangan[i] = jo.getString(TAG_ADRA_AKETERANGAN);
-                adrsAketerangan[i] = jo.getString(TAG_ADRS_AKETERANGAN);
-                astatuskirim[i] = jo.getString(TAG_ASTATUSKIRIM);
-                ado[i] = jo.getString(TAG_ADO);
+                akditem[i] = jo.getString(DBConfig.TAG_AKDITEM);
+                akdstatus[i] = jo.getString(DBConfig.TAG_AKDSTATUS);
+                awklokal[i] = jo.getString(DBConfig.TAG_AWKTLOKAL);
+                adraAketerangan[i] = jo.getString(DBConfig.TAG_ADRA_AKETERANGAN);
+                adrsAketerangan[i] = jo.getString(DBConfig.TAG_ADRS_AKETERANGAN);
+                astatuskirim[i] = jo.getString(DBConfig.TAG_ASTATUSKIRIM);
+                ado[i] = jo.getString(DBConfig.TAG_ADO);
             }
         } catch (JSONException e) {
             e.printStackTrace();

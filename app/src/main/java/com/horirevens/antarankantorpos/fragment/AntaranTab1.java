@@ -45,6 +45,7 @@ import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.horirevens.antarankantorpos.BarcodeScannerActivity;
+import com.horirevens.antarankantorpos.DBConfig;
 import com.horirevens.antarankantorpos.R;
 import com.horirevens.antarankantorpos.UpdateKolektifActivity;
 import com.horirevens.antarankantorpos.antaran.AdrstatusParseJSON;
@@ -59,14 +60,6 @@ import java.util.Map;
  * Created by horirevens on 12/16/16.
  */
 public class AntaranTab1 extends Fragment implements ListView.OnItemClickListener, ListView.OnItemLongClickListener {
-    public static final String JSON_URL_ADRANTARAN = "http://mob.agenposedo.com/adrantaran.php";
-    public static final String JSON_URL_ADRSTATUS = "http://mob.agenposedo.com/adrstatus.php";
-
-    public static final String KEY_AKDITEM = "akditem";
-    public static final String KEY_ANIPPOS = "anippos";
-    public static final String KEY_AWKTLOKAL = "awktlokal";
-    public static final String KEY_AKDSTATUS = "akdstatus";
-    public static final String KEY_AKETERANGAN = "aketerangan";
     public static final String STR_ERROR = "Gagal memuat data. Keluar dan coba kembali";
     public static final String STR_BERHASIL = "Berhasil update status dengan No Resi ";
 
@@ -269,7 +262,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         String param2 = "&anippos=" + anippos;
         String param3 = "&akditem=" + akditem;
         String params = param1 + param2 + param3;
-        StringRequest stringRequest = new StringRequest(JSON_URL_ADRANTARAN + params,
+        StringRequest stringRequest = new StringRequest(DBConfig.JSON_URL_ADRANTARAN + params,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -398,7 +391,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
 
     private void getAllAdrstatus(String params) {
         Log.i(MY_LOG, "getAllAdrstatus");
-        StringRequest stringRequest = new StringRequest(JSON_URL_ADRSTATUS + params,
+        StringRequest stringRequest = new StringRequest(DBConfig.JSON_URL_ADRSTATUS + params,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -636,7 +629,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         spinner.animate().alpha(1f).setDuration(animationDuration).setListener(null);
 
         String s = "?status=4";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, JSON_URL_ADRANTARAN + s,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, DBConfig.JSON_URL_ADRANTARAN + s,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -654,11 +647,11 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<>();
-                params.put(KEY_AKDITEM, valAkditem);
-                params.put(KEY_ANIPPOS, anippos);
-                params.put(KEY_AKDSTATUS, valAstatus);
-                params.put(KEY_AWKTLOKAL, awktlokal);
-                params.put(KEY_AKETERANGAN, valKeteranganStatus);
+                params.put(DBConfig.KEY_AKDITEM, valAkditem);
+                params.put(DBConfig.KEY_ANIPPOS, anippos);
+                params.put(DBConfig.KEY_AKDSTATUS, valAstatus);
+                params.put(DBConfig.KEY_AWKTLOKAL, awktlokal);
+                params.put(DBConfig.KEY_AKETERANGAN, valKeteranganStatus);
 
                 return params;
             }

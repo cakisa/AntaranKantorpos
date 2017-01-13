@@ -37,11 +37,6 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
     public static final String MY_LOG = "log_MainActivity";
-    public static final String JSON_URL_LOGIN = "http://mob.agenposedo.com/login.php";
-
-    public static final String TAG_JSON_ARRAY="array";
-    public static final String TAG_ANIPPOS = "anippos";
-    public static final String TAG_ANAMA = "anama";
 
     public static String[] anippos;
     public static String[] anama;
@@ -131,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
     private void getOneAdruser() {
         Log.i(MY_LOG, "getOneAdruser");
         String params = "?device_imei=" + imeiNumber;
-        StringRequest stringRequest = new StringRequest(JSON_URL_LOGIN + params,
+        StringRequest stringRequest = new StringRequest(DBConfig.JSON_URL_LOGIN + params,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -221,14 +216,14 @@ public class MainActivity extends AppCompatActivity {
         try {
             Log.i(MY_LOG, "parseJSON try");
             JSONObject jsonObject = new JSONObject(json);
-            JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON_ARRAY);
+            JSONArray jsonArray = jsonObject.getJSONArray(DBConfig.TAG_JSON_ARRAY);
             JSONObject jo = jsonArray.getJSONObject(0);
 
             anippos = new String[jsonArray.length()];
             anama = new String[jsonArray.length()];
 
-            anippos[0] = jo.getString(TAG_ANIPPOS);
-            anama[0] = jo.getString(TAG_ANAMA);
+            anippos[0] = jo.getString(DBConfig.TAG_ANIPPOS);
+            anama[0] = jo.getString(DBConfig.TAG_ANAMA);
 
             tvAnippos.setText(anippos[0]);
             tvAnama.setText(anama[0]);

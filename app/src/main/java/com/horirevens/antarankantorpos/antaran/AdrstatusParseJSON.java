@@ -2,6 +2,8 @@ package com.horirevens.antarankantorpos.antaran;
 
 import android.util.Log;
 
+import com.horirevens.antarankantorpos.DBConfig;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,9 +17,6 @@ public class AdrstatusParseJSON {
     public static int jsonArrayLength;
 
     public static final String MY_LOG = "log_AdrstatusParseJSON";
-    public static final String TAG_JSON_ARRAY="array";
-    public static final String TAG_ASTATUS = "astatus";
-    public static final String TAG_AKETERANGAN = "aketerangan";
 
     private JSONArray jsonArray = null;
     private JSONObject jsonObject = null;
@@ -32,7 +31,7 @@ public class AdrstatusParseJSON {
         try {
             Log.i(MY_LOG, "parseJSON try");
             jsonObject = new JSONObject(json);
-            jsonArray = jsonObject.getJSONArray(TAG_JSON_ARRAY);
+            jsonArray = jsonObject.getJSONArray(DBConfig.TAG_JSON_ARRAY);
 
             astatus = new String[jsonArray.length()];
             aketerangan = new String[jsonArray.length()];
@@ -42,8 +41,8 @@ public class AdrstatusParseJSON {
                 Log.i(MY_LOG, "parseJSON looping");
                 JSONObject jo = jsonArray.getJSONObject(i);
                 Log.i(MY_LOG, "parseJSON JSONObject");
-                astatus[i] = jo.getString(TAG_ASTATUS);
-                aketerangan[i] = jo.getString(TAG_AKETERANGAN);
+                astatus[i] = jo.getString(DBConfig.TAG_ASTATUS);
+                aketerangan[i] = jo.getString(DBConfig.TAG_AKETERANGAN);
             }
         } catch (JSONException e) {
             e.printStackTrace();
