@@ -6,7 +6,7 @@
     android:layout_height="200dp">
     <TextView
         android:id="@+id/tvInformasi"
-        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
+        android:textAppearance="@android:style/TextAppearance.Holo.Small"
         android:layout_marginBottom="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

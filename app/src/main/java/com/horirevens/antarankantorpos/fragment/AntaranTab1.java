@@ -67,8 +67,8 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
     public static final String KEY_AWKTLOKAL = "awktlokal";
     public static final String KEY_AKDSTATUS = "akdstatus";
     public static final String KEY_AKETERANGAN = "aketerangan";
-    public static final String STR_ERROR = "Gangguan koneksi. Sedang menunggu jaringan...";
-    public static final String STR_BERHASIL = "Berhasil update status dengan no resi ";
+    public static final String STR_ERROR = "Gagal memuat data. Keluar dan coba kembali";
+    public static final String STR_BERHASIL = "Berhasil update status dengan No Resi ";
 
     public static final String MY_LOG = "log_AntaranTab1";
 
@@ -189,7 +189,6 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         Intent intent = new Intent(getActivity(), UpdateKolektifActivity.class);
         intent.putExtra("anippos", anippos);
         startActivity(intent);
-        //getActivity().finish();
     }
 
     private void searchAkditem(MenuItem item) {
@@ -291,8 +290,8 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i(MY_LOG, "onErrorResponse");
-                        alertDialogInformasi(STR_ERROR);
-                        //Toast.makeText(getContext(), "Gangguan Koneksi. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
+                        String strError = "Gagal memuat data. Mencoba ulang...";
+                        alertDialogInformasi(strError);
                     }
                 });
 
@@ -383,7 +382,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         Log.i(MY_LOG, "alertDialogJenisStatus getAllAdrstatus");
 
         AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
-        adb.setTitle("Keterangan");
+        adb.setTitle("Status Kiriman");
         /*adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
@@ -440,7 +439,8 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
             RadioButton radioButton = new RadioButton(getContext());
             radioButton.setId(Integer.parseInt(AdrstatusParseJSON.astatus[i]));
             radioButton.setText(AdrstatusParseJSON.aketerangan[i]);
-            radioButton.setTextSize(18);
+            radioButton.setTextSize(16);
+            //radioButton.setTextColor(getResources().getColor(R.color.colorSecondaryText));
             radioGroup.addView(radioButton);
         }
         Log.i(MY_LOG, "addRadioButton showOption");
@@ -632,7 +632,9 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         spinner.setAlpha(0f);
         spinner.setVisibility(View.VISIBLE);
         spinner.animate().alpha(1f).setDuration(animationDuration).setListener(null);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, JSON_URL_ADRANTARAN,
+
+        String s = "?status=4";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, JSON_URL_ADRANTARAN + s,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

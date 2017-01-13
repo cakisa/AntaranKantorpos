@@ -573,7 +573,7 @@ public class UpdateKolektifActivity extends AppCompatActivity {
             final String awktlokal = date + " " + time;
 
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String MyURL = "http://mob.agenposedo.com/example.php";
+            String s = "?status=5";
             JSONArray jsonArray = new JSONArray();
 
             for (int i=0; i<checkedItem; i++) {
@@ -592,7 +592,7 @@ public class UpdateKolektifActivity extends AppCompatActivity {
             final String jsonString = jsonObjectArray.toString();
 
             StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                    MyURL,
+                    JSON_URL_ADRANTARAN + s,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {

@@ -6,7 +6,7 @@
     android:layout_height="200dp">
     <TextView
         android:text="@string/err_imei"
-        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
+        android:textAppearance="@android:style/TextAppearance.Holo.Small"
         android:layout_marginBottom="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -17,7 +17,7 @@
         android:layout_height="wrap_content" />
     <TextView
         android:id="@+id/tvImei"
-        android:textAppearance="@android:style/TextAppearance.Holo.Large"
+        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
         android:layout_marginBottom="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

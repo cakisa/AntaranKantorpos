@@ -231,7 +231,7 @@ public class AntaranTab3 extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i(MY_LOG, "onErrorResponse");
-                        String s = "Gangguan koneksi. Sedang menunggu jaringan...";
+                        String s = "Gagal memuat data. Keluar dan coba kembali";
                         alertDialogInformasi(s);
                         //Toast.makeText(getContext(), "Gangguan Koneksi. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
                     }
