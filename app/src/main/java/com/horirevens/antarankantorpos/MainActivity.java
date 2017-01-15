@@ -18,15 +18,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 import com.horirevens.antarankantorpos.antaran.AntaranPagerAdapter;
 import com.horirevens.antarankantorpos.libs.MyImei;
 import com.horirevens.antarankantorpos.network.NetworkStatus;
@@ -49,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvImei;
     private AlertDialog ade, adi;
     private ViewPager viewPager;
+    private Snackbar snackbar;
     private CoordinatorLayout coordinatorLayout;
     private IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
     private BroadcastReceiver myReceiver = new BroadcastReceiver() {
@@ -67,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 tvAnama.setVisibility(View.GONE);
                 tvAnippos.setVisibility(View.GONE);
 
-                Snackbar.make(coordinatorLayout, "No Internet Access", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(coordinatorLayout, "Tidak ada koneksi internet", Snackbar.LENGTH_LONG).show();
             }
         }
     };
@@ -97,22 +95,6 @@ public class MainActivity extends AppCompatActivity {
 
         getImeiNumber();
         getOneAdruser();
-        //getIntentResult();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        Log.i(MY_LOG, "onActivityResult");
-        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if(scanningResult != null) {
-            if(scanningResult.getContents() == null) {
-                Toast.makeText(this, "Cancelled from fragment", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, "Scanned from fragment", Toast.LENGTH_LONG).show();
-            }
-        }
-
-        super.onActivityResult(requestCode, resultCode, intent);
     }
 
     private String getImeiNumber() {
@@ -121,6 +103,22 @@ public class MainActivity extends AppCompatActivity {
         imeiNumber = myImei.getImeiNumber(getApplicationContext());
         Log.i(MY_LOG, "getImeiNumber imeiNumber");
         return imeiNumber;
+    }
+
+    private void showSnackbar(String s) {
+        snackbar = Snackbar.make(coordinatorLayout, s, Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction("Ulangi", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(getApplicationContext(), "OKE", Toast.LENGTH_SHORT).show();
+                getOneAdruser();
+            }
+        });
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
+        View view = snackbar.getView();
+        TextView textView = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(getResources().getColor(R.color.colorWhite));
+        snackbar.show();
     }
 
     private void getOneAdruser() {
@@ -138,9 +136,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i(MY_LOG, "onErrorResponse");
-                        String s = "Gagal memuat data. Keluar dan coba kembali";
-                        alertDialogInformasiError(s);
-                        //Toast.makeText(getApplicationContext(), "Gangguan Koneksi. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
+                        String s = "Gagal memuat data";
+                        showSnackbar(s);
                     }
                 });
 
@@ -148,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    private void alertDialogInformasiError(String s) {
+    /*private void alertDialogInformasiError(String s) {
         Log.i(MY_LOG, "alertDialogInformasi");
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.alert_dialog_informasi, null);
@@ -162,13 +159,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 Log.i(MY_LOG, "alertDialogInformasi setPositiveButton");
                 finish();
-                //adi.dismiss();
             }
         });
         adb.setView(view);
         adi = adb.create();
         adi.show();
-    }
+    }*/
 
     private void alertDialogIMEI(String response) {
         Log.i(MY_LOG, "alertDialogIMEI");

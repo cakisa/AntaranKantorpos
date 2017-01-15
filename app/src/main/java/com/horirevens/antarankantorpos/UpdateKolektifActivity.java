@@ -8,7 +8,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -39,7 +41,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
@@ -48,7 +49,6 @@ import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.horirevens.antarankantorpos.antaran.AdrstatusParseJSON;
 import com.horirevens.antarankantorpos.antaran.AntaranAdapterKolektif;
 import com.horirevens.antarankantorpos.antaran.AntaranParseJSON;
-import com.horirevens.antarankantorpos.libs.MyCustomRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -56,22 +56,13 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by horirevens on 12/27/16.
  */
 public class UpdateKolektifActivity extends AppCompatActivity {
     public static final String MY_LOG = "log_UpdateKolektif";
-    public static final String JSON_URL_ADRANTARAN = "http://mob.agenposedo.com/adrantaran.php";
-    public static final String JSON_URL_ADRSTATUS = "http://mob.agenposedo.com/adrstatus.php";
-
-    public static final String KEY_AKDITEM = "akditem";
-    public static final String KEY_ANIPPOS = "anippos";
-    public static final String KEY_AWKTLOKAL = "awktlokal";
-    public static final String KEY_AKDSTATUS = "akdstatus";
-    public static final String KEY_AKETERANGAN = "aketerangan";
+    public static final String STR_ERROR = "Gagal memuat data";
 
     private ListView listView;
     private Toolbar toolbar;
@@ -81,6 +72,8 @@ public class UpdateKolektifActivity extends AppCompatActivity {
     private SearchView searchView;
     private RadioGroup radioGroup;
     private FloatingActionButton fab;
+    private Snackbar snackbar;
+    private CoordinatorLayout coordinatorLayout;
     private AlertDialog adus, adjs, adp, adk, adi;
 
     private int animationDuration, checkedItem;
@@ -88,10 +81,6 @@ public class UpdateKolektifActivity extends AppCompatActivity {
     private ArrayList<String> checkboxList = new ArrayList<>();
     private AntaranAdapterKolektif antaranAdapterKolektif;
     private AwesomeValidation awesomeValidation;
-    private RequestQueue requestQueue;
-    private MyCustomRequest myCustomRequest;
-    private JsonObjectRequest jsonRequest;
-    private Map<String, String> map = new HashMap<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -105,6 +94,7 @@ public class UpdateKolektifActivity extends AppCompatActivity {
         frameNoData = (FrameLayout) findViewById(R.id.frameNoData);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
@@ -200,7 +190,7 @@ public class UpdateKolektifActivity extends AppCompatActivity {
         String param2 = "&anippos=" + anippos;
         String param3 = "&akditem=" + akditem;
         String params = param1 + param2 + param3;
-        StringRequest stringRequest = new StringRequest(JSON_URL_ADRANTARAN + params,
+        StringRequest stringRequest = new StringRequest(DBConfig.JSON_URL_ADRANTARAN + params,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -222,8 +212,8 @@ public class UpdateKolektifActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i(MY_LOG, "onErrorResponse");
-                        String s = "Gangguan koneksi. Sedang menunggu jaringan...";
-                        alertDialogInformasi(s);
+                        String se = "0";
+                        showSnackbar(STR_ERROR, se);
                     }
                 });
 
@@ -299,13 +289,6 @@ public class UpdateKolektifActivity extends AppCompatActivity {
                 alertDialogJenisStatus(params);
             }
         });
-        /*adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                Log.i(MY_LOG, "alertDialogUpdateStatus onDismiss");
-                getAllAdrantaran();
-            }
-        });*/
         adb.setView(view);
         adus = adb.create();
         adus.show();
@@ -326,13 +309,6 @@ public class UpdateKolektifActivity extends AppCompatActivity {
 
         AlertDialog.Builder adb = new AlertDialog.Builder(this);
         adb.setTitle("Keterangan");
-        /*adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                Log.i(MY_LOG, "alertDialogJenisStatus onDismiss");
-                getAllAdrantaran();
-            }
-        });*/
         adb.setView(view);
         adjs = adb.create();
         adjs.show();
@@ -340,7 +316,7 @@ public class UpdateKolektifActivity extends AppCompatActivity {
 
     private void getAllAdrstatus(String params) {
         Log.i(MY_LOG, "getAllAdrstatus");
-        StringRequest stringRequest = new StringRequest(JSON_URL_ADRSTATUS + params,
+        StringRequest stringRequest = new StringRequest(DBConfig.JSON_URL_ADRSTATUS + params,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -362,8 +338,8 @@ public class UpdateKolektifActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i(MY_LOG, "onErrorResponse");
-                        String s = "Gangguan koneksi. Sedang menunggu jaringan...";
-                        alertDialogInformasi(s);
+                        String se = "1";
+                        showSnackbar(STR_ERROR, se);
                     }
                 });
 
@@ -443,13 +419,6 @@ public class UpdateKolektifActivity extends AppCompatActivity {
             adb.setTitle("Keterangan Gagal");
         }
         adb.setPositiveButton("Simpan", null);
-        /*adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                Log.i(MY_LOG, "alertDialogKeterangan onDismiss");
-                getAllAdrantaran();
-            }
-        });*/
         adb.setView(view);
         adp = adb.create();
         adp.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -473,30 +442,6 @@ public class UpdateKolektifActivity extends AppCompatActivity {
         });
         adp.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         adp.show();
-
-    /*adb.setPositiveButton("Simpan", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                awesomeValidation.validate();
-                Log.i(MY_LOG, "validate");
-
-                Log.i(MY_LOG, "alertDialogPenerima simpan");
-                //String valNamaPenerima = namaPenerima.getText().toString().trim();
-                //resAnama[0] = valNamaPenerima;
-                //adp.dismiss();
-                //alertDialogValidasi(status);
-            }
-        });
-        adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                namaPenerima.setText("");
-            }
-        });
-        adb.setView(view);
-        adp = adb.create();
-        adp.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        adp.show();*/
     }
 
     private void alertDialogValidasi(final String status) {
@@ -543,13 +488,6 @@ public class UpdateKolektifActivity extends AppCompatActivity {
                 adk.dismiss();
             }
         });
-        /*adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                Log.i(MY_LOG, "alertDialogValidasi onDismiss");
-                getAllAdrantaran();
-            }
-        });*/
         adb.setView(view);
         adk = adb.create();
         adk.show();
@@ -579,11 +517,11 @@ public class UpdateKolektifActivity extends AppCompatActivity {
             for (int i=0; i<checkedItem; i++) {
                 Log.i(MY_LOG, "looping " + i);
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put(KEY_AKDITEM, checkboxList.get(i));
-                jsonObject.put(KEY_ANIPPOS, anippos);
-                jsonObject.put(KEY_AKDSTATUS, valAstatus);
-                jsonObject.put(KEY_AWKTLOKAL, awktlokal);
-                jsonObject.put(KEY_AKETERANGAN, valKeteranganStatus);
+                jsonObject.put(DBConfig.KEY_AKDITEM, checkboxList.get(i));
+                jsonObject.put(DBConfig.KEY_ANIPPOS, anippos);
+                jsonObject.put(DBConfig.KEY_AKDSTATUS, valAstatus);
+                jsonObject.put(DBConfig.KEY_AWKTLOKAL, awktlokal);
+                jsonObject.put(DBConfig.KEY_AKETERANGAN, valKeteranganStatus);
                 jsonArray.put(jsonObject);
             }
 
@@ -592,19 +530,23 @@ public class UpdateKolektifActivity extends AppCompatActivity {
             final String jsonString = jsonObjectArray.toString();
 
             StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                    JSON_URL_ADRANTARAN + s,
+                    DBConfig.JSON_URL_ADRANTARAN + s,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             Log.i(MY_LOG, "updateData onResponse");
                             String s = "Berhasil update status";
-                            alertDialogInformasi(s);
+                            String se = "1";
+                            showSnackbar(s, se);
+                            getAllAdrantaran();
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             Log.i(MY_LOG, "onErrorResponse");
+                            String se = "0";
+                            showSnackbar(STR_ERROR, se);
                         }
                     }) {
                 @Override
@@ -627,7 +569,6 @@ public class UpdateKolektifActivity extends AppCompatActivity {
                     String responseString = "";
                     if (response != null) {
                         responseString = String.valueOf(response.statusCode);
-                        // can get more details such as response.headers
                     }
                     return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
                 }
@@ -639,7 +580,29 @@ public class UpdateKolektifActivity extends AppCompatActivity {
         }
     }
 
-    private void alertDialogInformasi(String s) {
+    private void showSnackbar(String s, String se) {
+        if (se.equals("0")) {
+            snackbar = Snackbar.make(coordinatorLayout, s, Snackbar.LENGTH_INDEFINITE);
+            snackbar.setAction("Ulangi", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getAllAdrantaran();
+                }
+            });
+            snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
+        }
+
+        if (se.equals("1")) {
+            snackbar = Snackbar.make(coordinatorLayout, s, Snackbar.LENGTH_LONG);
+        }
+
+        View view = snackbar.getView();
+        TextView textView = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(getResources().getColor(R.color.colorWhite));
+        snackbar.show();
+    }
+
+    /*private void alertDialogInformasi(String s) {
         Log.i(MY_LOG, "alertDialogInformasi");
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.alert_dialog_informasi, null);
@@ -659,5 +622,5 @@ public class UpdateKolektifActivity extends AppCompatActivity {
         adb.setView(view);
         adi = adb.create();
         adi.show();
-    }
+    }*/
 }

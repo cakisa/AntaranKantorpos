@@ -4,6 +4,10 @@ package com.horirevens.antarankantorpos;
  * Created by horirevens on 1/13/17.
  */
 public class DBConfig {
+    /*public static final String JSON_URL_LOGIN = "http://regional7.posindonesia.co.id:8082/usa/login.php";
+    public static final String JSON_URL_ADRANTARAN = "http://regional7.posindonesia.co.id:8082/usa/adrantaran.php";
+    public static final String JSON_URL_ADRSTATUS = "http://regional7.posindonesia.co.id:8082/usa/adrstatus.php";*/
+
     public static final String JSON_URL_LOGIN = "http://mob.agenposedo.com/login.php";
     public static final String JSON_URL_ADRANTARAN = "http://mob.agenposedo.com/adrantaran.php";
     public static final String JSON_URL_ADRSTATUS = "http://mob.agenposedo.com/adrstatus.php";
