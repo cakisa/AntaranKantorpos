@@ -56,6 +56,16 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".LaporanDOActivity"
+            android:label="Laporan DO"
+            android:parentActivityName=".MainActivity" >
+            <intent-filter>
+                <action android:name="com.horirevens.antarankantorpos.LaporanDOActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".AnyOrientationCaptureActivity"
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"

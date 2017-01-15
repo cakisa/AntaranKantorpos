@@ -12,7 +12,8 @@
         app:showAsAction="never" />
     <item android:id="@+id/updateKolektif"
         android:title="Update Kolektif"
-        android:icon="@drawable/ic_barcode"
         app:showAsAction="never" />
-
+    <item android:id="@+id/laporanDO"
+        android:title="Laporan DO"
+        app:showAsAction="never" />
 </menu>

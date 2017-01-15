@@ -48,6 +48,7 @@ import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.horirevens.antarankantorpos.BarcodeScannerActivity;
 import com.horirevens.antarankantorpos.DBConfig;
+import com.horirevens.antarankantorpos.LaporanDOActivity;
 import com.horirevens.antarankantorpos.R;
 import com.horirevens.antarankantorpos.UpdateKolektifActivity;
 import com.horirevens.antarankantorpos.antaran.AdrstatusParseJSON;
@@ -159,6 +160,10 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                 Log.i(MY_LOG, "onOptionsItemSelected updateKolektif");
                 startUpdateKolektifActivity();
                 return true;
+            case R.id.laporanDO:
+                Log.i(MY_LOG, "onOptionsItemSelected laporanDO");
+                startLaporanDOActivity();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -185,6 +190,12 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
 
     private void startUpdateKolektifActivity() {
         Intent intent = new Intent(getActivity(), UpdateKolektifActivity.class);
+        intent.putExtra("anippos", anippos);
+        startActivity(intent);
+    }
+
+    private void startLaporanDOActivity() {
+        Intent intent = new Intent(getActivity(), LaporanDOActivity.class);
         intent.putExtra("anippos", anippos);
         startActivity(intent);
     }
