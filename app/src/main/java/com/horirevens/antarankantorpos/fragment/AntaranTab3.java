@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -33,7 +34,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.horirevens.antarankantorpos.DBConfig;
+import com.horirevens.antarankantorpos.LaporanDOActivity;
 import com.horirevens.antarankantorpos.R;
+import com.horirevens.antarankantorpos.UpdateKolektifActivity;
 import com.horirevens.antarankantorpos.antaran.AntaranAdapter;
 import com.horirevens.antarankantorpos.antaran.AntaranParseJSON;
 
@@ -110,7 +113,6 @@ public class AntaranTab3 extends Fragment {
         menu.clear();
         inflater.inflate(R.menu.main_menu, menu);
         menu.findItem(R.id.scanAkditem).setVisible(false);
-        menu.findItem(R.id.updateKolektif).setVisible(false);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -121,14 +123,29 @@ public class AntaranTab3 extends Fragment {
                 Log.i(MY_LOG, "onOptionsItemSelected searchAkditem");
                 searchAkditem(item);
                 return true;
-            /*case R.id.scanAkditem:
-                Log.i(MY_LOG, "onOptionsItemSelected scanAkditem");
-                IntentIntegrator scanIntegrator = new IntentIntegrator(getActivity());
-                scanIntegrator.initiateScan();
-                return  true;*/
+            case R.id.updateKolektif:
+                Log.i(MY_LOG, "onOptionsItemSelected updateKolektif");
+                startUpdateKolektifActivity();
+                return true;
+            case R.id.laporanDO:
+                Log.i(MY_LOG, "onOptionsItemSelected laporanDO");
+                startLaporanDOActivity();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void startUpdateKolektifActivity() {
+        Intent intent = new Intent(getActivity(), UpdateKolektifActivity.class);
+        intent.putExtra("anippos", anippos);
+        startActivity(intent);
+    }
+
+    private void startLaporanDOActivity() {
+        Intent intent = new Intent(getActivity(), LaporanDOActivity.class);
+        intent.putExtra("anippos", anippos);
+        startActivity(intent);
     }
 
     private void searchAkditem(MenuItem item) {

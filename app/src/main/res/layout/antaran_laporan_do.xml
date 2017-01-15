@@ -43,11 +43,16 @@
                     android:layout_height="wrap_content" />
             </RelativeLayout>
         </FrameLayout>
-        <ListView android:id="@+id/listView"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_below="@+id/toolbar"
-            android:divider="@android:color/transparent"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
+            <ListView android:id="@+id/listView"
+                android:divider="@android:color/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </android.support.v4.widget.SwipeRefreshLayout>
         <com.github.rahatarmanahmed.cpv.CircularProgressView
             android:id="@+id/spinner"
             android:layout_width="48dp"

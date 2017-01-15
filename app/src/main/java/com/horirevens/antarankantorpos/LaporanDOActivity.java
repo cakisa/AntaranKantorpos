@@ -4,8 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -37,6 +39,7 @@ public class LaporanDOActivity extends AppCompatActivity {
     private CoordinatorLayout coordinatorLayout;
     private CircularProgressView spinner;
     private FrameLayout frameNoData;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private int animationDuration;
     private AntaranAdapterLaporanDO antaranAdapterLaporanDO;
@@ -51,6 +54,7 @@ public class LaporanDOActivity extends AppCompatActivity {
         frameNoData = (FrameLayout) findViewById(R.id.frameNoData);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         spinner = (CircularProgressView) findViewById(R.id.spinner);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         animationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
@@ -64,6 +68,30 @@ public class LaporanDOActivity extends AppCompatActivity {
 
         getIntentResult();
         getAllLaporanDO();
+        swipeRefresh();
+    }
+
+    private void swipeRefresh() {
+        Log.i(MY_LOG, "swipeRefresh");
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        listView.setVisibility(View.GONE);
+                        frameNoData.setVisibility(View.GONE);
+                        getAllLaporanDO();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 3000);
+            }
+        });
+        swipeRefreshLayout.setColorSchemeResources(
+                android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
     }
 
     private void getIntentResult() {

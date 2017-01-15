@@ -54,8 +54,9 @@ public class AntaranAdapter extends ArrayAdapter<String> {
         if (akdstatus[position].equals("6207") || akdstatus[position].equals("6208") ||
                 akdstatus[position].equals("6209") || akdstatus[position].equals("6210") ||
                 akdstatus[position].equals("6211") || akdstatus[position].equals("6212") ||
+                akdstatus[position].equals("6213") || akdstatus[position].equals("6214") ||
                 akdstatus[position].equals("6215") || akdstatus[position].equals("6216") ||
-                akdstatus[position].equals("6218") || akdstatus[position].equals("6213")) {
+                akdstatus[position].equals("6217") || akdstatus[position].equals("6218")) {
             if (astatuskirim[position].equals("2")) {
                 tvAkdstatus.setImageResource(R.drawable.ba_android);
                 tvAketerangan.setText(adrsAketerangan[position] + " (" + adraAketerangan[position] + ")");
