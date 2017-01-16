@@ -12,7 +12,7 @@
         android:layout_height="match_parent">
         <ImageView android:id="@+id/akdstatus"
             android:layout_alignTop="@+id/akditem"
-            android:layout_alignBottom="@+id/awktlokal"
+            android:layout_alignBottom="@+id/aketerangan"
             android:layout_width="24dp"
             android:layout_height="24dp" />
         <TextView android:id="@+id/akditem"

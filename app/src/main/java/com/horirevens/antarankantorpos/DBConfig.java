@@ -4,15 +4,15 @@ package com.horirevens.antarankantorpos;
  * Created by horirevens on 1/13/17.
  */
 public class DBConfig {
-    /*public static final String JSON_URL_LOGIN = "http://regional7.posindonesia.co.id:8082/usa/login.php";
+    public static final String JSON_URL_LOGIN = "http://regional7.posindonesia.co.id:8082/usa/login.php";
     public static final String JSON_URL_ADRANTARAN = "http://regional7.posindonesia.co.id:8082/usa/adrantaran.php";
     public static final String JSON_URL_ADRSTATUS = "http://regional7.posindonesia.co.id:8082/usa/adrstatus.php";
-    public static final String JSON_URL_ADO = "http://regional7.posindonesia.co.id:8082/usa/ado.php";*/
+    public static final String JSON_URL_ADO = "http://regional7.posindonesia.co.id:8082/usa/ado.php";
 
-    public static final String JSON_URL_LOGIN = "http://mob.agenposedo.com/login.php";
+    /*public static final String JSON_URL_LOGIN = "http://mob.agenposedo.com/login.php";
     public static final String JSON_URL_ADRANTARAN = "http://mob.agenposedo.com/adrantaran.php";
     public static final String JSON_URL_ADRSTATUS = "http://mob.agenposedo.com/adrstatus.php";
-    public static final String JSON_URL_ADO = "http://mob.agenposedo.com/ado.php";
+    public static final String JSON_URL_ADO = "http://mob.agenposedo.com/ado.php";*/
 
     public static final String KEY_AKDITEM = "akditem";
     public static final String KEY_ANIPPOS = "anippos";
@@ -29,6 +29,7 @@ public class DBConfig {
     public static final String TAG_ADRA_AKETERANGAN = "ada_aketerangan";
     public static final String TAG_ADRS_AKETERANGAN = "ads_aketerangan";
     public static final String TAG_ASTATUSKIRIM = "astatuskirim";
+    public static final String TAG_RES_AKDITEM = "res_akditem";
     public static final String TAG_ADO = "ado";
     public static final String TAG_ASTATUS = "astatus";
     public static final String TAG_AKETERANGAN = "aketerangan";

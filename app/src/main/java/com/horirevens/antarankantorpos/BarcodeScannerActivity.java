@@ -21,12 +21,7 @@ import org.json.JSONObject;
  * Created by horirevens on 1/1/17.
  */
 public class BarcodeScannerActivity extends AppCompatActivity {
-    public static final String JSON_URL_ADRANTARAN = "http://mob.agenposedo.com/adrantaran.php";
-
     public static final String MY_LOG = "log_BarcodeScanner";
-
-    public static final String TAG_JSON_ARRAY="array";
-    public static final String TAG_AKDITEM = "res_akditem";
 
     public static String[] resAkditem;
 
@@ -78,7 +73,7 @@ public class BarcodeScannerActivity extends AppCompatActivity {
         String param2 = "&anippos=" + anippos;
         String param3 = "&akditem=" + akditem;
         String params = param1 + param2 + param3;
-        StringRequest stringRequest = new StringRequest(JSON_URL_ADRANTARAN + params,
+        StringRequest stringRequest = new StringRequest(DBConfig.JSON_URL_ADRANTARAN + params,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -108,7 +103,7 @@ public class BarcodeScannerActivity extends AppCompatActivity {
             try {
                 Log.i(MY_LOG, "parseJSON try");
                 jsonObject = new JSONObject(response);
-                jsonArray = jsonObject.getJSONArray(TAG_JSON_ARRAY);
+                jsonArray = jsonObject.getJSONArray(DBConfig.TAG_JSON_ARRAY);
 
                 resAkditem = new String[jsonArray.length()];
 
@@ -116,7 +111,7 @@ public class BarcodeScannerActivity extends AppCompatActivity {
                     Log.i(MY_LOG, "parseJSON looping");
                     JSONObject jo = jsonArray.getJSONObject(i);
                     Log.i(MY_LOG, "parseJSON JSONObject");
-                    resAkditem[i] = jo.getString(TAG_AKDITEM);
+                    resAkditem[i] = jo.getString(DBConfig.TAG_RES_AKDITEM);
                 }
 
                 Log.i(MY_LOG, "resultParseJSON notNull");

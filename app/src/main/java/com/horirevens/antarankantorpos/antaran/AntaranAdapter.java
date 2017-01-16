@@ -50,13 +50,14 @@ public class AntaranAdapter extends ArrayAdapter<String> {
 
         MyDate myDate = new MyDate();
         tvAkditem.setText(akditem[position]);
-        tvAwtlokal.setText(myDate.datetimeIndo(awktlokal[position]) + " | No. DO " + ado[position]);
+        //tvAwtlokal.setText(myDate.datetimeIndo(awktlokal[position]) + " | No. DO " + ado[position]);
         if (akdstatus[position].equals("6207") || akdstatus[position].equals("6208") ||
                 akdstatus[position].equals("6209") || akdstatus[position].equals("6210") ||
                 akdstatus[position].equals("6211") || akdstatus[position].equals("6212") ||
                 akdstatus[position].equals("6213") || akdstatus[position].equals("6214") ||
                 akdstatus[position].equals("6215") || akdstatus[position].equals("6216") ||
                 akdstatus[position].equals("6217") || akdstatus[position].equals("6218")) {
+            tvAwtlokal.setText(myDate.datetimeIndo(awktlokal[position]) + " | No. DO " + ado[position]);
             if (astatuskirim[position].equals("2")) {
                 tvAkdstatus.setImageResource(R.drawable.ba_android);
                 tvAketerangan.setText(adrsAketerangan[position] + " (" + adraAketerangan[position] + ")");
@@ -67,8 +68,9 @@ public class AntaranAdapter extends ArrayAdapter<String> {
                 tvAkdstatus.setImageResource(R.drawable.ba);
                 tvAketerangan.setText(adrsAketerangan[position] + " (" + adraAketerangan[position] + ")");
             }
-        } else if (akdstatus[position].equals("6221") || akdstatus[position].equals("6220") ||
+        } else if (akdstatus[position].equals("6220") || akdstatus[position].equals("6221") ||
                 akdstatus[position].equals("6238")) {
+            tvAwtlokal.setText(myDate.datetimeIndo(awktlokal[position]) + " | No. DO " + ado[position]);
             if (astatuskirim[position].equals("2")) {
                 tvAkdstatus.setImageResource(R.drawable.ga_android);
                 tvAketerangan.setText(adrsAketerangan[position] + " (" + adraAketerangan[position] + ")");
@@ -81,7 +83,9 @@ public class AntaranAdapter extends ArrayAdapter<String> {
             }
         } else {
             tvAkdstatus.setImageResource(R.drawable.do_proses);
-            tvAketerangan.setText(adrsAketerangan[position]);
+            tvAwtlokal.setText(myDate.datetimeIndo(awktlokal[position]));
+            tvAketerangan.setText("No. DO " + ado[position]);
+            //tvAketerangan.setText(adrsAketerangan[position]);
         }
 
         return convertView;
