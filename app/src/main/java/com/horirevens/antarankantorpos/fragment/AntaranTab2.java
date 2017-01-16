@@ -5,11 +5,12 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -55,6 +56,8 @@ public class AntaranTab2 extends Fragment {
     private AntaranAdapter antaranAdapter;
     private AlertDialog adi;
     private SearchView searchView;
+    private CoordinatorLayout coordinatorLayout;
+    private Snackbar snackbar;
     private FloatingActionButton fab;
     private FrameLayout frameNoData;
 
@@ -248,9 +251,9 @@ public class AntaranTab2 extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i(MY_LOG, "onErrorResponse");
-                        String s = "Gagal memuat data. Keluar dan coba kembali";
-                        alertDialogInformasi(s);
-                        //Toast.makeText(getContext(), "Gangguan Koneksi. Keluar dan Jalankan Kembali", Toast.LENGTH_LONG).show();
+                        String s = "Gagal memuat data";
+                        String se = "0";
+                        showSnackbar(s, se);
                     }
                 });
 
@@ -258,7 +261,33 @@ public class AntaranTab2 extends Fragment {
         requestQueue.add(stringRequest);
     }
 
-    private void alertDialogInformasi(String s) {
+    private void showSnackbar(String s, String se) {
+        //LayoutInflater inflater = LayoutInflater.from(getContext());
+        //View rootView = inflater.inflate(R.layout.activity_main, null);
+        coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.coordinatorLayout);
+
+        if (se.equals("0")) {
+            snackbar = Snackbar.make(coordinatorLayout, s, Snackbar.LENGTH_INDEFINITE);
+            snackbar.setAction("Ulangi", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getAllAdrantaran();
+                }
+            });
+            snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
+        }
+
+        if (se.equals("1")) {
+            snackbar = Snackbar.make(coordinatorLayout, s, Snackbar.LENGTH_LONG);
+        }
+
+        View view = snackbar.getView();
+        TextView textView = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(getResources().getColor(R.color.colorWhite));
+        snackbar.show();
+    }
+
+    /*private void alertDialogInformasi(String s) {
         Log.i(MY_LOG, "alertDialogInformasi");
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = inflater.inflate(R.layout.alert_dialog_informasi, null);
@@ -279,7 +308,7 @@ public class AntaranTab2 extends Fragment {
         adb.setView(view);
         adi = adb.create();
         adi.show();
-    }
+    }*/
 
     private void showAdrantaran(String json) {
         Log.i(MY_LOG, "showAdrantaran");
