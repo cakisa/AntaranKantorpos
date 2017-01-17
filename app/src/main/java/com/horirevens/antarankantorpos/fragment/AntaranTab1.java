@@ -81,6 +81,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
     private FloatingActionButton fab;
     private FrameLayout frameNoData;
     private Snackbar snackbar;
+    private MenuItem myItem;
     private AlertDialog adus, adjs, adp, adk, adi;
 
     private int animationDuration, countData;
@@ -151,6 +152,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
             case R.id.searchAkditem:
                 Log.i(MY_LOG, "onOptionsItemSelected searchAkditem");
                 searchAkditem(item);
+                myItem = item;
                 return true;
             case R.id.scanAkditem:
                 Log.i(MY_LOG, "onOptionsItemSelected scanAkditem");
@@ -315,7 +317,8 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         Log.i(MY_LOG, "showAdrantaran parseJSON");
         antaranAdapter = new AntaranAdapter(
                 getActivity(), AntaranParseJSON.akditem, AntaranParseJSON.akdstatus, AntaranParseJSON.awklokal,
-                AntaranParseJSON.adraAketerangan, AntaranParseJSON.adrsAketerangan, AntaranParseJSON.astatuskirim, AntaranParseJSON.ado);
+                AntaranParseJSON.adraAketerangan, AntaranParseJSON.adrsAketerangan, AntaranParseJSON.astatuskirim,
+                AntaranParseJSON.ado);
         antaranAdapter.notifyDataSetChanged();
         if (antaranAdapter.getCount() == 0) {
             frameNoData.setVisibility(View.VISIBLE);
@@ -337,6 +340,14 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         Log.i(MY_LOG, "onItemClick");
         String itemValue = String.valueOf(listView.getItemAtPosition(i));
         alertDialogUpdateStatus(itemValue);
+
+        if (adus.isShowing()) {
+            Log.i(MY_LOG, "adus isShowing");
+            if (!searchView.isIconified()) {
+                Log.i(MY_LOG, "searchView isIconfied false");
+                MenuItemCompat.collapseActionView(myItem);
+            }
+        }
     }
 
     private void alertDialogUpdateStatus(String resAkditem) {
@@ -622,6 +633,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                         Log.i(MY_LOG, "updateData onResponse");
                         String se = "1";
                         showSnackbar(STR_BERHASIL + valAkditem, se);
+                        akditem = null;
                         getAllAdrantaran();
                     }
                 },

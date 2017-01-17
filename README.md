@@ -10,6 +10,5 @@ Fitur Aplikasi :
 5. Laporan DO  
 
 Perubahan :  
-1. Ubah letak Floating Action Button 
-2. Tampilkan semua menu pada Tab Option Menu
+1. Perbaikan setelah update status
 
