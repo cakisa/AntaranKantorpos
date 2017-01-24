@@ -18,7 +18,7 @@
             app:theme="@style/ThemeOverlay.AppCompat.Dark"/>
         <!--<EditText
             android:id="@+id/searchAkditem"
-            android:layout_below="@+id/toolbar"
+            android:layout_below="@+id/toolbar_lap_do"
             android:hint="No Barcode"
             android:inputType="number"
             android:layout_width="match_parent"

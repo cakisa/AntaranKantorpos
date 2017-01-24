@@ -4,20 +4,24 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.app.SearchManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,86 +50,96 @@ import com.android.volley.toolbox.Volley;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
-import com.horirevens.antarankantorpos.antaran.AdrstatusParseJSON;
-import com.horirevens.antarankantorpos.antaran.AntaranAdapterKolektif;
-import com.horirevens.antarankantorpos.antaran.AntaranParseJSON;
+import com.horirevens.antarankantorpos.antaran.AntaranKolektif;
+import com.horirevens.antarankantorpos.antaran.AntaranKolektifAdapter;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-/**
- * Created by horirevens on 12/27/16.
- */
-public class UpdateKolektifActivity extends AppCompatActivity {
-    public static final String MY_LOG = "log_UpdateKolektif";
+public class KolektifActivity extends AppCompatActivity implements FloatingActionButton.OnClickListener {
     public static final String STR_ERROR = "Gagal memuat data";
+    public static final String STR_BERHASIL = "Berhasil update status No Resi ";
+    public static final String MY_LOG = "log_KolektifActivity";
 
     private ListView listView;
-    private Toolbar toolbar;
-    private String anippos, akditem, valKeteranganStatus, valAstatus, valAketerangan;
+    private String anippos, valKeteranganStatus, valAstatus, valAketerangan;
     private CircularProgressView spinner, spinnerAstatus;
-    private FrameLayout frameNoData;
-    private SearchView searchView;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private RadioGroup radioGroup;
-    private FloatingActionButton fab;
+    private FrameLayout frameNoData;
     private Snackbar snackbar;
+    private AlertDialog adus, adjs, adp, adk;
+    private Toolbar toolbar;
     private CoordinatorLayout coordinatorLayout;
-    private AlertDialog adus, adjs, adp, adk, adi;
+    private FloatingActionButton fab;
+    private SearchView searchView;
+    private String networkStatus;
+    private TextView tvTitle, tvNetwork;
 
     private int animationDuration, checkedItem;
 
-    private ArrayList<String> checkboxList = new ArrayList<>();
-    private AntaranAdapterKolektif antaranAdapterKolektif;
     private AwesomeValidation awesomeValidation;
+    private AntaranKolektifAdapter antaranKolektifAdapter;
+    private ArrayList<AntaranKolektif> antaranList = new ArrayList<>();
+    private ArrayList<String> astatusList = new ArrayList<>();
+    private ArrayList<String> aketeranganList = new ArrayList<>();
+    private ArrayList<String> checkedList = new ArrayList<>();
+
+    /*private IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+    private BroadcastReceiver myReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i(MY_LOG, "onReceive");
+            networkStatus = NetworkStatus.getConnectivityStatusString(context.getApplicationContext());
+
+            if (networkStatus == "1") {
+                tvNetwork.setVisibility(View.GONE);
+                tvTitle.setVisibility(View.VISIBLE);
+            }
+            if (networkStatus == "0") {
+                tvNetwork.setVisibility(View.VISIBLE);
+                tvTitle.setVisibility(View.GONE);
+
+                Snackbar.make(coordinatorLayout, "Tidak ada koneksi internet", Snackbar.LENGTH_LONG).show();
+            }
+        }
+    };*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.i(MY_LOG, "onCreateView");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.antaran_update_kolektif);
-        Log.i(MY_LOG, "onCreate");
+        setContentView(R.layout.activity_kolektif);
 
-        animationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
-        spinner = (CircularProgressView) findViewById(R.id.spinner);
-        listView = (ListView) findViewById(R.id.listView);
-        frameNoData = (FrameLayout) findViewById(R.id.frameNoData);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
-
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        tvTitle = (TextView) findViewById(R.id.tvTitle);
+        tvNetwork = (TextView) findViewById(R.id.tvNetwork);
+        listView = (ListView) findViewById(R.id.listView);
+        spinner = (CircularProgressView) findViewById(R.id.spinner);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        animationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
+        frameNoData = (FrameLayout) findViewById(R.id.frameNoData);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+
         frameNoData.setVisibility(View.GONE);
+        listView = (ListView) findViewById(R.id.listView);
         listView.setVisibility(View.GONE);
+        fab.setOnClickListener(this);
 
         getIntentResult();
         getAllAdrantaran();
-        initCheckBox();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.update_kolektif, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.searchAkditem:
-                Log.i(MY_LOG, "onOptionsItemSelected searchAkditem");
-                searchAkditem(item);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        swipeRefresh();
     }
 
     private void getIntentResult() {
@@ -136,60 +150,11 @@ public class UpdateKolektifActivity extends AppCompatActivity {
         }
     }
 
-    private void searchAkditem(MenuItem item) {
-        Log.i(MY_LOG, "searchAkditem");
-        final SearchManager searchManager = (SearchManager) this.getSystemService(Context.SEARCH_SERVICE);
-
-        if (item != null) {
-            MenuItemCompat.setOnActionExpandListener(item, new MenuItemCompat.OnActionExpandListener() {
-                @Override
-                public boolean onMenuItemActionExpand(MenuItem item) {
-                    Log.i(MY_LOG, "searchAkditem onMenuItemActionExpand");
-                    if (searchView != null) {
-                        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-                        searchView.setInputType(InputType.TYPE_CLASS_NUMBER);
-                        searchView.setIconified(false);
-                        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                            @Override
-                            public boolean onQueryTextSubmit(String query) {
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onQueryTextChange(String s) {
-                                Log.i(MY_LOG, "searchAkditem onQueryTextChange");
-                                if (!TextUtils.isEmpty(s)) {
-                                    akditem = s;
-                                    getAllAdrantaran();
-                                } else {
-                                    akditem = null;
-                                    getAllAdrantaran();
-                                }
-                                return false;
-                            }
-                        });
-                    }
-                    return true;
-                }
-
-                @Override
-                public boolean onMenuItemActionCollapse(MenuItem item) {
-                    Log.i(MY_LOG, "searchAkditem onMenuItemActionCollapse");
-                    akditem = null;
-                    return true;
-                }
-            });
-
-            searchView = (SearchView) item.getActionView();
-        }
-    }
-
     private void getAllAdrantaran() {
         Log.i(MY_LOG, "getAllAdrantaran");
         String param1 = "?status=0";
         String param2 = "&anippos=" + anippos;
-        String param3 = "&akditem=" + akditem;
-        String params = param1 + param2 + param3;
+        String params = param1 + param2;
         StringRequest stringRequest = new StringRequest(DBConfig.JSON_URL_ADRANTARAN + params,
                 new Response.Listener<String>() {
                     @Override
@@ -198,7 +163,8 @@ public class UpdateKolektifActivity extends AppCompatActivity {
                         listView.setAlpha(0f);
                         listView.setVisibility(View.VISIBLE);
                         listView.animate().alpha(1f).setDuration(animationDuration).setListener(null);
-                        showAdrantaran(response);
+                        antaranList.clear();
+                        showAllAdrantaran(response);
 
                         spinner.animate().alpha(0f).setDuration(animationDuration).setListener(new AnimatorListenerAdapter() {
                             @Override
@@ -221,47 +187,164 @@ public class UpdateKolektifActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    private void showAdrantaran(String json) {
-        Log.i(MY_LOG, "showAdrantaran");
-        AntaranParseJSON pj = new AntaranParseJSON(json);
-        pj.parseJSON();
-        Log.i(MY_LOG, "showAdrantaran parseJSON");
-        antaranAdapterKolektif = new AntaranAdapterKolektif(
-                this, AntaranParseJSON.akditem, AntaranParseJSON.awklokal, AntaranParseJSON.adrsAketerangan, AntaranParseJSON.length);
-        antaranAdapterKolektif.notifyDataSetChanged();
+    private void initListAdrantaran(String json) {
+        try {
+            Log.i(MY_LOG, "listAdrantaran");
+            JSONObject jsonObject = new JSONObject(json);
+            JSONArray jsonArray = jsonObject.getJSONArray(DBConfig.TAG_JSON_ARRAY);
 
-        if (antaranAdapterKolektif.getCount() == 0) {
-            frameNoData.setVisibility(View.VISIBLE);
-            listView.setVisibility(View.GONE);
-            fab.setVisibility(View.GONE);
-        } else {
-            frameNoData.setVisibility(View.GONE);
-            listView.setVisibility(View.VISIBLE);
-            fab.setVisibility(View.VISIBLE);
+            for (int i=0; i<jsonArray.length(); i++) {
+                JSONObject jo = jsonArray.getJSONObject(i);
+                String valAkditem = jo.getString(DBConfig.TAG_AKDITEM);
+                String valAwktlokal = jo.getString(DBConfig.TAG_AWKTLOKAL);
+                String valAkdstatus = jo.getString(DBConfig.TAG_AKDSTATUS);
+                String valAda_aketerangan = jo.getString(DBConfig.TAG_ADRA_AKETERANGAN);
+                String valAds_aketerangan = jo.getString(DBConfig.TAG_ADRS_AKETERANGAN);
+                String valAstatuskirim = jo.getString(DBConfig.TAG_ASTATUSKIRIM);
+                String valAdo = jo.getString(DBConfig.TAG_ADO);
+                boolean valSelected = false;
+                Log.i(MY_LOG, "listAdrantaran: " + valAkditem + ", " +
+                        valAwktlokal + ", " + valAkdstatus + ", " + valAda_aketerangan + ", " +
+                        valAds_aketerangan + ", " + valAstatuskirim + ", " + valAdo);
 
-            listView.setAdapter(antaranAdapterKolektif);
+                antaranList.add(new AntaranKolektif(valAkditem, valAkdstatus, valAwktlokal, valAda_aketerangan,
+                        valAds_aketerangan, valAstatuskirim, valAdo, valSelected));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
-    private void initCheckBox() {
-        Log.i(MY_LOG, "initCheckBox");
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkboxList.clear();
-                for (int i = 0; i < antaranAdapterKolektif.getCount(); i++) {
-                    if (antaranAdapterKolektif.getItemChecked(i)) {
-                        checkboxList.add(antaranAdapterKolektif.getItem(i));
-                    }
-                }
+    private void showAllAdrantaran(String json) {
+        Log.i(MY_LOG, "showAdrantaran");
+        initListAdrantaran(json);
+        antaranKolektifAdapter = new AntaranKolektifAdapter(antaranList, this);
 
-                alertDialogUpdateStatus(checkboxList.size());
-                checkedItem = checkboxList.size();
-            }
-        });
+        if (antaranKolektifAdapter.getCount() == 0) {
+            frameNoData.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
+            //fab.setVisibility(View.GONE);
+        } else {
+            frameNoData.setVisibility(View.GONE);
+            listView.setVisibility(View.VISIBLE);
+            //fab.setVisibility(View.VISIBLE);
+
+            listView.setAdapter(antaranKolektifAdapter);
+            //countData = listView.getAdapter().getCount();
+            //tvCountData.setText("" + countData);
+        }
     }
 
-    private void alertDialogUpdateStatus(int j) {
+    private void showSnackbar(String s, String se) {
+        CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
+
+        if (se.equals("0")) {
+            snackbar = Snackbar.make(coordinatorLayout, s, Snackbar.LENGTH_INDEFINITE);
+            snackbar.setAction("ulangi", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getAllAdrantaran();
+                }
+            });
+            snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
+        }
+
+        if (se.equals("1")) {
+            snackbar = Snackbar.make(coordinatorLayout, s, Snackbar.LENGTH_LONG);
+        }
+
+        View view = snackbar.getView();
+        TextView textView = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(getResources().getColor(R.color.colorWhite));
+        snackbar.show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Log.i(MY_LOG, "onCreateOptionsMenu");
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.kolektif, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.searchAkditem:
+                Log.i(MY_LOG, "onOptionsItemSelected searchAkditem");
+                searchAkditem(item);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void searchAkditem(MenuItem item) {
+        Log.i(MY_LOG, "searchAkditem");
+        final SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
+        if (item != null) {
+            MenuItemCompat.setOnActionExpandListener(item, new MenuItemCompat.OnActionExpandListener() {
+                @Override
+                public boolean onMenuItemActionExpand(MenuItem item) {
+                    Log.i(MY_LOG, "searchAkditem onMenuItemActionExpand");
+                    if (searchView != null) {
+                        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+                        searchView.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        searchView.setIconified(false);
+                        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                            @Override
+                            public boolean onQueryTextSubmit(String query) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onQueryTextChange(String s) {
+                                Log.i(MY_LOG, "searchAkditem onQueryTextChange");
+                                antaranKolektifAdapter.filter(s);
+                                listView.invalidate();
+                                return false;
+                            }
+                        });
+                    }
+                    return true;
+                }
+
+                @Override
+                public boolean onMenuItemActionCollapse(MenuItem item) {
+                    Log.i(MY_LOG, "searchAkditem onMenuItemActionCollapse");
+                    return true;
+                }
+            });
+
+            searchView = (SearchView) item.getActionView();
+        }
+    }
+
+    private void swipeRefresh() {
+        Log.i(MY_LOG, "swipeRefresh");
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        listView.setVisibility(View.GONE);
+                        frameNoData.setVisibility(View.GONE);
+                        getAllAdrantaran();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 3000);
+            }
+        });
+        swipeRefreshLayout.setColorSchemeResources(
+                android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+    }
+
+    private void alertDialogUpdateStatus(int s) {
         Log.i(MY_LOG, "alertDialogUpdateStatus");
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.alert_dialog_update_status, null);
@@ -269,7 +352,7 @@ public class UpdateKolektifActivity extends AppCompatActivity {
         TextView tvValAkditem = (TextView) view.findViewById(R.id.tvValAkditem);
 
         tvLabel.setText("Jumlah Resi");
-        tvValAkditem.setText("" + j);
+        tvValAkditem.setText("" + s);
 
         AlertDialog.Builder adb = new AlertDialog.Builder(this);
         adb.setTitle("Update Status");
@@ -292,8 +375,6 @@ public class UpdateKolektifActivity extends AppCompatActivity {
         adb.setView(view);
         adus = adb.create();
         adus.show();
-
-
     }
 
     private void alertDialogJenisStatus(String params) {
@@ -308,7 +389,7 @@ public class UpdateKolektifActivity extends AppCompatActivity {
         Log.i(MY_LOG, "alertDialogJenisStatus getAllAdrstatus");
 
         AlertDialog.Builder adb = new AlertDialog.Builder(this);
-        adb.setTitle("Keterangan");
+        adb.setTitle("Status Kiriman");
         adb.setView(view);
         adjs = adb.create();
         adjs.show();
@@ -324,6 +405,8 @@ public class UpdateKolektifActivity extends AppCompatActivity {
                         radioGroup.setAlpha(0f);
                         radioGroup.setVisibility(View.VISIBLE);
                         radioGroup.animate().alpha(1f).setDuration(animationDuration).setListener(null);
+                        astatusList.clear();
+                        aketeranganList.clear();
                         addRadioButton(response);
 
                         spinnerAstatus.animate().alpha(0f).setDuration(animationDuration).setListener(new AnimatorListenerAdapter() {
@@ -332,32 +415,50 @@ public class UpdateKolektifActivity extends AppCompatActivity {
                                 spinnerAstatus.setVisibility(View.GONE);
                             }
                         });
+                        antaranKolektifAdapter.notifyDataSetChanged();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i(MY_LOG, "onErrorResponse");
-                        String se = "1";
+                        String se = "0";
                         showSnackbar(STR_ERROR, se);
                     }
                 });
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         requestQueue.add(stringRequest);
+    }
+
+    private void initListAdrstatus(String json) {
+        try {
+            Log.i(MY_LOG, "initListAdrstatus");
+            JSONObject jsonObject = new JSONObject(json);
+            JSONArray jsonArray = jsonObject.getJSONArray(DBConfig.TAG_JSON_ARRAY);
+
+            for (int i=0; i<jsonArray.length(); i++) {
+                JSONObject jo = jsonArray.getJSONObject(i);
+                String valAstatus = jo.getString(DBConfig.TAG_ASTATUS);
+                String valAketerangan = jo.getString(DBConfig.TAG_AKETERANGAN);
+
+                astatusList.add(valAstatus);
+                aketeranganList.add(valAketerangan);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void addRadioButton(String json) {
         Log.i(MY_LOG, "addRadioButton");
-        AdrstatusParseJSON apj = new AdrstatusParseJSON(json);
-        apj.parseJSON();
-        Log.i(MY_LOG, "addRadioButton parseJSON");
+        initListAdrstatus(json);
 
-        for (int i = 0; i < AdrstatusParseJSON.jsonArrayLength; i++) {
+        for (int i = 0; i < astatusList.size(); i++) {
             RadioButton radioButton = new RadioButton(this);
-            radioButton.setId(Integer.parseInt(AdrstatusParseJSON.astatus[i]));
-            radioButton.setText(AdrstatusParseJSON.aketerangan[i]);
-            radioButton.setTextSize(18);
+            radioButton.setId(Integer.parseInt(astatusList.get(i)));
+            radioButton.setText(aketeranganList.get(i));
+            radioButton.setTextSize(16);
             radioGroup.addView(radioButton);
         }
         Log.i(MY_LOG, "addRadioButton showOption");
@@ -380,8 +481,9 @@ public class UpdateKolektifActivity extends AppCompatActivity {
                         if (rbIdValue.equals("6207") || rbIdValue.equals("6208") ||
                                 rbIdValue.equals("6209") || rbIdValue.equals("6210") ||
                                 rbIdValue.equals("6211") || rbIdValue.equals("6212") ||
+                                rbIdValue.equals("6213") || rbIdValue.equals("6214") ||
                                 rbIdValue.equals("6215") || rbIdValue.equals("6216") ||
-                                rbIdValue.equals("6218")) {
+                                rbIdValue.equals("6217") || rbIdValue.equals("6218")) {
                             Log.i(MY_LOG, "addRadioButton berhasil");
                             String status = "1";
                             alertDialogKeterangan(status);
@@ -407,7 +509,8 @@ public class UpdateKolektifActivity extends AppCompatActivity {
         awesomeValidation.setContext(getApplicationContext());
 
         final EditText keteranganStatus = (EditText) view.findViewById(R.id.keteranganStatus);
-        keteranganStatus.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
+        int maxLength = 25;
+        keteranganStatus.setFilters(new InputFilter[] {new InputFilter.AllCaps(), new InputFilter.LengthFilter(maxLength)});
 
         Log.i(MY_LOG, "initAwesomeValidation");
         awesomeValidation.addValidation(keteranganStatus, "[a-zA-Z\\s]+", getResources().getString(R.string.err_name));
@@ -459,7 +562,7 @@ public class UpdateKolektifActivity extends AppCompatActivity {
         if (status == "1") {
             Log.i(MY_LOG, "alertDialogValidasi berhasil");
             tvOleh.setText("Diterima Oleh");
-            tvAkditem.setText("" + checkboxList.size());
+            tvAkditem.setText("" + checkedList.size());
             tvAketerangan.setText(valAketerangan);
             tvAnama.setText(valKeteranganStatus.toUpperCase());
         }
@@ -467,7 +570,7 @@ public class UpdateKolektifActivity extends AppCompatActivity {
         if (status == "0") {
             Log.i(MY_LOG, "alertDialogValidasi gagal");
             tvOleh.setText("Keterangan Gagal");
-            tvAkditem.setText("" + checkboxList.size());
+            tvAkditem.setText("" + checkedList.size());
             tvAketerangan.setText(valAketerangan);
             tvAnama.setText(valKeteranganStatus.toUpperCase());
         }
@@ -517,7 +620,7 @@ public class UpdateKolektifActivity extends AppCompatActivity {
             for (int i=0; i<checkedItem; i++) {
                 Log.i(MY_LOG, "looping " + i);
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put(DBConfig.KEY_AKDITEM, checkboxList.get(i));
+                jsonObject.put(DBConfig.KEY_AKDITEM, checkedList.get(i));
                 jsonObject.put(DBConfig.KEY_ANIPPOS, anippos);
                 jsonObject.put(DBConfig.KEY_AKDSTATUS, valAstatus);
                 jsonObject.put(DBConfig.KEY_AWKTLOKAL, awktlokal);
@@ -535,7 +638,7 @@ public class UpdateKolektifActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             Log.i(MY_LOG, "updateData onResponse");
-                            String s = "Berhasil update status";
+                            String s = "Berhasil update status " + checkedList.size() + " item";
                             String se = "1";
                             showSnackbar(s, se);
                             getAllAdrantaran();
@@ -580,47 +683,38 @@ public class UpdateKolektifActivity extends AppCompatActivity {
         }
     }
 
-    private void showSnackbar(String s, String se) {
-        if (se.equals("0")) {
-            snackbar = Snackbar.make(coordinatorLayout, s, Snackbar.LENGTH_INDEFINITE);
-            snackbar.setAction("Ulangi", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getAllAdrantaran();
-                }
-            });
-            snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
-        }
-
-        if (se.equals("1")) {
-            snackbar = Snackbar.make(coordinatorLayout, s, Snackbar.LENGTH_LONG);
-        }
-
-        View view = snackbar.getView();
-        TextView textView = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setTextColor(getResources().getColor(R.color.colorWhite));
-        snackbar.show();
+    /*@Override
+    protected void onStart() {
+        Log.i(MY_LOG, "onStart");
+        super.onStart();
+        registerReceiver(myReceiver, intentFilter);
     }
 
-    /*private void alertDialogInformasi(String s) {
-        Log.i(MY_LOG, "alertDialogInformasi");
-        LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.alert_dialog_informasi, null);
-        TextView tvInformasi = (TextView) view.findViewById(R.id.tvInformasi);
-        tvInformasi.setText(s);
-
-        AlertDialog.Builder adb = new AlertDialog.Builder(this);
-        adb.setTitle("Informasi");
-        adb.setPositiveButton("Oke", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Log.i(MY_LOG, "alertDialogInformasi setPositiveButton");
-                getAllAdrantaran();
-                adi.dismiss();
-            }
-        });
-        adb.setView(view);
-        adi = adb.create();
-        adi.show();
+    @Override
+    protected void onStop() {
+        Log.i(MY_LOG, "onStop");
+        super.onStop();
+        unregisterReceiver(myReceiver);
+        finish();
     }*/
+
+    @Override
+    public void onClick(View v) {
+        checkedList.clear();
+        for (int i = 0; i < antaranList.size(); i++) {
+            AntaranKolektif antaranKolektif = antaranList.get(i);
+            if (antaranKolektif.isSelected()) {
+                checkedList.add(antaranKolektif.getAkditem());
+            }
+        }
+
+        if (checkedList.size() == 0) {
+            String s = "Tidak ada data yang dipilih";
+            String se = "1";
+            showSnackbar(s, se);
+        } else {
+            alertDialogUpdateStatus(checkedList.size());
+            checkedItem = checkedList.size();
+        }
+    }
 }

@@ -22,14 +22,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
-import com.horirevens.antarankantorpos.antaran.AntaranAdapterLaporanDO;
-import com.horirevens.antarankantorpos.antaran.AntaranLapDOParseJSON;
+import com.horirevens.antarankantorpos.ado.LapDO;
+import com.horirevens.antarankantorpos.ado.LapDOAdapter;
 
-/**
- * Created by horirevens on 1/15/17.
- */
-public class LaporanDOActivity extends AppCompatActivity {
-    public static final String MY_LOG = "log_LaporanDO";
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+public class LapDOActivity extends AppCompatActivity {
+    public static final String MY_LOG = "log_LapDOActivity";
     public static final String STR_ERROR = "Gagal memuat data";
 
     private ListView listView;
@@ -42,12 +45,13 @@ public class LaporanDOActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private int animationDuration;
-    private AntaranAdapterLaporanDO antaranAdapterLaporanDO;
+    private LapDOAdapter lapDOAdapter;
+    private ArrayList<LapDO> lapDOList = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.antaran_laporan_do);
+        setContentView(R.layout.activity_lap_do);
         Log.i(MY_LOG, "onCreate");
 
         listView = (ListView) findViewById(R.id.listView);
@@ -59,7 +63,7 @@ public class LaporanDOActivity extends AppCompatActivity {
         animationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -136,25 +140,40 @@ public class LaporanDOActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    private void showLaporanDO(String json) {
-        Log.i(MY_LOG, "showLaporanDO");
-        AntaranLapDOParseJSON pj = new AntaranLapDOParseJSON(json);
-        pj.parseJSON();
-        Log.i(MY_LOG, "showLaporanDO parseJSON");
-        antaranAdapterLaporanDO = new AntaranAdapterLaporanDO(
-                this, AntaranLapDOParseJSON.ado, AntaranLapDOParseJSON.proses,
-                AntaranLapDOParseJSON.berhasil, AntaranLapDOParseJSON.gagal,
-                AntaranLapDOParseJSON.jml_item);
-        antaranAdapterLaporanDO.notifyDataSetChanged();
+    private void initListDO(String json) {
+        try {
+            Log.i(MY_LOG, "listListDO");
+            JSONObject jsonObject = new JSONObject(json);
+            JSONArray jsonArray = jsonObject.getJSONArray(DBConfig.TAG_JSON_ARRAY);
 
-        if (antaranAdapterLaporanDO.getCount() == 0) {
+            for (int i=0; i<jsonArray.length(); i++) {
+                JSONObject jo = jsonArray.getJSONObject(i);
+                String valAdo = jo.getString(DBConfig.TAG_ADO);
+                String valProses = jo.getString(DBConfig.TAG_PROSES);
+                String valBerhasil = jo.getString(DBConfig.TAG_BERHASIL);
+                String valGagal = jo.getString(DBConfig.TAG_GAGAL);
+                String valJml_item = jo.getString(DBConfig.TAG_JML_ITEM);
+
+                lapDOList.add(new LapDO(valAdo, valProses, valBerhasil, valGagal, valJml_item));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showLaporanDO(String json) {
+        initListDO(json);
+        Log.i(MY_LOG, "showLaporanDO");
+        lapDOAdapter = new LapDOAdapter(lapDOList, this);
+
+        if (lapDOAdapter.getCount() == 0) {
             frameNoData.setVisibility(View.VISIBLE);
             listView.setVisibility(View.GONE);
         } else {
             frameNoData.setVisibility(View.GONE);
             listView.setVisibility(View.VISIBLE);
 
-            listView.setAdapter(antaranAdapterLaporanDO);
+            listView.setAdapter(lapDOAdapter);
         }
     }
 

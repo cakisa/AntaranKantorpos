@@ -29,8 +29,8 @@
         android:label="Antaran Kantorpos"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
-        <activity android:name=".MainActivity" >
+        android:theme="@style/AppTheme.NoActionBar" >
+        <activity android:name=".LaunchActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -46,21 +46,31 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".UpdateKolektifActivity"
+            android:name=".KolektifActivity"
             android:label="Update Kolektif"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".LaunchActivity" >
             <intent-filter>
-                <action android:name="com.horirevens.antarankantorpos.UpdateKolektifActivity" />
+                <action android:name="com.horirevens.antarankantorpos.KolektifActivity" />
+                <!-- <action android:name="android.net.conn.CONNECTIVITY_CHANGE" /> -->
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".LaporanDOActivity"
+            android:name=".LapDOActivity"
             android:label="Laporan DO"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".LaunchActivity" >
             <intent-filter>
-                <action android:name="com.horirevens.antarankantorpos.LaporanDOActivity" />
+                <action android:name="com.horirevens.antarankantorpos.LapDOActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".about.AboutActivity"
+            android:parentActivityName=".LaunchActivity">
+            <intent-filter>
+                <action android:name="com.horirevens.antarankantorpos.AboutActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -72,6 +82,7 @@
             android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden" >
         </activity>
+
     </application>
 
 </manifest>

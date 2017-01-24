@@ -2,12 +2,12 @@ package com.horirevens.antarankantorpos.fragment;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,7 +16,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.SearchView;
 import android.text.InputType;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,39 +33,49 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
+import com.horirevens.antarankantorpos.about.AboutActivity;
 import com.horirevens.antarankantorpos.DBConfig;
-import com.horirevens.antarankantorpos.LaporanDOActivity;
+import com.horirevens.antarankantorpos.KolektifActivity;
+import com.horirevens.antarankantorpos.LapDOActivity;
 import com.horirevens.antarankantorpos.R;
-import com.horirevens.antarankantorpos.UpdateKolektifActivity;
+import com.horirevens.antarankantorpos.antaran.Antaran;
 import com.horirevens.antarankantorpos.antaran.AntaranAdapter;
-import com.horirevens.antarankantorpos.antaran.AntaranParseJSON;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
- * Created by horirevens on 11/25/16.
+ * Created by horirevens on 1/18/17.
  */
 public class AntaranTab2 extends Fragment {
+    public static final String STR_ERROR = "Gagal memuat data";
     public static final String MY_LOG = "log_AntaranTab2";
 
-    private ListView listView;
     private View rootView;
+    private ListView listView;
+    private String anippos;
     private TextView tvCountData;
-    private String anippos, akditem;
     private CircularProgressView spinner;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private AntaranAdapter antaranAdapter;
-    private AlertDialog adi;
-    private SearchView searchView;
-    private CoordinatorLayout coordinatorLayout;
-    private Snackbar snackbar;
     private FloatingActionButton fab;
     private FrameLayout frameNoData;
+    private Snackbar snackbar;
+    SearchView searchView;
 
     private int animationDuration, countData;
 
+    private AntaranAdapter antaranAdapter;
+    private ArrayList<Antaran> antaranList = new ArrayList<>();
+
+    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i(MY_LOG, "onCreateView");
-        rootView = inflater.inflate(R.layout.antaran_tab_layout, container, false);
+        rootView = inflater.inflate(R.layout.tab_layout_antaran, container, false);
+
         listView = (ListView) rootView.findViewById(R.id.listView);
         spinner = (CircularProgressView) rootView.findViewById(R.id.spinner);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
@@ -82,6 +91,7 @@ public class AntaranTab2 extends Fragment {
 
         getAllAdrantaran();
         swipeRefresh();
+
         return rootView;
     }
 
@@ -104,6 +114,114 @@ public class AntaranTab2 extends Fragment {
         }
     }
 
+    private void getAllAdrantaran() {
+        Log.i(MY_LOG, "getAllAdrantaran");
+        String param1 = "?status=1";
+        String param2 = "&anippos=" + anippos;
+        String params = param1 + param2;
+        StringRequest stringRequest = new StringRequest(DBConfig.JSON_URL_ADRANTARAN + params,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i(MY_LOG, "onResponse");
+                        listView.setAlpha(0f);
+                        listView.setVisibility(View.VISIBLE);
+                        listView.animate().alpha(1f).setDuration(animationDuration).setListener(null);
+                        antaranList.clear();
+                        showAllAdrantaran(response);
+
+                        spinner.animate().alpha(0f).setDuration(animationDuration).setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                spinner.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i(MY_LOG, "onErrorResponse");
+                        String se = "0";
+                        showSnackbar(STR_ERROR, se);
+                    }
+                });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.add(stringRequest);
+    }
+
+    private void initListAdrantaran(String json) {
+        try {
+            Log.i(MY_LOG, "listAdrantaran");
+            JSONObject jsonObject = new JSONObject(json);
+            JSONArray jsonArray = jsonObject.getJSONArray(DBConfig.TAG_JSON_ARRAY);
+
+            for (int i=0; i<jsonArray.length(); i++) {
+                JSONObject jo = jsonArray.getJSONObject(i);
+                String valAkditem = jo.getString(DBConfig.TAG_AKDITEM);
+                String valAwktlokal = jo.getString(DBConfig.TAG_AWKTLOKAL);
+                String valAkdstatus = jo.getString(DBConfig.TAG_AKDSTATUS);
+                String valAda_aketerangan = jo.getString(DBConfig.TAG_ADRA_AKETERANGAN);
+                String valAds_aketerangan = jo.getString(DBConfig.TAG_ADRS_AKETERANGAN);
+                String valAstatuskirim = jo.getString(DBConfig.TAG_ASTATUSKIRIM);
+                String valAdo = jo.getString(DBConfig.TAG_ADO);
+                Log.i(MY_LOG, "listAdrantaran: " + valAkditem + ", " +
+                        valAwktlokal + ", " + valAkdstatus + ", " + valAda_aketerangan + ", " +
+                        valAds_aketerangan + ", " + valAstatuskirim + ", " + valAdo);
+
+                antaranList.add(new Antaran(valAkditem, valAkdstatus, valAwktlokal, valAda_aketerangan,
+                        valAds_aketerangan, valAstatuskirim, valAdo));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showAllAdrantaran(String json) {
+        Log.i(MY_LOG, "showAdrantaran");
+        initListAdrantaran(json);
+        antaranAdapter = new AntaranAdapter(antaranList, getContext());
+
+        if (antaranAdapter.getCount() == 0) {
+            frameNoData.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
+            fab.setVisibility(View.GONE);
+        } else {
+            frameNoData.setVisibility(View.GONE);
+            listView.setVisibility(View.VISIBLE);
+            fab.setVisibility(View.VISIBLE);
+
+            listView.setAdapter(antaranAdapter);
+            countData = listView.getAdapter().getCount();
+            tvCountData.setText("" + countData);
+        }
+    }
+
+    private void showSnackbar(String s, String se) {
+        CoordinatorLayout coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.coordinatorLayout);
+
+        if (se.equals("0")) {
+            snackbar = Snackbar.make(coordinatorLayout, s, Snackbar.LENGTH_INDEFINITE);
+            snackbar.setAction("ulangi", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getAllAdrantaran();
+                }
+            });
+            snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
+        }
+
+        if (se.equals("1")) {
+            snackbar = Snackbar.make(coordinatorLayout, s, Snackbar.LENGTH_LONG);
+        }
+
+        View view = snackbar.getView();
+        TextView textView = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(getResources().getColor(R.color.colorWhite));
+        snackbar.show();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,7 +232,7 @@ public class AntaranTab2 extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         Log.i(MY_LOG, "onCreateOptionsMenu");
         menu.clear();
-        inflater.inflate(R.menu.main_menu, menu);
+        inflater.inflate(R.menu.tab_antaran, menu);
         menu.findItem(R.id.scanAkditem).setVisible(false);
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -128,26 +246,35 @@ public class AntaranTab2 extends Fragment {
                 return true;
             case R.id.updateKolektif:
                 Log.i(MY_LOG, "onOptionsItemSelected updateKolektif");
-                startUpdateKolektifActivity();
+                kolektifActivity();
                 return true;
             case R.id.laporanDO:
                 Log.i(MY_LOG, "onOptionsItemSelected laporanDO");
-                startLaporanDOActivity();
+                lapDOActivity();
+                return true;
+            case R.id.versi:
+                Log.i(MY_LOG, "onOptionsItemSelected versi");
+                aboutActivity();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void startUpdateKolektifActivity() {
-        Intent intent = new Intent(getActivity(), UpdateKolektifActivity.class);
+    private void kolektifActivity() {
+        Intent intent = new Intent(getActivity(), KolektifActivity.class);
         intent.putExtra("anippos", anippos);
         startActivity(intent);
     }
 
-    private void startLaporanDOActivity() {
-        Intent intent = new Intent(getActivity(), LaporanDOActivity.class);
+    private void lapDOActivity() {
+        Intent intent = new Intent(getActivity(), LapDOActivity.class);
         intent.putExtra("anippos", anippos);
+        startActivity(intent);
+    }
+
+    private void aboutActivity() {
+        Intent intent = new Intent(getActivity(), AboutActivity.class);
         startActivity(intent);
     }
 
@@ -173,13 +300,8 @@ public class AntaranTab2 extends Fragment {
                             @Override
                             public boolean onQueryTextChange(String s) {
                                 Log.i(MY_LOG, "searchAkditem onQueryTextChange");
-                                if (!TextUtils.isEmpty(s)) {
-                                    akditem = s;
-                                    getAllAdrantaran();
-                                } else {
-                                    akditem = null;
-                                    getAllAdrantaran();
-                                }
+                                antaranAdapter.filter(s);
+                                listView.invalidate();
                                 return false;
                             }
                         });
@@ -190,7 +312,6 @@ public class AntaranTab2 extends Fragment {
                 @Override
                 public boolean onMenuItemActionCollapse(MenuItem item) {
                     Log.i(MY_LOG, "searchAkditem onMenuItemActionCollapse");
-                    akditem = null;
                     return true;
                 }
             });
@@ -220,117 +341,5 @@ public class AntaranTab2 extends Fragment {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-    }
-
-    private void getAllAdrantaran() {
-        Log.i(MY_LOG, "getAllAdrantaran");
-        String param1 = "?status=1";
-        String param2 = "&anippos=" + anippos;
-        String param3 = "&akditem=" + akditem;
-        String params = param1 + param2 + param3;
-        StringRequest stringRequest = new StringRequest(DBConfig.JSON_URL_ADRANTARAN + params,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.i(MY_LOG, "onResponse");
-                        listView.setAlpha(0f);
-                        listView.setVisibility(View.VISIBLE);
-                        listView.animate().alpha(1f).setDuration(animationDuration).setListener(null);
-                        showAdrantaran(response);
-
-                        spinner.animate().alpha(0f).setDuration(animationDuration).setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                spinner.setVisibility(View.GONE);
-                            }
-                        });
-                        antaranAdapter.notifyDataSetChanged();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.i(MY_LOG, "onErrorResponse");
-                        String s = "Gagal memuat data";
-                        String se = "0";
-                        showSnackbar(s, se);
-                    }
-                });
-
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        requestQueue.add(stringRequest);
-    }
-
-    private void showSnackbar(String s, String se) {
-        //LayoutInflater inflater = LayoutInflater.from(getContext());
-        //View rootView = inflater.inflate(R.layout.activity_main, null);
-        coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.coordinatorLayout);
-
-        if (se.equals("0")) {
-            snackbar = Snackbar.make(coordinatorLayout, s, Snackbar.LENGTH_INDEFINITE);
-            snackbar.setAction("Ulangi", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getAllAdrantaran();
-                }
-            });
-            snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
-        }
-
-        if (se.equals("1")) {
-            snackbar = Snackbar.make(coordinatorLayout, s, Snackbar.LENGTH_LONG);
-        }
-
-        View view = snackbar.getView();
-        TextView textView = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-        textView.setTextColor(getResources().getColor(R.color.colorWhite));
-        snackbar.show();
-    }
-
-    /*private void alertDialogInformasi(String s) {
-        Log.i(MY_LOG, "alertDialogInformasi");
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        View view = inflater.inflate(R.layout.alert_dialog_informasi, null);
-        TextView tvInformasi = (TextView) view.findViewById(R.id.tvInformasi);
-        tvInformasi.setText(s);
-
-        final AlertDialog.Builder adb = new AlertDialog.Builder(getContext());
-        adb.setTitle("Informasi");
-        adb.setPositiveButton("Oke", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Log.i(MY_LOG, "alertDialogInformasi setPositiveButton");
-                getAllAdrantaran();
-                adi.dismiss();
-            }
-        });
-
-        adb.setView(view);
-        adi = adb.create();
-        adi.show();
-    }*/
-
-    private void showAdrantaran(String json) {
-        Log.i(MY_LOG, "showAdrantaran");
-        AntaranParseJSON pj = new AntaranParseJSON(json);
-        pj.parseJSON();
-        Log.i(MY_LOG, "showAdrantaran parseJSON");
-        antaranAdapter = new AntaranAdapter(
-                getActivity(), AntaranParseJSON.akditem, AntaranParseJSON.akdstatus, AntaranParseJSON.awklokal,
-                AntaranParseJSON.adraAketerangan, AntaranParseJSON.adrsAketerangan, AntaranParseJSON.astatuskirim, AntaranParseJSON.ado);
-        if (antaranAdapter.getCount() == 0) {
-            frameNoData.setVisibility(View.VISIBLE);
-            listView.setVisibility(View.GONE);
-            fab.setVisibility(View.GONE);
-
-        } else {
-            frameNoData.setVisibility(View.GONE);
-            listView.setVisibility(View.VISIBLE);
-            fab.setVisibility(View.VISIBLE);
-
-            listView.setAdapter(antaranAdapter);
-            countData = listView.getAdapter().getCount();
-            tvCountData.setText("" + countData);
-        }
     }
 }

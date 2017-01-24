@@ -1,4 +1,4 @@
-package com.horirevens.antarankantorpos.network;
+package com.horirevens.antarankantorpos;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -6,13 +6,13 @@ import android.net.NetworkInfo;
 import android.util.Log;
 
 /**
- * Created by horirevens on 12/22/16.
+ * Created by horirevens on 1/18/17.
  */
 public class NetworkStatus {
     public static int TYPE_WIFI = 1;
     public static int TYPE_MOBILE = 2;
     public static int TYPE_NOT_CONNECTED = 0;
-    public static final String MY_LOG = "log_MainActivity";
+    public static final String MY_LOG = "log_LaunchActivity";
 
     public static int getConnectivityStatus(Context context) {
         Log.i(MY_LOG, "getConnectivityStatus");

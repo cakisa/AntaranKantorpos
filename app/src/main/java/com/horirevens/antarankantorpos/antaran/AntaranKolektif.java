@@ -1,13 +1,14 @@
 package com.horirevens.antarankantorpos.antaran;
 
 /**
- * Created by horirevens on 1/18/17.
+ * Created by horirevens on 1/20/17.
  */
-public class Antaran {
+public class AntaranKolektif {
     private String akditem, akdstatus, awktlokal, ada_aketerangan, ads_aketerangan, astatuskirim, ado;
+    private boolean selected = false;
 
-    public Antaran(String akditem, String akdstatus, String awktlokal, String ada_aketerangan,
-                   String ads_aketerangan, String astatuskirim, String ado) {
+    public AntaranKolektif(String akditem, String akdstatus, String awktlokal, String ada_aketerangan,
+                   String ads_aketerangan, String astatuskirim, String ado, boolean selected) {
         this.akditem = akditem;
         this.awktlokal = awktlokal;
         this.akdstatus = akdstatus;
@@ -15,6 +16,14 @@ public class Antaran {
         this.ads_aketerangan = ads_aketerangan;
         this.astatuskirim = astatuskirim;
         this.ado = ado;
+        this.selected = selected;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
     public String getAkditem() {

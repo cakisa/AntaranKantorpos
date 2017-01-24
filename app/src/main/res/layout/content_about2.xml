@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:text="Perihal"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+
+    <TextView android:text="Aplikasi Engine Antaran (NELoader)"
+        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:text="Nama"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:text="Moch. Arif Supriyanto"
+        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <android.support.percent.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView android:id="@+id/titleHp2"
+            android:text="No. Handphone"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/hp2"
+            android:layout_below="@+id/titleHp2"
+            android:text="0852-3366-7317"
+            android:textAppearance="@android:style/TextAppearance.Holo.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_widthPercent="90%"/>
+
+        <ImageView android:id="@+id/iv_phone2"
+            android:src="@drawable/phone"
+            android:layout_toEndOf="@+id/hp2"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/hp2"
+            android:layout_alignBottom="@+id/hp2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </android.support.percent.PercentRelativeLayout>
+
+    <android.support.percent.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView android:id="@+id/titleEmail2"
+            android:text="Email"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/email2"
+            android:layout_below="@+id/titleEmail2"
+            android:text="mohamad.arif.supriyanto@pci"
+            android:textAppearance="@android:style/TextAppearance.Holo.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_widthPercent="90%"/>
+
+        <ImageView android:id="@+id/iv_email2"
+            android:src="@drawable/mail"
+            android:layout_toEndOf="@+id/email2"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/email2"
+            android:layout_alignBottom="@+id/email2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </android.support.percent.PercentRelativeLayout>
+
+</LinearLayout>

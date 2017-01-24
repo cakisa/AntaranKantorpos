@@ -18,14 +18,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by horirevens on 1/1/17.
+ * Created by horirevens on 1/19/17.
  */
 public class BarcodeScannerActivity extends AppCompatActivity {
     public static final String MY_LOG = "log_BarcodeScanner";
 
-    public static String[] resAkditem;
-
-    private String anippos, akditem;
+    private String anippos, akditem, resAkditem;
     private JSONArray jsonArray = null;
     private JSONObject jsonObject = null;
 
@@ -51,9 +49,9 @@ public class BarcodeScannerActivity extends AppCompatActivity {
         IntentIntegrator scanIntegrator = new IntentIntegrator(this);
         scanIntegrator.setCaptureActivity(AnyOrientationCaptureActivity.class);
         scanIntegrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
-        scanIntegrator.setPrompt("Scan something");
+        scanIntegrator.setPrompt("Scan No Barcode");
         scanIntegrator.setOrientationLocked(false);
-        scanIntegrator.setBeepEnabled(false);
+        scanIntegrator.setBeepEnabled(true);
         scanIntegrator.initiateScan();
     }
 
@@ -79,13 +77,15 @@ public class BarcodeScannerActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         Log.i(MY_LOG, "onResponse");
                         resultParseJSON(response);
-                        //startMainActivity();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i(MY_LOG, "onErrorResponse");
+                        Intent maIntent = new Intent(getApplicationContext(), LaunchActivity.class);
+                        startActivity(maIntent);
+                        finish();
                     }
                 });
 
@@ -98,34 +98,29 @@ public class BarcodeScannerActivity extends AppCompatActivity {
         if (response.equals("null")) {
             Log.i(MY_LOG, "parseJSON null");
             String resultScan = "null";
-            startMainActivity(resultScan);
+            startLaunchActivity(resultScan);
         } else {
             try {
                 Log.i(MY_LOG, "parseJSON try");
                 jsonObject = new JSONObject(response);
                 jsonArray = jsonObject.getJSONArray(DBConfig.TAG_JSON_ARRAY);
 
-                resAkditem = new String[jsonArray.length()];
-
                 for(int i=0;i<jsonArray.length();i++){
-                    Log.i(MY_LOG, "parseJSON looping");
                     JSONObject jo = jsonArray.getJSONObject(i);
-                    Log.i(MY_LOG, "parseJSON JSONObject");
-                    resAkditem[i] = jo.getString(DBConfig.TAG_RES_AKDITEM);
+                    resAkditem = jo.getString(DBConfig.TAG_RES_AKDITEM);
                 }
 
-                Log.i(MY_LOG, "resultParseJSON notNull");
                 String resultScan = akditem;
-                startMainActivity(resultScan);
+                startLaunchActivity(resultScan);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void startMainActivity(String resultScan) {
-        Log.i(MY_LOG, "startMainActivity");
-        Intent maIntent = new Intent(this, MainActivity.class);
+    private void startLaunchActivity(String resultScan) {
+        Log.i(MY_LOG, "startLaunchActivity");
+        Intent maIntent = new Intent(this, LaunchActivity.class);
         maIntent.putExtra("resultScan", resultScan);
         startActivity(maIntent);
         finish();
