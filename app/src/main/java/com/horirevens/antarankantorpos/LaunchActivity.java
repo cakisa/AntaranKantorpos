@@ -53,11 +53,13 @@ public class LaunchActivity extends AppCompatActivity  {
             networkStatus = NetworkStatus.getConnectivityStatusString(context.getApplicationContext());
 
             if (networkStatus == "1") {
+                Log.i(MY_LOG, "onReceive 1");
                 tvNetwork.setVisibility(View.GONE);
                 tvAnama.setVisibility(View.VISIBLE);
                 tvAnippos.setVisibility(View.VISIBLE);
             }
             if (networkStatus == "0") {
+                Log.i(MY_LOG, "onReceive 0");
                 tvNetwork.setVisibility(View.VISIBLE);
                 tvAnama.setVisibility(View.GONE);
                 tvAnippos.setVisibility(View.GONE);

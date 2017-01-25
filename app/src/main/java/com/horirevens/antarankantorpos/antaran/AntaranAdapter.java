@@ -75,6 +75,7 @@ public class AntaranAdapter extends ArrayAdapter<Antaran> {
                 antaran.getAkdstatus().equals("6215") || antaran.getAkdstatus().equals("6216") ||
                 antaran.getAkdstatus().equals("6217") || antaran.getAkdstatus().equals("6218")) {
             holder.awktlokal.setText(myDate.datetimeIndo(antaran.getAwktlokal()) + " | No. DO " + antaran.getAdo());
+            holder.aketerangan.setText(antaran.getAds_aketerangan() + " (" + antaran.getAda_aketerangan() + ")");
             if (antaran.getAstatuskirim().equals("2")) {
                 holder.akdstatus.setImageResource(R.drawable.ba_android);
                 holder.aketerangan.setText(antaran.getAds_aketerangan() + " (" + antaran.getAda_aketerangan() + ")");
@@ -88,6 +89,7 @@ public class AntaranAdapter extends ArrayAdapter<Antaran> {
         } else if (antaran.getAkdstatus().equals("6220") || antaran.getAkdstatus().equals("6221") ||
                 antaran.getAkdstatus().equals("6238")) {
             holder.awktlokal.setText(myDate.datetimeIndo(antaran.getAwktlokal()) + " | No. DO " + antaran.getAdo());
+            holder.aketerangan.setText(antaran.getAds_aketerangan() + " (" + antaran.getAda_aketerangan() + ")");
             if (antaran.getAstatuskirim().equals("2")) {
                 holder.akdstatus.setImageResource(R.drawable.ga_android);
                 holder.aketerangan.setText(antaran.getAds_aketerangan() + " (" + antaran.getAda_aketerangan() + ")");
