@@ -78,13 +78,13 @@ public class AntaranAdapter extends ArrayAdapter<Antaran> {
             holder.aketerangan.setText(antaran.getAds_aketerangan() + " (" + antaran.getAda_aketerangan() + ")");
             if (antaran.getAstatuskirim().equals("2")) {
                 holder.akdstatus.setImageResource(R.drawable.ba_android);
-                holder.aketerangan.setText(antaran.getAds_aketerangan() + " (" + antaran.getAda_aketerangan() + ")");
+                //holder.aketerangan.setText(antaran.getAds_aketerangan() + " (" + antaran.getAda_aketerangan() + ")");
             } else if (antaran.getAstatuskirim().equals("3")) {
                 holder.akdstatus.setImageResource(R.drawable.ba_desktop);
-                holder.aketerangan.setText(antaran.getAds_aketerangan() + " (" + antaran.getAda_aketerangan() + ")");
+                //holder.aketerangan.setText(antaran.getAds_aketerangan() + " (" + antaran.getAda_aketerangan() + ")");
             } else {
                 holder.akdstatus.setImageResource(R.drawable.ba);
-                holder.aketerangan.setText(antaran.getAds_aketerangan() + " (" + antaran.getAda_aketerangan() + ")");
+                //holder.aketerangan.setText(antaran.getAds_aketerangan() + " (" + antaran.getAda_aketerangan() + ")");
             }
         } else if (antaran.getAkdstatus().equals("6220") || antaran.getAkdstatus().equals("6221") ||
                 antaran.getAkdstatus().equals("6238")) {
@@ -92,13 +92,13 @@ public class AntaranAdapter extends ArrayAdapter<Antaran> {
             holder.aketerangan.setText(antaran.getAds_aketerangan() + " (" + antaran.getAda_aketerangan() + ")");
             if (antaran.getAstatuskirim().equals("2")) {
                 holder.akdstatus.setImageResource(R.drawable.ga_android);
-                holder.aketerangan.setText(antaran.getAds_aketerangan() + " (" + antaran.getAda_aketerangan() + ")");
+                //holder.aketerangan.setText(antaran.getAds_aketerangan() + " (" + antaran.getAda_aketerangan() + ")");
             } else if (antaran.getAstatuskirim().equals("3")) {
                 holder.akdstatus.setImageResource(R.drawable.ga_desktop);
-                holder.aketerangan.setText(antaran.getAds_aketerangan() + " (" + antaran.getAda_aketerangan() + ")");
+                //holder.aketerangan.setText(antaran.getAds_aketerangan() + " (" + antaran.getAda_aketerangan() + ")");
             } else {
                 holder.akdstatus.setImageResource(R.drawable.ga);
-                holder.aketerangan.setText(antaran.getAds_aketerangan() + " (" + antaran.getAda_aketerangan() + ")");
+                //holder.aketerangan.setText(antaran.getAds_aketerangan() + " (" + antaran.getAda_aketerangan() + ")");
             }
         } else {
             holder.akdstatus.setImageResource(R.drawable.do_proses);
