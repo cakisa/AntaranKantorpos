@@ -5,7 +5,7 @@
     android:paddingEnd="@dimen/activity_horizontal_margin"
     android:paddingTop="8dp"
     android:layout_width="match_parent"
-    android:layout_height="84dp">
+    android:layout_height="72dp">
 
     <ImageView android:id="@+id/akdstatus"
         android:layout_alignTop="@+id/akditem"

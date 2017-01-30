@@ -45,14 +45,14 @@ import com.android.volley.toolbox.Volley;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
-import com.horirevens.antarankantorpos.about.AboutActivity;
 import com.horirevens.antarankantorpos.BarcodeScannerActivity;
 import com.horirevens.antarankantorpos.DBConfig;
 import com.horirevens.antarankantorpos.KolektifActivity;
 import com.horirevens.antarankantorpos.LapDOActivity;
 import com.horirevens.antarankantorpos.R;
+import com.horirevens.antarankantorpos.about.AboutActivity;
 import com.horirevens.antarankantorpos.antaran.Antaran;
-import com.horirevens.antarankantorpos.antaran.AntaranAdapter;
+import com.horirevens.antarankantorpos.antaran.AntaranAdapterDO;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -89,7 +89,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
     private int animationDuration, countData;
 
     private AwesomeValidation awesomeValidation;
-    private AntaranAdapter antaranAdapter;
+    private AntaranAdapterDO antaranAdapterDO;
     private ArrayList<Antaran> antaranList = new ArrayList<>();
     private ArrayList<String> astatusList = new ArrayList<>();
     private ArrayList<String> aketeranganList = new ArrayList<>();
@@ -145,6 +145,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         String param1 = "?status=0";
         String param2 = "&anippos=" + anippos;
         String params = param1 + param2;
+        Log.i(MY_LOG, "params: " + params);
         StringRequest stringRequest = new StringRequest(DBConfig.JSON_URL_ADRANTARAN + params,
                 new Response.Listener<String>() {
                     @Override
@@ -179,7 +180,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
 
     private void initListAdrantaran(String json) {
         try {
-            Log.i(MY_LOG, "listAdrantaran");
+            Log.i(MY_LOG, "listAdrantaran 1");
             JSONObject jsonObject = new JSONObject(json);
             JSONArray jsonArray = jsonObject.getJSONArray(DBConfig.TAG_JSON_ARRAY);
 
@@ -207,9 +208,9 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
     private void showAllAdrantaran(String json) {
         Log.i(MY_LOG, "showAdrantaran");
         initListAdrantaran(json);
-        antaranAdapter = new AntaranAdapter(antaranList, getContext());
+        antaranAdapterDO = new AntaranAdapterDO(antaranList, getContext());
 
-        if (antaranAdapter.getCount() == 0) {
+        if (antaranAdapterDO.getCount() == 0) {
             frameNoData.setVisibility(View.VISIBLE);
             listView.setVisibility(View.GONE);
             fab.setVisibility(View.GONE);
@@ -218,7 +219,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
             listView.setVisibility(View.VISIBLE);
             fab.setVisibility(View.VISIBLE);
 
-            listView.setAdapter(antaranAdapter);
+            listView.setAdapter(antaranAdapterDO);
             countData = listView.getAdapter().getCount();
             tvCountData.setText("" + countData);
         }
@@ -369,7 +370,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                             @Override
                             public boolean onQueryTextChange(String s) {
                                 Log.i(MY_LOG, "searchAkditem onQueryTextChange");
-                                antaranAdapter.filter(s);
+                                antaranAdapterDO.filter(s);
                                 listView.invalidate();
                                 return false;
                             }
@@ -498,7 +499,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                                 spinnerAstatus.setVisibility(View.GONE);
                             }
                         });
-                        antaranAdapter.notifyDataSetChanged();
+                        antaranAdapterDO.notifyDataSetChanged();
                     }
                 },
                 new Response.ErrorListener() {

@@ -15,16 +15,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by horirevens on 1/18/17.
+ * Created by horirevens on 1/30/17.
  */
-public class AntaranAdapter extends ArrayAdapter<Antaran> {
+
+public class AntaranAdapterDO extends ArrayAdapter<Antaran> {
 
     private List<Antaran> antaranList;
     private ArrayList<Antaran> arrayList;
     private Context context;
 
-    public AntaranAdapter(List<Antaran> antaranList, Context context) {
-        super(context, R.layout.listview_antaran, antaranList);
+    public AntaranAdapterDO(List<Antaran> antaranList, Context context) {
+        super(context, R.layout.listview_antaran_do, antaranList);
         this.antaranList = antaranList;
         this.context = context;
         arrayList = new ArrayList<>();
@@ -50,10 +51,10 @@ public class AntaranAdapter extends ArrayAdapter<Antaran> {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = new ViewHolder();
+        AntaranAdapterDO.ViewHolder holder = new AntaranAdapterDO.ViewHolder();
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.listview_antaran, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.listview_antaran_do, parent, false);
             holder.akditem = (TextView) convertView.findViewById(R.id.akditem);
             holder.awktlokal = (TextView) convertView.findViewById(R.id.awktlokal);
             holder.aketerangan = (TextView) convertView.findViewById(R.id.aketerangan);
@@ -61,7 +62,7 @@ public class AntaranAdapter extends ArrayAdapter<Antaran> {
 
             convertView.setTag(holder);
         } else {
-            holder = (ViewHolder) convertView.getTag();
+            holder = (AntaranAdapterDO.ViewHolder) convertView.getTag();
         }
 
         MyDate myDate = new MyDate();
@@ -74,7 +75,7 @@ public class AntaranAdapter extends ArrayAdapter<Antaran> {
                 antaran.getAkdstatus().equals("6213") || antaran.getAkdstatus().equals("6214") ||
                 antaran.getAkdstatus().equals("6215") || antaran.getAkdstatus().equals("6216") ||
                 antaran.getAkdstatus().equals("6217") || antaran.getAkdstatus().equals("6218")) {
-            holder.awktlokal.setText(myDate.datetimeIndo(antaran.getAwktlokal()) + "\nNo. DO " + antaran.getAdo());
+            holder.awktlokal.setText(myDate.datetimeIndo(antaran.getAwktlokal()) + " | No. DO " + antaran.getAdo());
             //holder.aketerangan.setText(antaran.getAds_aketerangan() + " (" + antaran.getAda_aketerangan() + ")");
             if (antaran.getAstatuskirim().equals("2")) {
                 holder.akdstatus.setImageResource(R.drawable.ba_android);
@@ -88,7 +89,7 @@ public class AntaranAdapter extends ArrayAdapter<Antaran> {
             }
         } else if (antaran.getAkdstatus().equals("6220") || antaran.getAkdstatus().equals("6221") ||
                 antaran.getAkdstatus().equals("6238")) {
-            holder.awktlokal.setText(myDate.datetimeIndo(antaran.getAwktlokal()) + "\nNo. DO " + antaran.getAdo());
+            holder.awktlokal.setText(myDate.datetimeIndo(antaran.getAwktlokal()) + " | No. DO " + antaran.getAdo());
             //holder.aketerangan.setText(antaran.getAds_aketerangan() + " (" + antaran.getAda_aketerangan() + ")");
             if (antaran.getAstatuskirim().equals("2")) {
                 holder.akdstatus.setImageResource(R.drawable.ga_android);
@@ -124,5 +125,4 @@ public class AntaranAdapter extends ArrayAdapter<Antaran> {
         }
         notifyDataSetChanged();
     }
-
 }
