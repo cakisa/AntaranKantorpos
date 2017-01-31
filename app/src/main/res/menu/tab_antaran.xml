@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/searchAkditem"
+        android:title="Search"
+        android:icon="@drawable/ic_search"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:iconifiedByDefault="true"
+        app:actionViewClass="android.support.v7.widget.SearchView"/>
+    <item android:id="@+id/scanAkditem"
+        android:title="Scan Barcode"
+        app:showAsAction="never" />
+    <item android:id="@+id/updateKolektif"
+        android:title="Update Kolektif"
+        app:showAsAction="never" />
+    <item android:id="@+id/laporanDO"
+        android:title="Laporan DO"
+        app:showAsAction="never" />
+    <item android:id="@+id/versi"
+        android:title="Tentang Aplikasi"
+        app:showAsAction="never" />
+</menu>

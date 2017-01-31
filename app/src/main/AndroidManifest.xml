@@ -27,22 +27,52 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="Antaran Kantorpos"
-        android:supportsRtl="true"
         android:screenOrientation="portrait"
-        android:theme="@style/AppTheme" >
-        <activity
-            android:name=".MainActivity" >
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme.NoActionBar" >
+        <activity android:name=".LaunchActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".BarcodeScannerActivity" >
+        <activity android:name=".BarcodeScannerActivity" >
             <intent-filter>
                 <action android:name="com.horirevens.antarankantorpos.BarcodeScannerActivity" />
-                <category android:name="android.intent.category.default" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".KolektifActivity"
+            android:label="Update Kolektif"
+            android:parentActivityName=".LaunchActivity" >
+            <intent-filter>
+                <action android:name="com.horirevens.antarankantorpos.KolektifActivity" />
+                <!-- <action android:name="android.net.conn.CONNECTIVITY_CHANGE" /> -->
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".LapDOActivity"
+            android:label="Laporan DO"
+            android:parentActivityName=".LaunchActivity" >
+            <intent-filter>
+                <action android:name="com.horirevens.antarankantorpos.LapDOActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".about.AboutActivity"
+            android:parentActivityName=".LaunchActivity">
+            <intent-filter>
+                <action android:name="com.horirevens.antarankantorpos.AboutActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
@@ -50,8 +80,9 @@
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme"
-            android:windowSoftInputMode="stateAlwaysHidden">
+            android:windowSoftInputMode="stateAlwaysHidden" >
         </activity>
+
     </application>
 
 </manifest>

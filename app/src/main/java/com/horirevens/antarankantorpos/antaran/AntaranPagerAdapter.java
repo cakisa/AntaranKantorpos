@@ -10,7 +10,7 @@ import com.horirevens.antarankantorpos.fragment.AntaranTab2;
 import com.horirevens.antarankantorpos.fragment.AntaranTab3;
 
 /**
- * Created by horirevens on 11/25/16.
+ * Created by horirevens on 1/18/17.
  */
 public class AntaranPagerAdapter extends FragmentStatePagerAdapter {
     int numOfTabs;
@@ -32,8 +32,6 @@ public class AntaranPagerAdapter extends FragmentStatePagerAdapter {
                 AntaranTab1 antaranTab1 = new AntaranTab1();
                 antaranTab1.setArguments(bundle);
                 return antaranTab1;
-                /*Test myTest = new Test();
-                return myTest;*/
             case 1:
                 AntaranTab2 antaranTab2 = new AntaranTab2();
                 antaranTab2.setArguments(bundle);
@@ -50,6 +48,5 @@ public class AntaranPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return numOfTabs;
-        //return 0;
     }
 }

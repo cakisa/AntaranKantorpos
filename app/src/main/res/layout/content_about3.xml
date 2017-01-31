@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:text="Perihal"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+
+    <TextView android:text="Aplikasi Android Antaran (Update Status)"
+        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:text="Nama"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:text="Yogi Trismayana"
+        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <android.support.percent.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView android:id="@+id/titleHp3"
+            android:text="No. Handphone"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/hp3"
+            android:layout_below="@+id/titleHp3"
+            android:text="0821-4051-3878"
+            android:textAppearance="@android:style/TextAppearance.Holo.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_widthPercent="90%"/>
+
+        <ImageView android:id="@+id/iv_phone3"
+            android:src="@drawable/phone"
+            android:layout_toEndOf="@+id/hp3"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/hp3"
+            android:layout_alignBottom="@+id/hp3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </android.support.percent.PercentRelativeLayout>
+
+    <android.support.percent.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView android:id="@+id/titleEmail3"
+            android:text="Email"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView android:id="@+id/email3"
+            android:layout_below="@+id/titleEmail3"
+            android:text="644spv@posindonesia.co.id"
+            android:textAppearance="@android:style/TextAppearance.Holo.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_widthPercent="90%"/>
+
+        <ImageView android:id="@+id/iv_email3"
+            android:src="@drawable/mail"
+            android:layout_toEndOf="@+id/email3"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/email3"
+            android:layout_alignBottom="@+id/email3"
+            android:layout_width="wrap_content"/>
+
+    </android.support.percent.PercentRelativeLayout>
+
+</LinearLayout>
