@@ -4,12 +4,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.app.SearchManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
@@ -29,6 +26,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -85,6 +83,7 @@ public class KolektifActivity extends AppCompatActivity implements FloatingActio
 
     private AwesomeValidation awesomeValidation;
     private AntaranKolektifAdapter antaranKolektifAdapter;
+    private ArrayAdapter<String> itemKolektifAdapter;
     private ArrayList<AntaranKolektif> antaranList = new ArrayList<>();
     private ArrayList<String> astatusList = new ArrayList<>();
     private ArrayList<String> aketeranganList = new ArrayList<>();
@@ -347,12 +346,13 @@ public class KolektifActivity extends AppCompatActivity implements FloatingActio
     private void alertDialogUpdateStatus(int s) {
         Log.i(MY_LOG, "alertDialogUpdateStatus");
         LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.alert_dialog_update_status, null);
-        TextView tvLabel = (TextView) view.findViewById(R.id.tvLabel);
-        TextView tvValAkditem = (TextView) view.findViewById(R.id.tvValAkditem);
+        View view = inflater.inflate(R.layout.alert_dialog_update_status_kolektif, null);
+        ListView lvItemkolektif = (ListView) view.findViewById(R.id.lvItemKolektif);
+        TextView tvJmlItem = (TextView) view.findViewById(R.id.tvJmlItem);
 
-        tvLabel.setText("Jumlah Resi");
-        tvValAkditem.setText("" + s);
+        itemKolektifAdapter = new ArrayAdapter<>(this, R.layout.listview_item_kolektif, R.id.tvItemKolektif, checkedList);
+        lvItemkolektif.setAdapter(itemKolektifAdapter);
+        tvJmlItem.setText("Jumlah item : " + s);
 
         AlertDialog.Builder adb = new AlertDialog.Builder(this);
         adb.setTitle("Update Status");
@@ -701,10 +701,12 @@ public class KolektifActivity extends AppCompatActivity implements FloatingActio
     @Override
     public void onClick(View v) {
         checkedList.clear();
+        int j = 1;
         for (int i = 0; i < antaranList.size(); i++) {
             AntaranKolektif antaranKolektif = antaranList.get(i);
             if (antaranKolektif.isSelected()) {
-                checkedList.add(antaranKolektif.getAkditem());
+                checkedList.add(j +". "+antaranKolektif.getAkditem());
+                j++;
             }
         }
 
