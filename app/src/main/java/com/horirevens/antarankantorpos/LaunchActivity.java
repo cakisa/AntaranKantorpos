@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -38,7 +37,6 @@ public class LaunchActivity extends AppCompatActivity  {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private FloatingActionButton fab;
     private TextView tvAnippos, tvImei, tvAnama, tvNetwork;
     private String imeiNumber, anippos, anama, networkStatus;
     private Snackbar snackbar;

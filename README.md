@@ -1,4 +1,4 @@
-# AntaranKantorpos 1.3.4
+# AntaranKantorpos 1.3.5
 
 Aplikasi internal PT Pos Indonesia (Persero) untuk layanan petugas Antaran  
 
@@ -11,5 +11,5 @@ Fitur Aplikasi :
 6. Tentang Aplikasi
 
 Perubahan :  
-1. Perbaikan Listview untuk tab DO, Berhasil dan Gagal
+1. Perbaikan Listview untuk tab DO, Berhasil dan Gagal (Revisi)
 

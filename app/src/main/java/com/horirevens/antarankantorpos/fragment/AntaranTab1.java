@@ -52,7 +52,7 @@ import com.horirevens.antarankantorpos.LapDOActivity;
 import com.horirevens.antarankantorpos.R;
 import com.horirevens.antarankantorpos.about.AboutActivity;
 import com.horirevens.antarankantorpos.antaran.Antaran;
-import com.horirevens.antarankantorpos.antaran.AntaranAdapterDO;
+import com.horirevens.antarankantorpos.antaran.AntaranAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -89,7 +89,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
     private int animationDuration, countData;
 
     private AwesomeValidation awesomeValidation;
-    private AntaranAdapterDO antaranAdapterDO;
+    private AntaranAdapter antaranAdapter;
     private ArrayList<Antaran> antaranList = new ArrayList<>();
     private ArrayList<String> astatusList = new ArrayList<>();
     private ArrayList<String> aketeranganList = new ArrayList<>();
@@ -208,9 +208,9 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
     private void showAllAdrantaran(String json) {
         Log.i(MY_LOG, "showAdrantaran");
         initListAdrantaran(json);
-        antaranAdapterDO = new AntaranAdapterDO(antaranList, getContext());
+        antaranAdapter = new AntaranAdapter(antaranList, getContext());
 
-        if (antaranAdapterDO.getCount() == 0) {
+        if (antaranAdapter.getCount() == 0) {
             frameNoData.setVisibility(View.VISIBLE);
             listView.setVisibility(View.GONE);
             fab.setVisibility(View.GONE);
@@ -219,7 +219,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
             listView.setVisibility(View.VISIBLE);
             fab.setVisibility(View.VISIBLE);
 
-            listView.setAdapter(antaranAdapterDO);
+            listView.setAdapter(antaranAdapter);
             countData = listView.getAdapter().getCount();
             tvCountData.setText("" + countData);
         }
@@ -370,7 +370,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                             @Override
                             public boolean onQueryTextChange(String s) {
                                 Log.i(MY_LOG, "searchAkditem onQueryTextChange");
-                                antaranAdapterDO.filter(s);
+                                antaranAdapter.filter(s);
                                 listView.invalidate();
                                 return false;
                             }
@@ -499,7 +499,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                                 spinnerAstatus.setVisibility(View.GONE);
                             }
                         });
-                        antaranAdapterDO.notifyDataSetChanged();
+                        antaranAdapter.notifyDataSetChanged();
                     }
                 },
                 new Response.ErrorListener() {
