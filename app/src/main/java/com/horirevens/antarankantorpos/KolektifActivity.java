@@ -88,6 +88,7 @@ public class KolektifActivity extends AppCompatActivity implements FloatingActio
     private ArrayList<String> astatusList = new ArrayList<>();
     private ArrayList<String> aketeranganList = new ArrayList<>();
     private ArrayList<String> checkedList = new ArrayList<>();
+    private ArrayList<String> checkedItemList = new ArrayList<>();
 
     /*private IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
     private BroadcastReceiver myReceiver = new BroadcastReceiver() {
@@ -614,13 +615,13 @@ public class KolektifActivity extends AppCompatActivity implements FloatingActio
             final String awktlokal = date + " " + time;
 
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String s = "?status=5";
+            String params = "?status=5";
             JSONArray jsonArray = new JSONArray();
 
             for (int i=0; i<checkedItem; i++) {
                 Log.i(MY_LOG, "looping " + i);
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put(DBConfig.KEY_AKDITEM, checkedList.get(i));
+                jsonObject.put(DBConfig.KEY_AKDITEM, checkedItemList.get(i));
                 jsonObject.put(DBConfig.KEY_ANIPPOS, anippos);
                 jsonObject.put(DBConfig.KEY_AKDSTATUS, valAstatus);
                 jsonObject.put(DBConfig.KEY_AWKTLOKAL, awktlokal);
@@ -633,7 +634,7 @@ public class KolektifActivity extends AppCompatActivity implements FloatingActio
             final String jsonString = jsonObjectArray.toString();
 
             StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                    DBConfig.JSON_URL_ADRANTARAN + s,
+                    DBConfig.JSON_URL_ADRANTARAN + params,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -701,11 +702,13 @@ public class KolektifActivity extends AppCompatActivity implements FloatingActio
     @Override
     public void onClick(View v) {
         checkedList.clear();
+        checkedItemList.clear();
         int j = 1;
         for (int i = 0; i < antaranList.size(); i++) {
             AntaranKolektif antaranKolektif = antaranList.get(i);
             if (antaranKolektif.isSelected()) {
                 checkedList.add(j +". "+antaranKolektif.getAkditem());
+                checkedItemList.add(antaranKolektif.getAkditem());
                 j++;
             }
         }
