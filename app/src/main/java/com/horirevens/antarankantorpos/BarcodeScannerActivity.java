@@ -24,8 +24,6 @@ public class BarcodeScannerActivity extends AppCompatActivity {
     public static final String MY_LOG = "log_BarcodeScanner";
 
     private String anippos, akditem, resAkditem;
-    private JSONArray jsonArray = null;
-    private JSONObject jsonObject = null;
 
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(MY_LOG, "onCreate");
@@ -50,8 +48,8 @@ public class BarcodeScannerActivity extends AppCompatActivity {
         scanIntegrator.setCaptureActivity(AnyOrientationCaptureActivity.class);
         scanIntegrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
         scanIntegrator.setPrompt("Scan No Barcode");
-        scanIntegrator.setOrientationLocked(false);
-        scanIntegrator.setBeepEnabled(true);
+        scanIntegrator.setOrientationLocked(true);
+        scanIntegrator.setBeepEnabled(false);
         scanIntegrator.initiateScan();
     }
 
@@ -60,6 +58,7 @@ public class BarcodeScannerActivity extends AppCompatActivity {
         Log.i(MY_LOG, "onActivityResult");
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if(scanningResult != null) {
+            Log.i(MY_LOG, ""+akditem);
             akditem = scanningResult.getContents();
             cekAkditem(akditem, anippos);
         }
@@ -71,6 +70,7 @@ public class BarcodeScannerActivity extends AppCompatActivity {
         String param2 = "&anippos=" + anippos;
         String param3 = "&akditem=" + akditem;
         String params = param1 + param2 + param3;
+        Log.i(MY_LOG, params);
         StringRequest stringRequest = new StringRequest(DBConfig.JSON_URL_ADRANTARAN + params,
                 new Response.Listener<String>() {
                     @Override
@@ -94,27 +94,25 @@ public class BarcodeScannerActivity extends AppCompatActivity {
     }
 
     private void resultParseJSON(String response) {
-        Log.i(MY_LOG, "parseJSON");
-        if (response.equals("null")) {
-            Log.i(MY_LOG, "parseJSON null");
-            String resultScan = "null";
-            startLaunchActivity(resultScan);
-        } else {
-            try {
-                Log.i(MY_LOG, "parseJSON try");
-                jsonObject = new JSONObject(response);
-                jsonArray = jsonObject.getJSONArray(DBConfig.TAG_JSON_ARRAY);
-
-                for(int i=0;i<jsonArray.length();i++){
-                    JSONObject jo = jsonArray.getJSONObject(i);
-                    resAkditem = jo.getString(DBConfig.TAG_RES_AKDITEM);
-                }
-
-                String resultScan = akditem;
+        try {
+            Log.i(MY_LOG, "parseJSON");
+            if (response.equals("null")) {
+                Log.i(MY_LOG, "parseJSON null");
+                String resultScan = "null";
                 startLaunchActivity(resultScan);
-            } catch (JSONException e) {
-                e.printStackTrace();
+            } else {
+                Log.i(MY_LOG, "parseJSON try");
+                JSONObject jsonObject = new JSONObject(response);
+                JSONArray jsonArray = jsonObject.getJSONArray(DBConfig.TAG_JSON_ARRAY);
+                JSONObject jo = jsonArray.getJSONObject(0);
+                resAkditem = jo.getString(DBConfig.TAG_AKDITEM);
+                Log.i(MY_LOG, ""+resAkditem);
+
+                String resultScan = resAkditem;
+                startLaunchActivity(resultScan);
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 

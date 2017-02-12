@@ -9,11 +9,13 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
@@ -35,7 +37,7 @@ public class LapDOActivity extends AppCompatActivity {
     public static final String MY_LOG = "log_LapDOActivity";
     public static final String STR_ERROR = "Gagal memuat data";
 
-    private ListView listView;
+    private RecyclerView recyclerView;
     private Toolbar toolbar;
     private Snackbar snackbar;
     private String anippos;
@@ -54,7 +56,7 @@ public class LapDOActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lap_do);
         Log.i(MY_LOG, "onCreate");
 
-        listView = (ListView) findViewById(R.id.listView);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         frameNoData = (FrameLayout) findViewById(R.id.frameNoData);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         spinner = (CircularProgressView) findViewById(R.id.spinner);
@@ -68,7 +70,7 @@ public class LapDOActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         frameNoData.setVisibility(View.GONE);
-        listView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
 
         getIntentResult();
         getAllLaporanDO();
@@ -83,7 +85,7 @@ public class LapDOActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        listView.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.GONE);
                         frameNoData.setVisibility(View.GONE);
                         getAllLaporanDO();
                         swipeRefreshLayout.setRefreshing(false);
@@ -114,9 +116,9 @@ public class LapDOActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.i(MY_LOG, "onResponse ");
-                        listView.setAlpha(0f);
-                        listView.setVisibility(View.VISIBLE);
-                        listView.animate().alpha(1f).setDuration(animationDuration).setListener(null);
+                        recyclerView.setAlpha(0f);
+                        recyclerView.setVisibility(View.VISIBLE);
+                        recyclerView.animate().alpha(1f).setDuration(animationDuration).setListener(null);
                         showLaporanDO(response);
 
                         spinner.animate().alpha(0f).setDuration(animationDuration).setListener(new AnimatorListenerAdapter() {
@@ -166,14 +168,17 @@ public class LapDOActivity extends AppCompatActivity {
         Log.i(MY_LOG, "showLaporanDO");
         lapDOAdapter = new LapDOAdapter(lapDOList, this);
 
-        if (lapDOAdapter.getCount() == 0) {
+        if (lapDOAdapter.getItemCount() == 0) {
             frameNoData.setVisibility(View.VISIBLE);
-            listView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.GONE);
         } else {
             frameNoData.setVisibility(View.GONE);
-            listView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
 
-            listView.setAdapter(lapDOAdapter);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+            recyclerView.setLayoutManager(layoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(lapDOAdapter);
         }
     }
 

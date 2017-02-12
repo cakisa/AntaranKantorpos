@@ -1,10 +1,10 @@
 package com.horirevens.antarankantorpos.ado;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,53 +14,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by horirevens on 1/23/17.
+ * Created by horirevens on 2/12/17.
  */
-public class LapDOAdapter extends ArrayAdapter<LapDO> {
+
+public class LapDOAdapter extends RecyclerView.Adapter<LapDOAdapter.MyViewHolder> {
     private List<LapDO> lapDOList;
     private ArrayList<LapDO> arrayList;
     private Context context;
 
     public LapDOAdapter(List<LapDO> lapDOList, Context context) {
-        super(context, R.layout.listview_lap_do, lapDOList);
         this.lapDOList = lapDOList;
         this.context = context;
         arrayList = new ArrayList<>();
         arrayList.addAll(lapDOList);
     }
-
-    public int getCount() {
-        return lapDOList.size();
-    }
-
-    public LapDO getItem(int position) {
-        return lapDOList.get(position);
-    }
-
-    public long getItemId(int position) {
-        return lapDOList.get(position).hashCode();
-    }
-
-    private static class ViewHolder {
+    
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvAdo, tvAdoKeterangan;
         public ImageView ivAdoStatus;
+
+        public MyViewHolder(View itemView) {
+            super(itemView);
+            tvAdo = (TextView) itemView.findViewById(R.id.ado);
+            tvAdoKeterangan = (TextView) itemView.findViewById(R.id.adoKeterangan);
+            ivAdoStatus = (ImageView) itemView.findViewById(R.id.adoStatus);
+        }
+    }
+    
+    @Override
+    public LapDOAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_lap_do, parent, false);
+        return new LapDOAdapter.MyViewHolder(itemView);
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = new ViewHolder();
-
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.listview_lap_do, parent, false);
-            holder.tvAdo = (TextView) convertView.findViewById(R.id.ado);
-            holder.tvAdoKeterangan = (TextView) convertView.findViewById(R.id.adoKeterangan);
-            holder.ivAdoStatus = (ImageView) convertView.findViewById(R.id.adoStatus);
-
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
+    public void onBindViewHolder(LapDOAdapter.MyViewHolder holder, int position) {
         LapDO lapDO = lapDOList.get(position);
         holder.tvAdo.setText(lapDO.getAdo());
         holder.tvAdoKeterangan.setText(
@@ -69,14 +57,16 @@ public class LapDOAdapter extends ArrayAdapter<LapDO> {
                         "Gagal: " + lapDO.getGagal() + " | " +
                         "Jml Item: " + lapDO.getJml_item()
         );
+
         if(lapDO.getProses().equals("0")) {
             holder.ivAdoStatus.setImageResource(R.drawable.ba);
         } else {
             holder.ivAdoStatus.setImageResource(R.drawable.ga);
         }
+    }
 
-
-
-        return convertView;
+    @Override
+    public int getItemCount() {
+        return lapDOList.size();
     }
 }

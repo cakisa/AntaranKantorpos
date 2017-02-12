@@ -15,6 +15,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -26,15 +29,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -66,14 +66,12 @@ import java.util.Map;
 /**
  * Created by horirevens on 1/18/17.
  */
-public class AntaranTab1 extends Fragment implements ListView.OnItemClickListener,
-        ListView.OnItemLongClickListener {
+public class AntaranTab1 extends Fragment {
     public static final String STR_ERROR = "Gagal memuat data";
     public static final String STR_BERHASIL = "Berhasil update status No Resi ";
     public static final String MY_LOG = "log_AntaranTab1";
 
     private View rootView;
-    private ListView listView;
     private String anippos, valAkditem, valKeteranganStatus, valAstatus, valAketerangan;
     private CircularProgressView spinner, spinnerAstatus;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -85,6 +83,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
     private SearchView searchView;
     private FloatingActionButton fab;
     private TextView tvCountData;
+    private RecyclerView recyclerView;
 
     private int animationDuration, countData;
 
@@ -99,7 +98,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         Log.i(MY_LOG, "onCreateView");
         rootView = inflater.inflate(R.layout.tab_layout_antaran, container, false);
 
-        listView = (ListView) rootView.findViewById(R.id.listView);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         spinner = (CircularProgressView) rootView.findViewById(R.id.spinner);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
         animationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
@@ -109,10 +108,9 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
 
         anippos = getArguments().getString("anippos");
         frameNoData.setVisibility(View.GONE);
-        listView = (ListView) rootView.findViewById(R.id.listView);
-        listView.setVisibility(View.GONE);
-        listView.setOnItemClickListener(this);
-        listView.setOnItemLongClickListener(this);
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setVisibility(View.GONE);
 
         getAllAdrantaran();
         swipeRefresh();
@@ -128,7 +126,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
 
         if (this.isVisible()) {
             Log.i(MY_LOG, "setUserVisibleHint isVisible");
-            listView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.GONE);
             frameNoData.setVisibility(View.GONE);
             fab.setVisibility(View.GONE);
             spinner.setAlpha(0f);
@@ -151,9 +149,9 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                     @Override
                     public void onResponse(String response) {
                         Log.i(MY_LOG, "onResponse");
-                        listView.setAlpha(0f);
-                        listView.setVisibility(View.VISIBLE);
-                        listView.animate().alpha(1f).setDuration(animationDuration).setListener(null);
+                        recyclerView.setAlpha(0f);
+                        recyclerView.setVisibility(View.VISIBLE);
+                        recyclerView.animate().alpha(1f).setDuration(animationDuration).setListener(null);
                         antaranList.clear();
                         showAllAdrantaran(response);
 
@@ -180,7 +178,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
 
     private void initListAdrantaran(String json) {
         try {
-            Log.i(MY_LOG, "listAdrantaran 1");
+            Log.i(MY_LOG, "initListAdrantaran");
             JSONObject jsonObject = new JSONObject(json);
             JSONArray jsonArray = jsonObject.getJSONArray(DBConfig.TAG_JSON_ARRAY);
 
@@ -208,19 +206,38 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
     private void showAllAdrantaran(String json) {
         Log.i(MY_LOG, "showAdrantaran");
         initListAdrantaran(json);
-        antaranAdapter = new AntaranAdapter(antaranList, getContext());
+        antaranAdapter = new AntaranAdapter(antaranList, getContext(), new AntaranAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Antaran antaran) {
+                Log.i(MY_LOG, "showAllAdrantaran onItemClick");
+                String s = String.valueOf(antaran.getAkditem());
+                alertDialogUpdateStatus(s);
 
-        if (antaranAdapter.getCount() == 0) {
+                if (adus.isShowing()) {
+                    Log.i(MY_LOG, "adus isShowing");
+                    if (!searchView.isIconified()) {
+                        Log.i(MY_LOG, "true");
+                        MenuItemCompat.collapseActionView(myItem);
+                    }
+                }
+            }
+        });
+
+        if (antaranAdapter.getItemCount() == 0) {
             frameNoData.setVisibility(View.VISIBLE);
-            listView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.GONE);
             fab.setVisibility(View.GONE);
         } else {
             frameNoData.setVisibility(View.GONE);
-            listView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
             fab.setVisibility(View.VISIBLE);
 
-            listView.setAdapter(antaranAdapter);
-            countData = listView.getAdapter().getCount();
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+            recyclerView.setLayoutManager(layoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(antaranAdapter);
+
+            countData = recyclerView.getAdapter().getItemCount();
             tvCountData.setText("" + countData);
         }
     }
@@ -335,7 +352,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
         if (intent.hasExtra("resultScan")) {
             String resultScan = intent.getStringExtra("resultScan");
             if (resultScan.equals("null")) {
-                String s = "No Barcode tidak ditemukan pada Delivery Order";
+                String s = "No Barcode tidak ditemukan / sudah digunakan pada Delivery Order";
                 String se = "1";
                 showSnackbar(s, se);
             } else if (resultScan.equals("error")) {
@@ -371,7 +388,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                             public boolean onQueryTextChange(String s) {
                                 Log.i(MY_LOG, "searchAkditem onQueryTextChange");
                                 antaranAdapter.filter(s);
-                                listView.invalidate();
+                                recyclerView.invalidate();
                                 return false;
                             }
                         });
@@ -398,7 +415,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        listView.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.GONE);
                         frameNoData.setVisibility(View.GONE);
                         getAllAdrantaran();
                         swipeRefreshLayout.setRefreshing(false);
@@ -411,23 +428,6 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.i(MY_LOG, "onItemClick");
-        Antaran antaran = antaranList.get(position);
-        String s = String.valueOf(antaran.getAkditem());
-        //String s = String.valueOf(listView.getItemAtPosition(position));
-        alertDialogUpdateStatus(s);
-
-        if (adus.isShowing()) {
-            Log.i(MY_LOG, "adus isShowing");
-            if (!searchView.isIconified()) {
-                Log.i(MY_LOG, "true");
-                MenuItemCompat.collapseActionView(myItem);
-            }
-        }
     }
 
     private void alertDialogUpdateStatus(String s) {
@@ -693,7 +693,7 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
 
         final String awktlokal = date+" "+time;
 
-        listView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
         spinner.setAlpha(0f);
         spinner.setVisibility(View.VISIBLE);
         spinner.animate().alpha(1f).setDuration(animationDuration).setListener(null);
@@ -732,12 +732,5 @@ public class AntaranTab1 extends Fragment implements ListView.OnItemClickListene
 
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
-    }
-
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.i(MY_LOG, "onItemLongClick");
-        Toast.makeText(getContext(), "Long click", Toast.LENGTH_SHORT).show();
-        return true;
     }
 }

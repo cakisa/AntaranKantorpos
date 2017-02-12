@@ -1,10 +1,10 @@
 package com.horirevens.antarankantorpos.antaran;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -15,52 +15,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by horirevens on 1/20/17.
+ * Created by horirevens on 2/12/17.
  */
-public class AntaranKolektifAdapter extends ArrayAdapter<AntaranKolektif> {
 
+public class AntaranKolektifAdapter extends RecyclerView.Adapter<AntaranKolektifAdapter.MyViewHolder> {
     private List<AntaranKolektif> antaranList;
     private ArrayList<AntaranKolektif> arrayList;
     private Context context;
 
-    public AntaranKolektifAdapter(ArrayList<AntaranKolektif> antaranList, Context context) {
-        super(context, R.layout.listview_kolektif, antaranList);
-        this.antaranList = antaranList;
-        this.context = context;
-        arrayList = new ArrayList<>();
-        arrayList.addAll(antaranList);
-    }
-
-    public int getCount() {
-        return antaranList.size();
-    }
-
-    public AntaranKolektif getItem(int position) {
-        return antaranList.get(position);
-    }
-
-    public long getItemId(int position) {
-        return antaranList.get(position).hashCode();
-    }
-
-    private static class ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView awktlokal, aketerangan;
         public CheckBox cbAkditem;
-    }
 
-    @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = new ViewHolder();
+        public MyViewHolder(View itemView) {
+            super(itemView);
+            awktlokal = (TextView) itemView.findViewById(R.id.awktlokal);
+            aketerangan = (TextView) itemView.findViewById(R.id.aketerangan);
+            cbAkditem = (CheckBox) itemView.findViewById(R.id.cbAkditem);
 
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.listview_kolektif, parent, false);
-            holder.awktlokal = (TextView) convertView.findViewById(R.id.awktlokal);
-            holder.aketerangan = (TextView) convertView.findViewById(R.id.aketerangan);
-            holder.cbAkditem = (CheckBox) convertView.findViewById(R.id.cbAkditem);
-
-            convertView.setTag(holder);
-
-            holder.cbAkditem.setOnClickListener(new View.OnClickListener() {
+            cbAkditem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     CheckBox cb = (CheckBox) v;
@@ -68,10 +41,24 @@ public class AntaranKolektifAdapter extends ArrayAdapter<AntaranKolektif> {
                     antaran.setSelected(cb.isChecked());
                 }
             });
-        } else {
-            holder = (ViewHolder) convertView.getTag();
         }
+    }
 
+    public AntaranKolektifAdapter(ArrayList<AntaranKolektif> antaranList, Context context) {
+        this.antaranList = antaranList;
+        this.context = context;
+        arrayList = new ArrayList<>();
+        arrayList.addAll(antaranList);
+    }
+    
+    @Override
+    public AntaranKolektifAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_kolektif, parent, false);
+        return new AntaranKolektifAdapter.MyViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(AntaranKolektifAdapter.MyViewHolder holder, int position) {
         MyDate myDate = new MyDate();
         AntaranKolektif antaran = antaranList.get(position);
         holder.cbAkditem.setChecked(antaran.isSelected());
@@ -80,8 +67,11 @@ public class AntaranKolektifAdapter extends ArrayAdapter<AntaranKolektif> {
         holder.cbAkditem.setTextSize(24);
         holder.awktlokal.setText(myDate.datetimeIndo(antaran.getAwktlokal()));
         holder.aketerangan.setText("No. DO " + antaran.getAdo());
+    }
 
-        return convertView;
+    @Override
+    public int getItemCount() {
+        return antaranList.size();
     }
 
     public void filter(String akditem) {

@@ -14,6 +14,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.InputType;
 import android.util.Log;
@@ -24,7 +27,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
@@ -33,11 +35,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
-import com.horirevens.antarankantorpos.about.AboutActivity;
 import com.horirevens.antarankantorpos.DBConfig;
 import com.horirevens.antarankantorpos.KolektifActivity;
 import com.horirevens.antarankantorpos.LapDOActivity;
 import com.horirevens.antarankantorpos.R;
+import com.horirevens.antarankantorpos.about.AboutActivity;
 import com.horirevens.antarankantorpos.antaran.Antaran;
 import com.horirevens.antarankantorpos.antaran.AntaranAdapter;
 
@@ -55,7 +57,7 @@ public class AntaranTab3 extends Fragment {
     public static final String MY_LOG = "log_AntaranTab3";
 
     private View rootView;
-    private ListView listView;
+    private RecyclerView recyclerView;
     private String anippos;
     private TextView tvCountData;
     private CircularProgressView spinner;
@@ -63,7 +65,7 @@ public class AntaranTab3 extends Fragment {
     private FloatingActionButton fab;
     private FrameLayout frameNoData;
     private Snackbar snackbar;
-    SearchView searchView;
+    private SearchView searchView;
 
     private int animationDuration, countData;
 
@@ -76,7 +78,7 @@ public class AntaranTab3 extends Fragment {
         Log.i(MY_LOG, "onCreateView");
         rootView = inflater.inflate(R.layout.tab_layout_antaran, container, false);
 
-        listView = (ListView) rootView.findViewById(R.id.listView);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         spinner = (CircularProgressView) rootView.findViewById(R.id.spinner);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
         animationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
@@ -86,8 +88,7 @@ public class AntaranTab3 extends Fragment {
 
         anippos = getArguments().getString("anippos");
         frameNoData.setVisibility(View.GONE);
-        listView = (ListView) rootView.findViewById(R.id.listView);
-        listView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
 
         getAllAdrantaran();
         swipeRefresh();
@@ -102,7 +103,7 @@ public class AntaranTab3 extends Fragment {
 
         if (this.isVisible()) {
             Log.i(MY_LOG, "setUserVisibleHint isVisible");
-            listView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.GONE);
             frameNoData.setVisibility(View.GONE);
             fab.setVisibility(View.GONE);
             spinner.setAlpha(0f);
@@ -124,9 +125,9 @@ public class AntaranTab3 extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         Log.i(MY_LOG, "onResponse");
-                        listView.setAlpha(0f);
-                        listView.setVisibility(View.VISIBLE);
-                        listView.animate().alpha(1f).setDuration(animationDuration).setListener(null);
+                        recyclerView.setAlpha(0f);
+                        recyclerView.setVisibility(View.VISIBLE);
+                        recyclerView.animate().alpha(1f).setDuration(animationDuration).setListener(null);
                         antaranList.clear();
                         showAllAdrantaran(response);
 
@@ -181,19 +182,28 @@ public class AntaranTab3 extends Fragment {
     private void showAllAdrantaran(String json) {
         Log.i(MY_LOG, "showAdrantaran");
         initListAdrantaran(json);
-        antaranAdapter = new AntaranAdapter(antaranList, getContext());
+        antaranAdapter = new AntaranAdapter(antaranList, getContext(), new AntaranAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Antaran antaran) {
 
-        if (antaranAdapter.getCount() == 0) {
+            }
+        });
+
+        if (antaranAdapter.getItemCount() == 0) {
             frameNoData.setVisibility(View.VISIBLE);
-            listView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.GONE);
             fab.setVisibility(View.GONE);
         } else {
             frameNoData.setVisibility(View.GONE);
-            listView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
             fab.setVisibility(View.VISIBLE);
 
-            listView.setAdapter(antaranAdapter);
-            countData = listView.getAdapter().getCount();
+            RecyclerView.LayoutManager mlayoutManager = new LinearLayoutManager(getContext());
+            recyclerView.setLayoutManager(mlayoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(antaranAdapter);
+
+            countData = recyclerView.getAdapter().getItemCount();
             tvCountData.setText("" + countData);
         }
     }
@@ -301,7 +311,7 @@ public class AntaranTab3 extends Fragment {
                             public boolean onQueryTextChange(String s) {
                                 Log.i(MY_LOG, "searchAkditem onQueryTextChange");
                                 antaranAdapter.filter(s);
-                                listView.invalidate();
+                                recyclerView.invalidate();
                                 return false;
                             }
                         });
@@ -328,7 +338,7 @@ public class AntaranTab3 extends Fragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        listView.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.GONE);
                         frameNoData.setVisibility(View.GONE);
                         getAllAdrantaran();
                         swipeRefreshLayout.setRefreshing(false);
