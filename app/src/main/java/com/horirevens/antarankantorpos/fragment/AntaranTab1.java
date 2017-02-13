@@ -68,7 +68,7 @@ import java.util.Map;
  */
 public class AntaranTab1 extends Fragment {
     public static final String STR_ERROR = "Gagal memuat data";
-    public static final String STR_BERHASIL = "Berhasil update status No Resi ";
+    public static final String STR_BERHASIL = "Berhasil update status no resi ";
     public static final String MY_LOG = "log_AntaranTab1";
 
     private View rootView;
@@ -237,9 +237,14 @@ public class AntaranTab1 extends Fragment {
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setAdapter(antaranAdapter);
 
-            countData = recyclerView.getAdapter().getItemCount();
+            countData = getCountData();
             tvCountData.setText("" + countData);
         }
+    }
+
+    public int getCountData() {
+        int count = recyclerView.getAdapter().getItemCount();
+        return count;
     }
 
     private void showSnackbar(String s, String se) {

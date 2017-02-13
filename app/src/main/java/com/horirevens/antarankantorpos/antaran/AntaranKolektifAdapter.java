@@ -64,7 +64,8 @@ public class AntaranKolektifAdapter extends RecyclerView.Adapter<AntaranKolektif
         holder.cbAkditem.setChecked(antaran.isSelected());
         holder.cbAkditem.setText(antaran.getAkditem());
         holder.cbAkditem.setTag(antaran);
-        holder.cbAkditem.setTextSize(24);
+        //holder.cbAkditem.setTextSize(22);
+        //holder.cbAkditem.setTextAppearance(context, android.R.style.TextAppearance_DeviceDefault_Large);
         holder.awktlokal.setText(myDate.datetimeIndo(antaran.getAwktlokal()));
         holder.aketerangan.setText("No. DO " + antaran.getAdo());
     }

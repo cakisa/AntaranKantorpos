@@ -13,22 +13,23 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"/>
 
     <TextView android:id="@+id/awktlokal"
         android:layout_below="@+id/cbAkditem"
         android:layout_marginStart="35dp"
-        android:textSize="14sp"
         android:textColor="@color/colorSecondaryText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
 
     <TextView android:id="@+id/aketerangan"
         android:layout_marginStart="35dp"
-        android:textSize="14sp"
         android:textColor="@color/colorSecondaryText"
         android:layout_below="@+id/awktlokal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
 
 </RelativeLayout>

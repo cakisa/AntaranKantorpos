@@ -53,10 +53,16 @@ public class LapDOAdapter extends RecyclerView.Adapter<LapDOAdapter.MyViewHolder
         holder.tvAdo.setText(lapDO.getAdo());
         holder.tvAdoKeterangan.setText(
                 "Sisa: " + lapDO.getProses() + " | " +
-                        "Berhasil: " + lapDO.getBerhasil() + " | " +
-                        "Gagal: " + lapDO.getGagal() + " | " +
-                        "Jml Item: " + lapDO.getJml_item()
+                "Berhasil: " + lapDO.getBerhasil() + " | " +
+                "Gagal: " + lapDO.getGagal() +
+                "\nJumlah Item: " + lapDO.getJml_item()
         );
+        /*holder.tvAdoKeterangan.setText(
+                "Sisa : " + lapDO.getProses() + "\n" +
+                "Berhasil : " + lapDO.getBerhasil() + "\n" +
+                "Gagal : " + lapDO.getGagal() + "\n" +
+                "Jumlah Item : " + lapDO.getJml_item()
+        );*/
 
         if(lapDO.getProses().equals("0")) {
             holder.ivAdoStatus.setImageResource(R.drawable.ba);

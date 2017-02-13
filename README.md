@@ -13,4 +13,4 @@ Fitur Aplikasi :
 Perubahan :  
 1. Penggantian listview dengan recyclerview agar data terakhir pada daftar tetap terlihat
 2. Perbaikan scan barcode yang tidak tampil setelah scan
-
+3. Perbaikan tampilan textview

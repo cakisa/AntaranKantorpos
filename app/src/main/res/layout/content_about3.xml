@@ -9,24 +9,28 @@
     <TextView
         android:text="Perihal"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"/>
+        android:layout_width="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
 
     <TextView android:text="Aplikasi Android Antaran (Update Status)"
-        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryText"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"/>
 
     <TextView
         android:text="Nama"
         android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
 
     <TextView
         android:text="Yogi Trismayana"
-        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryText"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"/>
 
     <android.support.percent.PercentRelativeLayout
         android:layout_width="match_parent"
@@ -36,14 +40,16 @@
             android:text="No. Handphone"
             android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
 
         <TextView android:id="@+id/hp3"
             android:layout_below="@+id/titleHp3"
             android:text="0821-4051-3878"
-            android:textAppearance="@android:style/TextAppearance.Holo.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryText"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
             app:layout_widthPercent="90%"/>
 
         <ImageView android:id="@+id/iv_phone3"
@@ -65,14 +71,16 @@
             android:text="Email"
             android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
 
         <TextView android:id="@+id/email3"
             android:layout_below="@+id/titleEmail3"
             android:text="644spv@posindonesia.co.id"
-            android:textAppearance="@android:style/TextAppearance.Holo.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryText"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
             app:layout_widthPercent="90%"/>
 
         <ImageView android:id="@+id/iv_email3"

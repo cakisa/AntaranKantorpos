@@ -9,24 +9,28 @@
     <TextView
         android:text="Perihal"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"/>
+        android:layout_width="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
 
     <TextView android:text="Aplikasi Android Man. Antaran"
-        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryText"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"/>
 
     <TextView
         android:text="Nama"
         android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
 
     <TextView
         android:text="M. Isa Anshori"
-        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryText"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"/>
 
     <android.support.percent.PercentRelativeLayout
         android:layout_width="match_parent"
@@ -36,14 +40,16 @@
             android:text="No. Handphone"
             android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
 
         <TextView android:id="@+id/hp1"
             android:layout_below="@+id/titleHp1"
             android:text="0853-3173-1155"
-            android:textAppearance="@android:style/TextAppearance.Holo.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryText"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
             app:layout_widthPercent="90%"/>
 
         <ImageView android:id="@+id/iv_phone1"
@@ -65,14 +71,16 @@
             android:text="Email"
             android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
 
         <TextView android:id="@+id/email1"
             android:layout_below="@+id/titleEmail1"
             android:text="isa@posindonesia.co.id"
-            android:textAppearance="@android:style/TextAppearance.Holo.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryText"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
             app:layout_widthPercent="90%"/>
 
         <ImageView android:id="@+id/iv_email1"
