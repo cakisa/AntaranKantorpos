@@ -1,4 +1,4 @@
-# AntaranKantorpos 1.3.7
+# AntaranKantorpos 1.3.8
 
 Aplikasi internal PT Pos Indonesia (Persero) untuk layanan petugas Antaran  
 
@@ -11,6 +11,4 @@ Fitur Aplikasi :
 6. Tentang Aplikasi
 
 Perubahan :  
-1. Penggantian listview dengan recyclerview agar data terakhir pada daftar tetap terlihat
-2. Perbaikan scan barcode yang tidak tampil setelah scan
-3. Perbaikan tampilan textview
+1. Perbaikan tampilan listview pada update kolektif yang terpotong
