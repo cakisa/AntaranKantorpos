@@ -58,7 +58,6 @@ public class AntaranTab2 extends Fragment {
     public static final String MY_LOG = "log_AntaranTab2";
 
     private View rootView;
-    private ListView listView;
     private RecyclerView recyclerView;
     private String anippos;
     private TextView tvCountData;

@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -137,13 +138,15 @@ public class LaunchActivity extends AppCompatActivity  {
                     finish();
                 }
             });
-            adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    Log.i(MY_LOG, "alertDialogIMEI dismiss");
-                    finish();
-                }
-            });
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        Log.i(MY_LOG, "alertDialogIMEI dismiss");
+                        finish();
+                    }
+                });
+            }
             adb.setView(view);
             ade = adb.create();
             ade.show();

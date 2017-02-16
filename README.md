@@ -1,4 +1,4 @@
-# AntaranKantorpos 1.3.8
+# AntaranKantorpos 1.3.9
 
 Aplikasi internal PT Pos Indonesia (Persero) untuk layanan petugas Antaran  
 
@@ -11,4 +11,4 @@ Fitur Aplikasi :
 6. Tentang Aplikasi
 
 Perubahan :  
-1. Perbaikan tampilan listview pada update kolektif yang terpotong
+1. Perubahan minimal android versi menjadi 4.0
