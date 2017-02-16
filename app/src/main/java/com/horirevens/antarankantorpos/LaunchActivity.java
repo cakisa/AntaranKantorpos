@@ -42,7 +42,6 @@ public class LaunchActivity extends AppCompatActivity  {
     private Snackbar snackbar;
     private CoordinatorLayout coordinatorLayout;
     private AlertDialog ade;
-    private int a;
 
     private IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
     private BroadcastReceiver myReceiver = new BroadcastReceiver() {
