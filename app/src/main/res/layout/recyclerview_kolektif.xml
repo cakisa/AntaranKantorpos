@@ -21,7 +21,8 @@
         android:textColor="@color/colorSecondaryText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+        android:layout_marginLeft="35dp" />
 
     <TextView android:id="@+id/aketerangan"
         android:layout_marginStart="35dp"
@@ -29,6 +30,7 @@
         android:layout_below="@+id/awktlokal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+        android:layout_marginLeft="35dp" />
 
 </RelativeLayout>

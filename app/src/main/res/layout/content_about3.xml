@@ -59,7 +59,9 @@
             android:layout_alignTop="@+id/hp3"
             android:layout_alignBottom="@+id/hp3"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/hp3"
+            android:layout_alignParentRight="true" />
 
     </android.support.percent.PercentRelativeLayout>
 
@@ -89,7 +91,9 @@
             android:layout_alignParentEnd="true"
             android:layout_alignTop="@+id/email3"
             android:layout_alignBottom="@+id/email3"
-            android:layout_width="wrap_content"/>
+            android:layout_width="wrap_content"
+            android:layout_toRightOf="@+id/email3"
+            android:layout_alignParentRight="true" />
 
     </android.support.percent.PercentRelativeLayout>
 

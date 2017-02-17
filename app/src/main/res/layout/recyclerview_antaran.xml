@@ -22,7 +22,9 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:singleLine="true"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"/>
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:layout_toRightOf="@+id/akdstatus"
+        android:layout_marginLeft="20dp" />
 
     <!--<com.horirevens.antarankantorpos.libs.AutoResizeTextView
         android:id="@+id/akditem"
@@ -40,7 +42,9 @@
         android:layout_below="@+id/akditem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+        android:layout_toRightOf="@+id/akdstatus"
+        android:layout_marginLeft="20dp" />
 
     <TextView android:id="@+id/aketerangan"
         android:layout_toEndOf="@+id/akdstatus"
@@ -49,6 +53,8 @@
         android:layout_below="@+id/awktlokal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+        android:layout_toRightOf="@+id/akdstatus"
+        android:layout_marginLeft="20dp" />
 
 </RelativeLayout>

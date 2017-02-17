@@ -19,7 +19,9 @@
         android:layout_toEndOf="@id/adoStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@android:style/TextAppearance.DeviceDefault.Large"/>
+        style="@android:style/TextAppearance.DeviceDefault.Large"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@id/adoStatus" />
 
     <TextView android:id="@+id/adoKeterangan"
         android:layout_toEndOf="@+id/adoStatus"
@@ -28,6 +30,8 @@
         android:layout_below="@+id/ado"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@android:style/TextAppearance.DeviceDefault.Small"/>
+        style="@android:style/TextAppearance.DeviceDefault.Small"
+        android:layout_toRightOf="@+id/adoStatus"
+        android:layout_marginLeft="20dp" />
 
 </RelativeLayout>
