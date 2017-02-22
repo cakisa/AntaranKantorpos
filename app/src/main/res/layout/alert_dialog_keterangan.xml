@@ -12,6 +12,9 @@
         android:layout_height="36dp" />-->
 
     <EditText android:id="@+id/keteranganStatus"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:imeOptions="actionDone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

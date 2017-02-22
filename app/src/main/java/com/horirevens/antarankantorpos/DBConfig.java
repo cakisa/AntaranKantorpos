@@ -4,15 +4,15 @@ package com.horirevens.antarankantorpos;
  * Created by horirevens on 1/18/17.
  */
 public class DBConfig {
-    /*public static final String JSON_URL_LOGIN = "http://mob.agenposedo.com/login.php";
+    public static final String JSON_URL_LOGIN = "http://mob.agenposedo.com/login.php";
     public static final String JSON_URL_ADRANTARAN = "http://mob.agenposedo.com/adrantaranv2.php";
     public static final String JSON_URL_ADRSTATUS = "http://mob.agenposedo.com/adrstatus.php";
-    public static final String JSON_URL_ADO = "http://mob.agenposedo.com/ado.php";*/
+    public static final String JSON_URL_ADO = "http://mob.agenposedo.com/ado.php";
 
-    public static final String JSON_URL_LOGIN = "http://regional7.posindonesia.co.id:8082/usa/login.php";
+    /*public static final String JSON_URL_LOGIN = "http://regional7.posindonesia.co.id:8082/usa/login.php";
     public static final String JSON_URL_ADRANTARAN = "http://regional7.posindonesia.co.id:8082/usa/adrantaranv2.php";
     public static final String JSON_URL_ADRSTATUS = "http://regional7.posindonesia.co.id:8082/usa/adrstatus.php";
-    public static final String JSON_URL_ADO = "http://regional7.posindonesia.co.id:8082/usa/ado.php";
+    public static final String JSON_URL_ADO = "http://regional7.posindonesia.co.id:8082/usa/ado.php";*/
 
     public static final String KEY_AKDITEM = "akditem";
     public static final String KEY_ANIPPOS = "anippos";

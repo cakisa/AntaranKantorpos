@@ -29,7 +29,7 @@
             <TextView
                 android:id="@+id/nullAkditem"
                 android:text="Tidak ada data"
-                android:textSize="20sp"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:textColor="@color/colorPrimary"
                 android:layout_below="@+id/infoIcon"
                 android:layout_centerHorizontal="true"
