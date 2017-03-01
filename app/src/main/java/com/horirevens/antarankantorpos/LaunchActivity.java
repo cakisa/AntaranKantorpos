@@ -7,9 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -38,7 +38,6 @@ public class LaunchActivity extends AppCompatActivity  {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private FloatingActionButton fab;
     private TextView tvAnippos, tvImei, tvAnama, tvNetwork;
     private String imeiNumber, anippos, anama, networkStatus;
     private Snackbar snackbar;
@@ -139,13 +138,15 @@ public class LaunchActivity extends AppCompatActivity  {
                     finish();
                 }
             });
-            adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    Log.i(MY_LOG, "alertDialogIMEI dismiss");
-                    finish();
-                }
-            });
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                adb.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        Log.i(MY_LOG, "alertDialogIMEI dismiss");
+                        finish();
+                    }
+                });
+            }
             adb.setView(view);
             ade = adb.create();
             ade.show();
@@ -200,6 +201,8 @@ public class LaunchActivity extends AppCompatActivity  {
 
     private void setupTabIcons() {
         Log.i(MY_LOG, "setupTabIcons");
+        //AntaranTab1 antaranTab1 = (AntaranTab1) getSupportFragmentManager().getFragments();
+
         tabLayout.addTab(tabLayout.newTab().setText("Delivery Order"));
         tabLayout.addTab(tabLayout.newTab().setText("Berhasil"));
         tabLayout.addTab(tabLayout.newTab().setText("Gagal"));

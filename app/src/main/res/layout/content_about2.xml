@@ -9,24 +9,28 @@
     <TextView
         android:text="Perihal"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"/>
+        android:layout_width="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
 
     <TextView android:text="Aplikasi Engine Antaran (NELoader)"
-        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryText"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"/>
 
     <TextView
         android:text="Nama"
         android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
 
     <TextView
         android:text="Moch. Arif Supriyanto"
-        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryText"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"/>
 
     <android.support.percent.PercentRelativeLayout
         android:layout_width="match_parent"
@@ -36,14 +40,16 @@
             android:text="No. Handphone"
             android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
 
         <TextView android:id="@+id/hp2"
             android:layout_below="@+id/titleHp2"
             android:text="0852-3366-7317"
-            android:textAppearance="@android:style/TextAppearance.Holo.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryText"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
             app:layout_widthPercent="90%"/>
 
         <ImageView android:id="@+id/iv_phone2"
@@ -53,7 +59,9 @@
             android:layout_alignTop="@+id/hp2"
             android:layout_alignBottom="@+id/hp2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/hp2"
+            android:layout_alignParentRight="true" />
 
     </android.support.percent.PercentRelativeLayout>
 
@@ -65,14 +73,16 @@
             android:text="Email"
             android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
 
         <TextView android:id="@+id/email2"
             android:layout_below="@+id/titleEmail2"
             android:text="mohamad.arif.supriyanto@pci"
-            android:textAppearance="@android:style/TextAppearance.Holo.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryText"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
             app:layout_widthPercent="90%"/>
 
         <ImageView android:id="@+id/iv_email2"
@@ -82,7 +92,9 @@
             android:layout_alignTop="@+id/email2"
             android:layout_alignBottom="@+id/email2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/email2"
+            android:layout_alignParentRight="true" />
 
     </android.support.percent.PercentRelativeLayout>
 

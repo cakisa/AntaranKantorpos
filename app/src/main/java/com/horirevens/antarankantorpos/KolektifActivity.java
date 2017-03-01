@@ -4,12 +4,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.app.SearchManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
@@ -18,6 +15,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
@@ -29,6 +29,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -66,7 +67,7 @@ public class KolektifActivity extends AppCompatActivity implements FloatingActio
     public static final String STR_BERHASIL = "Berhasil update status No Resi ";
     public static final String MY_LOG = "log_KolektifActivity";
 
-    private ListView listView;
+    private RecyclerView recyclerView;
     private String anippos, valKeteranganStatus, valAstatus, valAketerangan;
     private CircularProgressView spinner, spinnerAstatus;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -78,17 +79,19 @@ public class KolektifActivity extends AppCompatActivity implements FloatingActio
     private CoordinatorLayout coordinatorLayout;
     private FloatingActionButton fab;
     private SearchView searchView;
-    private String networkStatus;
-    private TextView tvTitle, tvNetwork;
+    //private String networkStatus;
+    //private TextView tvTitle, tvNetwork;
 
     private int animationDuration, checkedItem;
 
     private AwesomeValidation awesomeValidation;
     private AntaranKolektifAdapter antaranKolektifAdapter;
+    private ArrayAdapter<String> itemKolektifAdapter;
     private ArrayList<AntaranKolektif> antaranList = new ArrayList<>();
     private ArrayList<String> astatusList = new ArrayList<>();
     private ArrayList<String> aketeranganList = new ArrayList<>();
     private ArrayList<String> checkedList = new ArrayList<>();
+    private ArrayList<String> checkedItemList = new ArrayList<>();
 
     /*private IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
     private BroadcastReceiver myReceiver = new BroadcastReceiver() {
@@ -122,9 +125,9 @@ public class KolektifActivity extends AppCompatActivity implements FloatingActio
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        tvTitle = (TextView) findViewById(R.id.tvTitle);
-        tvNetwork = (TextView) findViewById(R.id.tvNetwork);
-        listView = (ListView) findViewById(R.id.listView);
+        //tvTitle = (TextView) findViewById(R.id.tvTitle);
+        //tvNetwork = (TextView) findViewById(R.id.tvNetwork);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         spinner = (CircularProgressView) findViewById(R.id.spinner);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         animationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
@@ -133,8 +136,8 @@ public class KolektifActivity extends AppCompatActivity implements FloatingActio
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
         frameNoData.setVisibility(View.GONE);
-        listView = (ListView) findViewById(R.id.listView);
-        listView.setVisibility(View.GONE);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView.setVisibility(View.GONE);
         fab.setOnClickListener(this);
 
         getIntentResult();
@@ -160,9 +163,9 @@ public class KolektifActivity extends AppCompatActivity implements FloatingActio
                     @Override
                     public void onResponse(String response) {
                         Log.i(MY_LOG, "onResponse");
-                        listView.setAlpha(0f);
-                        listView.setVisibility(View.VISIBLE);
-                        listView.animate().alpha(1f).setDuration(animationDuration).setListener(null);
+                        recyclerView.setAlpha(0f);
+                        recyclerView.setVisibility(View.VISIBLE);
+                        recyclerView.animate().alpha(1f).setDuration(animationDuration).setListener(null);
                         antaranList.clear();
                         showAllAdrantaran(response);
 
@@ -220,18 +223,19 @@ public class KolektifActivity extends AppCompatActivity implements FloatingActio
         initListAdrantaran(json);
         antaranKolektifAdapter = new AntaranKolektifAdapter(antaranList, this);
 
-        if (antaranKolektifAdapter.getCount() == 0) {
+        if (antaranKolektifAdapter.getItemCount() == 0) {
             frameNoData.setVisibility(View.VISIBLE);
-            listView.setVisibility(View.GONE);
-            //fab.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.GONE);
+            fab.setVisibility(View.GONE);
         } else {
             frameNoData.setVisibility(View.GONE);
-            listView.setVisibility(View.VISIBLE);
-            //fab.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
+            fab.setVisibility(View.VISIBLE);
 
-            listView.setAdapter(antaranKolektifAdapter);
-            //countData = listView.getAdapter().getCount();
-            //tvCountData.setText("" + countData);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+            recyclerView.setLayoutManager(layoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(antaranKolektifAdapter);
         }
     }
 
@@ -302,7 +306,7 @@ public class KolektifActivity extends AppCompatActivity implements FloatingActio
                             public boolean onQueryTextChange(String s) {
                                 Log.i(MY_LOG, "searchAkditem onQueryTextChange");
                                 antaranKolektifAdapter.filter(s);
-                                listView.invalidate();
+                                recyclerView.invalidate();
                                 return false;
                             }
                         });
@@ -329,7 +333,7 @@ public class KolektifActivity extends AppCompatActivity implements FloatingActio
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        listView.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.GONE);
                         frameNoData.setVisibility(View.GONE);
                         getAllAdrantaran();
                         swipeRefreshLayout.setRefreshing(false);
@@ -347,12 +351,13 @@ public class KolektifActivity extends AppCompatActivity implements FloatingActio
     private void alertDialogUpdateStatus(int s) {
         Log.i(MY_LOG, "alertDialogUpdateStatus");
         LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.alert_dialog_update_status, null);
-        TextView tvLabel = (TextView) view.findViewById(R.id.tvLabel);
-        TextView tvValAkditem = (TextView) view.findViewById(R.id.tvValAkditem);
+        View view = inflater.inflate(R.layout.alert_dialog_update_status_kolektif, null);
+        ListView lvItemkolektif = (ListView) view.findViewById(R.id.lvItemKolektif);
+        TextView tvJmlItem = (TextView) view.findViewById(R.id.tvJmlItem);
 
-        tvLabel.setText("Jumlah Resi");
-        tvValAkditem.setText("" + s);
+        itemKolektifAdapter = new ArrayAdapter<>(this, R.layout.listview_item_kolektif, R.id.tvItemKolektif, checkedList);
+        lvItemkolektif.setAdapter(itemKolektifAdapter);
+        tvJmlItem.setText("Jumlah item : " + s);
 
         AlertDialog.Builder adb = new AlertDialog.Builder(this);
         adb.setTitle("Update Status");
@@ -614,13 +619,13 @@ public class KolektifActivity extends AppCompatActivity implements FloatingActio
             final String awktlokal = date + " " + time;
 
             RequestQueue requestQueue = Volley.newRequestQueue(this);
-            String s = "?status=5";
+            String params = "?status=5";
             JSONArray jsonArray = new JSONArray();
 
             for (int i=0; i<checkedItem; i++) {
                 Log.i(MY_LOG, "looping " + i);
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put(DBConfig.KEY_AKDITEM, checkedList.get(i));
+                jsonObject.put(DBConfig.KEY_AKDITEM, checkedItemList.get(i));
                 jsonObject.put(DBConfig.KEY_ANIPPOS, anippos);
                 jsonObject.put(DBConfig.KEY_AKDSTATUS, valAstatus);
                 jsonObject.put(DBConfig.KEY_AWKTLOKAL, awktlokal);
@@ -633,7 +638,7 @@ public class KolektifActivity extends AppCompatActivity implements FloatingActio
             final String jsonString = jsonObjectArray.toString();
 
             StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                    DBConfig.JSON_URL_ADRANTARAN + s,
+                    DBConfig.JSON_URL_ADRANTARAN + params,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -701,10 +706,14 @@ public class KolektifActivity extends AppCompatActivity implements FloatingActio
     @Override
     public void onClick(View v) {
         checkedList.clear();
+        checkedItemList.clear();
+        int j = 1;
         for (int i = 0; i < antaranList.size(); i++) {
             AntaranKolektif antaranKolektif = antaranList.get(i);
             if (antaranKolektif.isSelected()) {
-                checkedList.add(antaranKolektif.getAkditem());
+                checkedList.add(j +". "+antaranKolektif.getAkditem());
+                checkedItemList.add(antaranKolektif.getAkditem());
+                j++;
             }
         }
 

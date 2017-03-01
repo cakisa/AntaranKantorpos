@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:background="@color/colorPrimary"
-    app:layout_scrollFlags="scroll|enterAlways"
+    app:layout_scrollFlags="enterAlways"
     app:popupTheme="@style/AppTheme.PopupOverlay">
 
     <LinearLayout android:orientation="vertical"
@@ -16,11 +16,14 @@
         <TextView
             android:id="@+id/tvTitle"
             android:text="Laporan DO"
-            android:textSize="22sp"
-            android:textColor="@color/colorWhite"
             android:textStyle="bold"
+            android:textColor="@color/colorWhite"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"/>
 
     </LinearLayout>
 

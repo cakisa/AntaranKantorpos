@@ -2,10 +2,12 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:paddingStart="@dimen/activity_horizontal_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="8dp"
     android:layout_width="match_parent"
-    android:layout_height="60dp">
+    android:layout_height="wrap_content">
 
     <ImageView android:id="@+id/adoStatus"
         android:layout_alignTop="@+id/ado"
@@ -15,19 +17,23 @@
 
     <TextView android:id="@+id/ado"
         android:layout_marginStart="20dp"
-        android:textSize="24sp"
         android:textColor="@color/colorPrimaryText"
         android:layout_toEndOf="@id/adoStatus"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@id/adoStatus" />
 
     <TextView android:id="@+id/adoKeterangan"
         android:layout_toEndOf="@+id/adoStatus"
         android:layout_marginStart="20dp"
-        android:textSize="14sp"
         android:textColor="@color/colorSecondaryText"
         android:layout_below="@+id/ado"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+        android:layout_toRightOf="@+id/adoStatus"
+        android:layout_marginLeft="20dp" />
 
 </RelativeLayout>

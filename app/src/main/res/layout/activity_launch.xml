@@ -20,4 +20,16 @@
 
     <include layout="@layout/content_launch" />
 
+    <!--<android.support.design.widget.FloatingActionButton
+        android:clickable="true"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_kolektif"
+        app:elevation="6dp"
+        app:fabSize="mini"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_behavior="com.horirevens.antarankantorpos.FABFloatOnScroll"/>-->
+
 </android.support.design.widget.CoordinatorLayout>

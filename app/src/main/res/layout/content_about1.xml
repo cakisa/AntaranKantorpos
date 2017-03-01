@@ -1,89 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:fillViewport="true">
 
-    <TextView
-        android:text="Perihal"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"/>
-
-    <TextView android:text="Aplikasi Android Man. Antaran"
-        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:text="Nama"
-        android:layout_marginTop="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:text="M. Isa Anshori"
-        android:textAppearance="@android:style/TextAppearance.Holo.Medium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <android.support.percent.PercentRelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <TextView android:id="@+id/titleHp1"
-            android:text="No. Handphone"
-            android:layout_marginTop="10dp"
+        <TextView
+            android:text="Perihal"
+            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
 
-        <TextView android:id="@+id/hp1"
-            android:layout_below="@+id/titleHp1"
-            android:text="0853-3173-1155"
-            android:textAppearance="@android:style/TextAppearance.Holo.Medium"
+        <TextView android:text="Aplikasi Android Man. Antaran"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_widthPercent="90%"/>
+            android:textColor="@color/colorPrimaryText"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"/>
 
-        <ImageView android:id="@+id/iv_phone1"
-            android:src="@drawable/phone"
-            android:layout_toEndOf="@+id/hp1"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/hp1"
-            android:layout_alignBottom="@+id/hp1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-    </android.support.percent.PercentRelativeLayout>
-
-    <android.support.percent.PercentRelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView android:id="@+id/titleEmail1"
-            android:text="Email"
+        <TextView
+            android:text="Nama"
             android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
 
-        <TextView android:id="@+id/email1"
-            android:layout_below="@+id/titleEmail1"
-            android:text="isa@posindonesia.co.id"
-            android:textAppearance="@android:style/TextAppearance.Holo.Medium"
+        <TextView
+            android:text="M. Isa Anshori"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_widthPercent="90%"/>
+            android:textColor="@color/colorPrimaryText"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"/>
 
-        <ImageView android:id="@+id/iv_email1"
-            android:src="@drawable/mail"
-            android:layout_toEndOf="@+id/email1"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/email1"
-            android:layout_alignBottom="@+id/email1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <android.support.percent.PercentRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    </android.support.percent.PercentRelativeLayout>
+            <TextView android:id="@+id/titleHp1"
+                android:text="No. Handphone"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
 
-</LinearLayout>
+            <TextView android:id="@+id/hp1"
+                android:layout_below="@+id/titleHp1"
+                android:text="0853-3173-1155"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryText"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+                app:layout_widthPercent="90%"/>
+
+            <ImageView android:id="@+id/iv_phone1"
+                android:src="@drawable/phone"
+                android:layout_toEndOf="@+id/hp1"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/hp1"
+                android:layout_alignBottom="@+id/hp1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/hp1"
+                android:layout_alignParentRight="true" />
+
+        </android.support.percent.PercentRelativeLayout>
+
+        <android.support.percent.PercentRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView android:id="@+id/titleEmail1"
+                android:text="Email"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"/>
+
+            <TextView android:id="@+id/email1"
+                android:layout_below="@+id/titleEmail1"
+                android:text="isa@posindonesia.co.id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryText"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+                app:layout_widthPercent="90%"/>
+
+            <ImageView android:id="@+id/iv_email1"
+                android:src="@drawable/mail"
+                android:layout_toEndOf="@+id/email1"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/email1"
+                android:layout_alignBottom="@+id/email1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/email1"
+                android:layout_alignParentRight="true" />
+
+        </android.support.percent.PercentRelativeLayout>
+
+    </LinearLayout>
+
+
+</ScrollView>

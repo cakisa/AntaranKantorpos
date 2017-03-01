@@ -5,10 +5,10 @@ android {
     buildToolsVersion '24.0.3'
     defaultConfig {
         applicationId "com.horirevens.antarankantorpos"
-        minSdkVersion 17
+        minSdkVersion 14
         targetSdkVersion 24
         versionCode 1
-        versionName "1.3.4"
+        versionName "1.3.9"
     }
     buildTypes {
         release {

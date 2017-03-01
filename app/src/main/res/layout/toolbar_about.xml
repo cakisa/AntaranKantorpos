@@ -25,11 +25,14 @@
         <TextView
             android:id="@+id/tvTitle"
             android:text="Tentang Aplikasi"
-            android:textSize="22sp"
-            android:textColor="@color/colorWhite"
             android:textStyle="bold"
+            android:textColor="@color/colorWhite"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"/>
 
     </LinearLayout>
 

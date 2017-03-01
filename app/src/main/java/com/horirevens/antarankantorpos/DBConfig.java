@@ -29,7 +29,6 @@ public class DBConfig {
     public static final String TAG_ADRA_AKETERANGAN = "ada_aketerangan";
     public static final String TAG_ADRS_AKETERANGAN = "ads_aketerangan";
     public static final String TAG_ASTATUSKIRIM = "astatuskirim";
-    public static final String TAG_RES_AKDITEM = "res_akditem";
     public static final String TAG_ADO = "ado";
     public static final String TAG_ASTATUS = "astatus";
     public static final String TAG_AKETERANGAN = "aketerangan";

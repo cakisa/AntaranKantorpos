@@ -2,10 +2,12 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:paddingStart="@dimen/activity_horizontal_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="8dp"
     android:layout_width="match_parent"
-    android:layout_height="72dp">
+    android:layout_height="wrap_content">
 
     <ImageView android:id="@+id/akdstatus"
         android:layout_alignTop="@+id/akditem"
@@ -16,10 +18,15 @@
     <TextView android:id="@+id/akditem"
         android:layout_toEndOf="@+id/akdstatus"
         android:layout_marginStart="20dp"
-        android:textSize="24sp"
         android:textColor="@color/colorPrimaryText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:layout_toRightOf="@+id/akdstatus"
+        android:layout_marginLeft="20dp" />
 
     <!--<com.horirevens.antarankantorpos.libs.AutoResizeTextView
         android:id="@+id/akditem"
@@ -33,19 +40,23 @@
     <TextView android:id="@+id/awktlokal"
         android:layout_toEndOf="@+id/akdstatus"
         android:layout_marginStart="20dp"
-        android:textSize="14sp"
         android:textColor="@color/colorSecondaryText"
         android:layout_below="@+id/akditem"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+        android:layout_toRightOf="@+id/akdstatus"
+        android:layout_marginLeft="20dp" />
 
     <TextView android:id="@+id/aketerangan"
         android:layout_toEndOf="@+id/akdstatus"
         android:layout_marginStart="20dp"
-        android:textSize="14sp"
         android:textColor="@color/colorSecondaryText"
         android:layout_below="@+id/awktlokal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+        android:layout_toRightOf="@+id/akdstatus"
+        android:layout_marginLeft="20dp" />
 
 </RelativeLayout>
